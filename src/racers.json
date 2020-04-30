@@ -1,0 +1,26 @@
+[
+	{
+		"id": 1,
+		"name": "Spiral Ham", 
+		"color": "brown",
+		"avatar": ""
+	},
+	{
+		"id": 2, 
+		"name": "Carmella's Dream",
+		"color": "tan",
+		"avatar": ""
+	},
+	{
+		"id": 3, 
+		"name": "Kenny",
+		"color": "whitesmoke",
+		"avatar": ""
+	},
+	{
+		"id": 4, 
+		"name": "Frederico",
+		"color": "black",
+		"avatar": ""
+	}
+]
