@@ -21,8 +21,7 @@
 
 .race-again {
   display: block;
-  margin: auto;
-  margin-top: 5px;
+  margin: auto
 }
 
 .white-text {
@@ -40,4 +39,30 @@
   width: 15px;
   height: 15px;
   margin-top: .3rem;
+}
+
+[class^="racer-img-"] {
+  width: 400px;
+  height: 400px;
+  margin: auto;
+  background-size: cover;
+  border-radius: 25%;
+  margin-bottom: 15px;
+}
+
+.racer-img-1 {
+  background-image: url(./images/1.jpg);
+}
+
+.racer-img-2 {
+  background-image: url(./images/2.jpg);
+}
+
+.racer-img-3 {
+  background-image: url(./images/3.jpg);
+  height: 300px;
+}
+
+.racer-img-4 {
+  background-image: url(./images/4.jpg);
 }

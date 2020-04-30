@@ -10,7 +10,8 @@ const ResultsBoard = () => {
 
   return (
   	<Fragment>
-  		<Table className="white-text" striped bordered hover size="sm">
+  		<div className={`racer-img-${results[0].racerId}`}></div>
+      <Table className="white-text" striped bordered hover size="sm">
   			<thead>
   				<tr>
   					<th>Rank</th>

@@ -21,7 +21,7 @@ const Results = (props) => {
 
 	return (
 		<Modal show={show} onHide={handleClose}>
-		  <Modal.Header>
+		  <Modal.Header closeButton>
 		    Race Results
 		  </Modal.Header>
 		  <Modal.Body style={{backgroundColor: props.track.trackColor}}>

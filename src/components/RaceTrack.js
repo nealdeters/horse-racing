@@ -8,7 +8,7 @@ import moment from 'moment';
 
 const RaceTrack = (props) => {
   const resultContext = useContext(ResultContext);
-  const { results, setResults, clearResults } = resultContext;
+  const { setResults, clearResults } = resultContext;
 
   const [racers, setRacers] = useState(props.racers);
   const [sqSize] = useState(props.sqSize);
@@ -16,8 +16,10 @@ const RaceTrack = (props) => {
 
   const startRace = () => {
     clearResults();
+    let startTime = moment();
     racers.forEach(racer => {
-      racer.startTime = moment();
+      racer.startTime = startTime;
+      racer.extraBoost = 3;
       updateRacer(racer);
       moveRacer(racer);
     });
@@ -36,16 +38,27 @@ const RaceTrack = (props) => {
     })
   }
 
-  const moveRacer = (racer) => {
-    let increment = Math.floor(Math.random() * Math.floor(10));
-    racer.percentage += (increment / 10);
+  const randomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
-    updateRacer(racer);
+  const moveRacer = (racer) => {
+    let increment = randomInt(1, 10);
+    let chance = randomInt(1, 40);
+    let divisable = 20;
+    if(racer.extraBoost > 0 && chance === randomInt(1, 500)){
+      divisable = randomInt(5, 10);
+      racer.extraBoost--;
+      console.log(`${racer.name} got a boost of ${increment/divisable}!`);
+    }
+
+    racer.percentage += (increment / divisable);
+    let endTime = moment();
 
     if(racer.percentage >= 100){
+      racer.endTime = endTime;
       racer.percentage = 100;
       racer.finished = true;
-      racer.endTime = moment();
       updateRacer(racer);
       
       if(raceIsFinished(racers)){
@@ -55,6 +68,7 @@ const RaceTrack = (props) => {
         setInProgress(false);
       }
     } else {
+      updateRacer(racer);
       setTimeout(() => {
         moveRacer(racer);
       }, 100);
@@ -165,7 +179,7 @@ const RaceTrack = (props) => {
           onClick={raceAgain}>Race</Button>
       )}
 
-      <RaceKey racers={racers} />
+      <RaceKey racers={racers}/>
     </Fragment>
   );
 }

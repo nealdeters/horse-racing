@@ -16,9 +16,8 @@ const App = () => {
     racer.endTime = null;
     return racer;
   })));
-  let e
-  const [track, setTrack] = useState(Utility.shuffle(tracksJson)[0]);
-  const [tracks, setTracks] = useState(tracksJson);
+
+  const [track] = useState(Utility.shuffle(tracksJson)[0]);
   
   return (
     <Fragment>
@@ -26,11 +25,12 @@ const App = () => {
         <div
           style={{
             backgroundColor: track.trackColor,
-            height: '100vh'
+            height: '150vh'
           }}>
           <Results 
             track={track} />
           <h1 className="header white-text">Cat Cave Derby</h1>
+          <h3 className="header white-text">{track.name}</h3>
           <RaceTrack 
             racers={racers}
             trackColor={track.trackColor} 

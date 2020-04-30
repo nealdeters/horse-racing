@@ -1,12 +1,14 @@
 [
 	{
 		"type": 1,
+		"name": "Churchill Downs",
 		"trackColor": "SeaGreen",
 		"groundColor": "SandyBrown",
 		"railColor": "black"
 	},
 	{
 		"type": 2,
+		"name": "Monmouth Park",
 		"trackColor": "DarkOliveGreen",
 		"groundColor": "OliveDrab",
 		"railColor": "white"

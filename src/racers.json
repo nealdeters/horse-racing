@@ -3,24 +3,24 @@
 		"id": 1,
 		"name": "Spiral Ham", 
 		"color": "brown",
-		"avatar": ""
+		"img_id": 1
 	},
 	{
 		"id": 2, 
 		"name": "Carmella's Dream",
 		"color": "darkgoldenrod",
-		"avatar": ""
+		"img_id": 2
 	},
 	{
 		"id": 3, 
 		"name": "Kenny",
 		"color": "whitesmoke",
-		"avatar": ""
+		"img_id": 3
 	},
 	{
 		"id": 4, 
 		"name": "Frederico",
 		"color": "black",
-		"avatar": ""
+		"img_id": 4
 	}
 ]

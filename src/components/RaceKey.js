@@ -5,8 +5,8 @@ const RaceKey = (props) => {
   const { racers } = props;
 
   return (
-  	<div className="race-key">
-  		<Table className="white-text" striped hover size="sm">
+    <div className="race-key">
+      <Table className="white-text" striped hover size="sm">
   			<thead>
   				<tr>
   					<th>Lane</th>
