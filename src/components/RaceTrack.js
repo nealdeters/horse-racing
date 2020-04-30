@@ -15,7 +15,7 @@ class RaceTrack extends React.Component {
       racer.startTime = moment();
       this.updateRacer(racer);
       this.moveRacer(racer);
-    })
+    });
   }
 
   updateRacer(racer) {
@@ -53,63 +53,74 @@ class RaceTrack extends React.Component {
   // the number of racers will determine the overall race track size
   // race track will determine the position of the race lanes on the element
 
-  // <svg
-  //     width={sqSize * 2}
-  //     height={sqSize}
-  //     viewBox={viewBox}>
-  //     <rect
-  //       className="track-rectangle"
-  //       width={sqSize * 2}
-  //       height={sqSize}
-  //       style={groundStyle} />
-
-  //     <circle
-  //       className="circle-background"
-  //       cx={cSize}
-  //       cy={cSize}
-  //       r={radius}
-  //       style={trackStyle}
-  //       strokeWidth={strokeWidth}
-  //       transform={transformRotate} />
-  // </svg>
-
   render() {
     const { sqSize, groundColor, trackColor } = this.props;
     const racers = this.state.racers;
-    const sizer = 10;
+    const stroke = 10;
+    const sizer = 30;
+    const increment = racers.length * sizer;
+    const rSize = sqSize + increment;
+    const cSize = (rSize / 2);
 
-    const viewBox = `0 0 ${sqSize} ${sqSize}`;
-    const radius = (this.props.sqSize - sizer) / 2;
-    const cSize = this.props.sqSize / 2;
-    const transformRotate = `rotate(-270 ${this.props.sqSize / 2} ${this.props.sqSize / 2})`;
-    const strokeWidth = `${sizer}px`;
+    const viewBox = `0 0 ${rSize} ${rSize}`;
+    const radius = (rSize - stroke) / 2;
+    const transformRotate = `rotate(-270 ${cSize} ${cSize})`;
+    const strokeWidth = `${stroke}px`;
     const groundStyle = {
-      stroke: groundColor
+      fill: groundColor
     }
     const trackStyle = {
-      stroke: trackColor
+      fill: trackColor
+    }
+
+    const laneStyle = {
+      width: `${cSize + increment}px`,
+      height:`${cSize + increment}px`,
+      left: `${ (rSize - cSize - sizer) / 2}px`
     }
 
     return (
       <Fragment>
-        { racers.map( (racer, i) => (
-          <RaceLane
-            key={racer.id}
-            strokeWidth={sizer}
-            sqSize={400}
-            laneIndex={i}
-            zIndex={racers.length - (i + 1)}
-            percentage={racer.percentage}
-            racerColor={racer.color}
-            groundColor={groundColor} />
-        ))}
+        <svg
+          width={rSize}
+          height={rSize}
+          viewBox={viewBox}
+          className="race-track">
+          <rect
+            className="track"
+            width={rSize}
+            height={rSize}
+            style={trackStyle} />
+
+          <circle
+            className="ground"
+            cx={cSize}
+            cy={cSize}
+            r={radius}
+            style={groundStyle}
+            strokeWidth={strokeWidth}
+            transform={transformRotate} />
+
+          { racers.map( (racer, i) => (
+            <RaceLane
+              key={racer.id}
+              strokeWidth={stroke}
+              sqSize={cSize}
+              laneIndex={i}
+              sizer={sizer}
+              zIndex={racers.length - (i + 1)}
+              percentage={racer.percentage}
+              racerColor={racer.color}
+              groundColor={groundColor} />
+          ))}
+        </svg>
       </Fragment>
     );
   }
 }
 
 RaceTrack.defaultProps = {
-  sqSize: 600,
+  sqSize: 400,
   groundColor: 'SandyBrown',
   trackColor: 'SeaGreen',
   racers: []

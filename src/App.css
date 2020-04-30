@@ -1,13 +1,26 @@
-.race-lane {
-  display: block;
+.race-track {
+  z-index: 0;
+}
+
+.ground {
   margin: auto;
+  position: relative;
+}
 
-  .race-lane-background,
-  .race-lane-progress {
-    fill: transparent;
-  }
+.race-lane-progress {
+  fill: transparent;
+}
 
-  .race-lane-background {
-    stroke: #ddd;
-  }
+.flex-container {
+  display: flex;
+}
+
+.track-block {
+  flex: 3;
+  background-color: SeaGreen;
+}
+
+.results-block {
+  flex: 1;
+  background-color: SeaGreen;
 }
