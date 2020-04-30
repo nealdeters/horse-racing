@@ -1,26 +1,43 @@
-.race-track {
-  z-index: 0;
+.header {
+  text-align: center;
 }
 
-.ground {
+.race-track {
+  display: block;
   margin: auto;
-  position: relative;
+}
+
+.race-track > button {
+  display: block;
+}
+
+.race-track > .ground {
+
 }
 
 .race-lane-progress {
   fill: transparent;
 }
 
-.flex-container {
-  display: flex;
+.race-again {
+  display: block;
+  margin: auto;
+  margin-top: 5px;
 }
 
-.track-block {
-  flex: 3;
-  background-color: SeaGreen;
+.white-text {
+  color: white;
 }
 
-.results-block {
-  flex: 1;
-  background-color: SeaGreen;
+.race-key {
+  display: block;
+  margin: auto;
+  margin-top: 15px;
+  width: 300px;
+}
+
+.racer-color {
+  width: 15px;
+  height: 15px;
+  margin-top: .3rem;
 }

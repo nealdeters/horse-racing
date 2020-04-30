@@ -1,0 +1,14 @@
+[
+	{
+		"type": 1,
+		"trackColor": "SeaGreen",
+		"groundColor": "SandyBrown",
+		"railColor": "black"
+	},
+	{
+		"type": 2,
+		"trackColor": "DarkOliveGreen",
+		"groundColor": "OliveDrab",
+		"railColor": "white"
+	}
+]

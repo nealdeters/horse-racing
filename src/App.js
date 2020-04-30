@@ -1,55 +1,45 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import RaceTrack from './components/RaceTrack';
-import racers from './racers.json'
+import Results from './components/Results';
+import ResultState from './context/result/ResultState';
+import Utility from './Utility';
+import racersJson from './racers.json';
+import tracksJson from './tracks.json'
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    racers.forEach(racer => {
-      racer.percentage = 0;
-      racer.finished = false;
-      racer.startTime = null;
-      racer.endTime = null;
-    });
-    this.shuffle(racers);
-    this.state = {
-      racers: racers
-    };
-  }
-
-  shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-    }
-
-    return array;
-  }
-
-  render() {
-    return (
-      <div className="flex-container">
-        <div className="track-block">
-          <RaceTrack racers={this.state.racers}/>
+const App = () => {
+  const [racers] = useState(Utility.shuffle(racersJson.map(racer => {
+    racer.percentage = 0;
+    racer.finished = false;
+    racer.startTime = null;
+    racer.endTime = null;
+    return racer;
+  })));
+  let e
+  const [track, setTrack] = useState(Utility.shuffle(tracksJson)[0]);
+  const [tracks, setTracks] = useState(tracksJson);
+  
+  return (
+    <Fragment>
+      <ResultState>
+        <div
+          style={{
+            backgroundColor: track.trackColor,
+            height: '100vh'
+          }}>
+          <Results 
+            track={track} />
+          <h1 className="header white-text">Cat Cave Derby</h1>
+          <RaceTrack 
+            racers={racers}
+            trackColor={track.trackColor} 
+            groundColor={track.groundColor} 
+            railColor={track.railColor} />
         </div>
-        <div className="results-block">
-          results go here
-        </div>
-      </div>
-    );
-  }
+      </ResultState>
+    </Fragment>
+  );
 }
 
 export default App;

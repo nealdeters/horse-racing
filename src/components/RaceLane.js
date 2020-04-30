@@ -15,7 +15,7 @@ class RaceLane extends React.Component {
     // SVG centers the stroke width on the radius, subtract out so circle fits in square
     const radius = (sqSize - this.props.strokeWidth) / 2;
     // Arc length at 100% coverage is the circle circumference
-    const dashArray = radius * Math.PI * 2;
+    const dashArray = (radius * 1.25) * Math.PI * 2;
     // Scale 100% coverage overlay with the actual percent
     const dashOffset = dashArray - dashArray * this.props.percentage / 100;
 
@@ -29,17 +29,17 @@ class RaceLane extends React.Component {
       margin: 'auto'
     }
 
-    const cSize = sqSize;
     const transformRotate = `rotate(-270 ${sqSize / 2} ${sqSize / 2})`;
     const strokeWidth = `${this.props.strokeWidth}px`;
 
     return (
       <Fragment>
-        <circle
+        <ellipse
           className="race-lane-progress"
           cx="50%"
           cy={incrementSize}
-          r={radius}
+          ry={radius}
+          rx={radius * 1.25}
           strokeWidth={strokeWidth}
           transform={transformRotate}
           style={racerStyle} />
