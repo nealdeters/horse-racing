@@ -24,6 +24,7 @@ const ResultState = props => {
         name: racer.name,
         colors: racer.colors,
         racerId: racer.id,
+        injured: racer.injured,
         time: isNaN(duration) ? null : duration
       }
       results.push(result);

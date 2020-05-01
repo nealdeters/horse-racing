@@ -15,7 +15,7 @@
 			"primary": "Red",
 			"secondary": "black"
 		},
-		"type": "start"
+		"type": "starter"
 	},
 	{
 		"id": 3, 
@@ -24,7 +24,7 @@
 			"primary": "whitesmoke",
 			"secondary": "black"
 		},
-		"type": "start"
+		"type": "starter"
 	},
 	{
 		"id": 4, 
@@ -33,7 +33,7 @@
 			"primary": "black",
 			"secondary": "white"
 		},
-		"type": "end"
+		"type": "finisher"
 	},
 	{
 		"id": 5,
@@ -60,15 +60,15 @@
 			"primary": "Gold",
 			"secondary": "black"
 		},
-		"type": "end"
+		"type": "finisher"
 	},
 	{
 		"id": 8, 
 		"name": "Nemo",
 		"colors": {
-			"primary": "Coral",
+			"primary": "DarkOrange",
 			"secondary": "black"
 		},
-		"type": "end"
+		"type": "finisher"
 	}
 ]

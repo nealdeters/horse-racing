@@ -1,6 +1,38 @@
-body {
+html, body {
   height: 100%;
   margin: 0;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+h5 {
+  font-size: 1rem;
+}
+
+h6 {
+  font-size: .5rem;
+}
+
+.margin-0 {
+  margin: 0;
+}
+
+.track-name {
+  margin: 1rem;
 }
 
 .header {
@@ -36,7 +68,7 @@ body {
 
 .race-key {
   display: block;
-  margin: 30px auto;
+  margin: 5px auto;
   width: 300px;
 }
 
@@ -47,45 +79,25 @@ body {
 }
 
 .racer-default-img {
-  font-size: 20rem;
+  font-size: 10rem;
   margin: auto;
   display: block;
   text-align: center;
   padding-top: 30px;
   margin-bottom: 15px;
 
-  width: 400px;
-  height: 400px;
+  width: 200px;
+  height: 200px;
   margin: auto;
   background-size: cover;
   border-radius: 25%;
   margin-bottom: 15px;
 }
 
-/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
-
-/* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 667px) 
-  and (-webkit-min-device-pixel-ratio: 2) { 
-    .racer-default-img {
-      width: 300px;
-      height: 300px;
-      font-size: 15rem;
-    }
+.modal.bottom-sheet {
+  max-height: 75%;
 }
 
-/* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
-
-/* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 568px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-    .racer-default-img {
-      width: 200px;
-      height: 200px;
-      font-size: 10rem;
-    }
+.strike-name {
+  text-decoration: line-through;
 }

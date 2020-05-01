@@ -1,12 +1,14 @@
-import React, { Fragment, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
+import React, { Fragment, useEffect, useState } from 'react';
 import RaceTrack from './components/RaceTrack';
 import Results from './components/Results';
 import ResultState from './context/result/ResultState';
 import Utility from './Utility';
 import racersJson from './racers.json';
 import tracksJson from './tracks.json'
+
+import "materialize-css/dist/css/materialize.min.css";
+import M from "materialize-css/dist/js/materialize.min.js";
+import './App.css';
 
 const App = () => {
   const [racers] = useState(Utility.shuffle(racersJson.map(racer => {
@@ -16,8 +18,14 @@ const App = () => {
     racer.endTime = null;
     return racer;
   })));
-
   const [track] = useState(Utility.shuffle(tracksJson)[0]);
+
+  useEffect(() => {
+    document.body.style = `background-color: ${track.colors.track};`;
+
+    // initialize materialize js
+    M.AutoInit();
+  })
   
   return (
     <Fragment>
@@ -29,8 +37,8 @@ const App = () => {
           }}>
           <Results 
             track={track} />
-          <h1 className="header white-text">Derby</h1>
-          <h3 className="header white-text">{track.name}</h3>
+          <h1 className="header white-text margin-0">Derby</h1>
+          <h3 className="header white-text track-name">{track.name}</h3>
           <RaceTrack 
             racers={racers}
             colors={track.colors} 

@@ -1,22 +1,25 @@
 import React, { Fragment, useContext } from 'react';
-import Moment from 'react-moment';
 import ResultContext from '../context/result/resultContext';
-import Table from 'react-bootstrap/Table';
+import Moment from 'react-moment';
 
-const ResultsBoard = () => {
-  
-	const resultContext = useContext(ResultContext);
-	const { results } = resultContext;
+const ResultsBoard = (props) => {
+  const resultContext = useContext(ResultContext);
+  const { results } = resultContext;
+
+  if(results === null){
+    return null;
+  }
 
   return (
   	<Fragment>
   		<div 
-        className="far fa-user racer-default-img"
+        className="fas fa-horse fa-flip-horizontal racer-default-img"
         style={{
-          backgroundColor: results[0].colors.primary,
-          color: results[0].colors.secondary
-        }}></div>
-      <Table className="white-text" striped bordered hover size="sm">
+          backgroundColor: results === null ? 'white' : results[0].colors.primary,
+          color: results === null ? 'white' : results[0].colors.secondary
+        }}
+        ></div>
+      <table className="white-text">
   			<thead>
   				<tr>
   					<th>Rank</th>
@@ -37,7 +40,7 @@ const ResultsBoard = () => {
                   }}>
                 </div>
               </td>
-  						<td>{result.name}</td>
+  						<td className={result.injured ? 'strike-name' : ''}>{result.name}</td>
   						<td>
   							{result.time === null ? '-' : (
                   <Moment 
@@ -49,7 +52,7 @@ const ResultsBoard = () => {
   					</tr>
   				))}
   			</tbody>
-  		</Table>
+  		</table>
   	</Fragment>
   );
 }

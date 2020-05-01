@@ -4,18 +4,6 @@ import Table from 'react-bootstrap/Table';
 const RaceKey = (props) => {
   const { racers } = props;
 
-  // setTimeout(() => {
-  //   racers.sort((a, b) => {
-  //     if(a.percentage < b. percentage){
-  //       return -1
-  //     } else if(a.percentage > b.percentage){
-  //       return 1;
-  //     } else {
-  //       return 0;
-  //     }
-  //   })
-  // }, 5000)
-
   return (
     <div className="race-key">
       <Table className="white-text" striped hover size="sm">
@@ -36,7 +24,8 @@ const RaceKey = (props) => {
                   backgroundColor: racer.colors.primary
                 }}></div>
               </td>
-  						<td>{racer.name}</td>
+  						<td
+                className={racer.injured ? 'strike-name' : ''}>{racer.name}</td>
   					</tr>
   				))}
   			</tbody>

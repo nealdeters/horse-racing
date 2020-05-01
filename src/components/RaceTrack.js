@@ -6,7 +6,7 @@ import ResultContext from '../context/result/resultContext';
 import Utility from '../Utility';
 import moment from 'moment';
 
-let debugging = false;
+let debugging = true;
 
 const RaceTrack = (props) => {
   const resultContext = useContext(ResultContext);
@@ -57,11 +57,11 @@ const RaceTrack = (props) => {
       const upperBound = Math.floor(props.distance * 0.90);
       const lowerBound = Math.floor(props.distance * 0.70);
 
-      if(racer.type === 'start' && racer.percentage < 33){
+      if(racer.type === 'starter' && racer.percentage < 33){
         divisable = Utility.randomInt(lowerBound, upperBound);
       } else if(racer.type === 'middle' && (racer.percentage >= 33 && racer.percentage <= 66)){
         divisable = Utility.randomInt(lowerBound, upperBound);
-      } else if(racer.type === 'end' && racer.percentage > 66){
+      } else if(racer.type === 'finisher' && racer.percentage > 66){
         divisable = Utility.randomInt(lowerBound, upperBound);
       }
     }
@@ -76,6 +76,7 @@ const RaceTrack = (props) => {
 
     racer.percentage += (increment / divisable);
     let endTime = moment();
+    updateRacer(racer);
 
     if(racer.percentage >= 100 || racer.injured){
       if(racer.injured){
@@ -90,12 +91,11 @@ const RaceTrack = (props) => {
       
       if(raceIsFinished(racers)){
         setResults(racers);
-        Utility.resetRacers(racers);
-        setRacers(racers);
+        let updates = Utility.resetRacers(racers);
+        setRacers(updates);
         setInProgress(false);
       }
     } else {
-      updateRacer(racer);
       setTimeout(() => {
         moveRacer(racer);
       }, 100);
@@ -195,8 +195,9 @@ const RaceTrack = (props) => {
 
       {inProgress ? null : (
         <Button 
-          className="race-again"
-          variant="dark" 
+          className="race-again grey darken-3"
+          waves="light"
+          flat="true"
           onClick={raceAgain}>Race</Button>
       )}
 

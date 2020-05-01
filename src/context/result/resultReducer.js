@@ -13,7 +13,7 @@ export default (state, action) => {
     case CLEAR_RESULTS:
       return {
         ...state,
-        results: []
+        results: null
       };
     default:
       return state;
