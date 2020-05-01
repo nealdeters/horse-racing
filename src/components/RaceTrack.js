@@ -2,35 +2,67 @@ import React, { Fragment, useState, useContext } from 'react';
 import RaceKey from './RaceKey';
 import RaceLane from './RaceLane';
 import { Button } from 'react-materialize';
-import ResultContext from '../context/result/resultContext';
+import RaceContext from '../context/race/raceContext';
 import Utility from '../Utility';
 import moment from 'moment';
 
-let debugging = false;
+let debugging = true;
 
 const RaceTrack = (props) => {
-  const resultContext = useContext(ResultContext);
-  const { setResults, clearResults } = resultContext;
+  const raceContext = useContext(RaceContext);
+  const { setResults } = raceContext;
 
   const [racers, setRacers] = useState(props.racers.map((racer) => {
-    // racer.percentage = 0.25;
     return racer;
   }));
   const [sqSize] = useState(props.sqSize);
   const [inProgress, setInProgress] = useState(false);
+  const [countdown, setCountdown] = useState(false);
 
   const startRace = () => {
-    clearResults();
-    let startTime = moment();
-    let updates = racers.map(racer => {
-      racer.startTime = startTime;
-      racer.injured = false;
-      racer.percentage = 0.25;
-      moveRacer(racer);
-      return racer;
-    });
-    setRacers(updates);
-    setInProgress(true);
+    setCountdown(true);
+    startTimer(1, document.querySelector('#timer'));
+  }
+
+  const startTimer = (duration, display) => {
+    let start = Date.now(),
+      diff,
+      minutes,
+      seconds;
+
+    // we don't want to wait a full second before the timer starts
+    timer();
+    const inter = setInterval(timer, 1000);
+
+    function timer(){
+      diff = duration - (((Date.now() - start) / 1000) | 0);
+
+      minutes = (diff / 60) | 0;
+      seconds = (diff % 60) | 0;
+
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      display.textContent = minutes + ":" + seconds; 
+
+      if (diff === 0) {
+        display.textContent = "";
+
+        const startTime = moment();
+        const rUpdates = racers.map(racer => {
+          racer.startTime = startTime;
+          racer.injured = false;
+          racer.percentage = 0;
+          moveRacer(racer);
+          return racer;
+        });
+        setRacers(rUpdates);
+        setInProgress(true);
+
+        clearInterval(inter);
+        setCountdown(false);
+      }
+    };
   }
 
   const updateRacer = (racer) => {
@@ -102,19 +134,15 @@ const RaceTrack = (props) => {
     }
   }
 
-  const raceAgain = () => {
-    startRace();
-  }
-
   const { colors } = props;
-  const stroke = 5;
-  const sizer = 30;
+  const stroke = 4;
+  const sizer = 20;
   const increment = racers.length * sizer;
   const rSize = sqSize + increment;
   const cSize = (rSize / 2);
   const viewBox = `0 0 ${rSize} ${rSize}`;
   const radius = (rSize - stroke) / 2;
-  const transformRotate = `rotate(-270 ${cSize} ${cSize})`;
+  const transformRotate = `rotate(90 ${cSize} ${cSize})`;
   const strokeWidth = `${stroke}px`;
   const insideRail = (cSize - sizer) / 2;
 
@@ -136,13 +164,16 @@ const RaceTrack = (props) => {
     stroke: colors.rail
   }
 
+  const rY = 1.5;
+
   return (
     <Fragment>
       <svg
-        height={rSize * 1.25}
-        width={rSize}
+        height={rSize}
+        width={rSize * rY}
         viewBox={viewBox}
         className="race-track">
+
         <rect
           className="track"
           width={rSize}
@@ -153,8 +184,8 @@ const RaceTrack = (props) => {
           className="ground"
           cx={cSize}
           cy={cSize}
-          ry={radius}
-          rx={radius * 1.25}
+          ry={radius * rY}
+          rx={radius}
           style={groundStyle}
           strokeWidth={strokeWidth}
           transform={transformRotate} />
@@ -163,8 +194,8 @@ const RaceTrack = (props) => {
           className="railing"
           cx={cSize}
           cy={cSize}
-          ry={radius}
-          rx={radius * 1.25}
+          ry={radius * rY}
+          rx={radius}
           style={railStyle}
           strokeWidth={2}
           transform={transformRotate} />
@@ -173,8 +204,8 @@ const RaceTrack = (props) => {
           className="railing"
           cx={cSize}
           cy={cSize}
-          ry={insideRail}
-          rx={insideRail * 1.25}
+          ry={insideRail * rY}
+          rx={insideRail}
           style={insideRailStyle}
           strokeWidth={2}
           transform={transformRotate} />
@@ -185,7 +216,7 @@ const RaceTrack = (props) => {
             strokeWidth={stroke}
             sqSize={cSize}
             laneIndex={i}
-            sizer={sizer / 1.5}
+            sizer={sizer / rY}
             zIndex={racers.length - (i + 1)}
             percentage={racer.percentage}
             racerColor={racer.colors.primary}
@@ -193,13 +224,15 @@ const RaceTrack = (props) => {
         ))}
       </svg>
 
-      {inProgress ? null : (
+      {inProgress || countdown ? null : (
         <Button 
           waves="light"
           flat={true}
           className="race-again grey darken-3 white-text"
-          onClick={raceAgain}>Race</Button>
+          onClick={startRace}>Race</Button>
       )}
+
+      <div id="timer" className="timer"></div>
 
       <RaceKey racers={racers}/>
     </Fragment>

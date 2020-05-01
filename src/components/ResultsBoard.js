@@ -1,10 +1,10 @@
 import React, { Fragment, useContext } from 'react';
-import ResultContext from '../context/result/resultContext';
+import RaceContext from '../context/race/raceContext';
 import Moment from 'react-moment';
 
 const ResultsBoard = (props) => {
-  const resultContext = useContext(ResultContext);
-  const { results } = resultContext;
+  const raceContext = useContext(RaceContext);
+  const { results } = raceContext;
 
   if(results === null){
     return null;

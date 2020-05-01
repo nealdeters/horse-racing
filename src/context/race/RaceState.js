@@ -1,19 +1,48 @@
 import React, { useReducer } from 'react';
 import moment from 'moment';
-import ResultContext from './resultContext';
-import resultReducer from './resultReducer';
+import RaceContext from './raceContext';
+import raceReducer from './raceReducer';
+import Utility from '../../Utility';
+import racersJson from '../../racers.json';
+import tracksJson from '../../tracks.json'
 import {
+  SET_TRACK,
+  SET_RACERS,
   SET_RESULTS,
   CLEAR_RESULTS
 } from '../types';
 
-const ResultState = props => {
+const RaceState = props => {
   const initialState = {
-    results: null,
-    error: null
+    racers: null,
+    track: null,
+    results: null
   };
 
-  const [state, dispatch] = useReducer(resultReducer, initialState);
+  const [state, dispatch] = useReducer(raceReducer, initialState);
+
+  const setRacers = () => {
+    const racers = Utility.shuffle(racersJson.map(racer => {
+      racer.percentage = 0;
+      racer.finished = false;
+      racer.startTime = null;
+      racer.endTime = null;
+      return racer;
+    }));
+
+    dispatch({
+      type: SET_RACERS,
+      payload: racers
+    })
+  }
+
+  const setTrack = () => {
+    const track = Utility.shuffle(tracksJson)[0]
+    dispatch({
+      type: SET_TRACK,
+      payload: track
+    })
+  }
 
   const setResults = (racers) => {
     let results = [];
@@ -25,7 +54,8 @@ const ResultState = props => {
         colors: racer.colors,
         racerId: racer.id,
         injured: racer.injured,
-        time: isNaN(duration) ? null : duration
+        time: isNaN(duration) ? null : duration,
+        lane: null
       }
       results.push(result);
     })
@@ -58,17 +88,20 @@ const ResultState = props => {
   }
 
   return (
-    <ResultContext.Provider
+    <RaceContext.Provider
       value={{
+        racers: state.racers,
+        track: state.track,
         results: state.results,
-        error: state.error,
+        setRacers,
+        setTrack,
         setResults,
         clearResults
       }}
     >
       {props.children}
-    </ResultContext.Provider>
+    </RaceContext.Provider>
   );
 };
 
-export default ResultState;
+export default RaceState;

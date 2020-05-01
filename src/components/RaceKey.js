@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import RaceContext from '../context/race/raceContext';
 
 const RaceKey = (props) => {
-  const { racers } = props;
+  const raceContext = useContext(RaceContext);
+  const { racers } = raceContext;
 
   return (
     <div className="race-key">

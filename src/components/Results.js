@@ -1,12 +1,11 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react';
 import ResultsBoard from './ResultsBoard';
-import ResultContext from '../context/result/resultContext';
+import RaceContext from '../context/race/raceContext';
 import { Modal, Button } from 'react-materialize';
 
 const Results = (props) => {
-	
-	const resultContext = useContext(ResultContext);
-	const { results } = resultContext;
+	const raceContext = useContext(RaceContext);
+	const { track, results, clearResults, setTrack, setRacers } = raceContext;
 	const [show, setShow] = useState(false);
 
 	useEffect(() => {
@@ -22,6 +21,12 @@ const Results = (props) => {
     }
 	}, [results]);
 
+	const onClose = () => {
+		clearResults();
+		setRacers();
+		setTrack();
+	}
+
 	if(results === null){
 		return null;
 	}
@@ -30,7 +35,7 @@ const Results = (props) => {
 		<Fragment>
 			{ show ? (
 				<Modal
-				  style={{backgroundColor: props.track.colors.track}}
+				  style={{backgroundColor: track.colors.track}}
 				  actions={[
 				    <Button 
 				    	waves="light"
@@ -50,7 +55,7 @@ const Results = (props) => {
 				    dismissible: true,
 				    endingTop: '10%',
 				    inDuration: 250,
-				    onCloseEnd: null,
+				    onCloseEnd: onClose,
 				    onCloseStart: null,
 				    onOpenEnd: null,
 				    onOpenStart: null,
@@ -59,8 +64,8 @@ const Results = (props) => {
 				    preventScrolling: true,
 				    startingTop: '15%'
 				  }}
-				>
-				  { results === null ? null : (
+				> 
+					{ results === null ? null : (
 				  	<ResultsBoard id="results-board" results={results}/>
 				  )}
 				</Modal>
