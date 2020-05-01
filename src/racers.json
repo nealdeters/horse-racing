@@ -2,49 +2,73 @@
 	{
 		"id": 1,
 		"name": "Spiral Ham", 
-		"color": "DeepPink",
+		"colors": {
+			"primary": "DeepPink",
+			"secondary": "black"
+		},
 		"type": "middle"
 	},
 	{
 		"id": 2, 
 		"name": "Carmella's Dream",
-		"color": "Red",
+		"colors": {
+			"primary": "Red",
+			"secondary": "black"
+		},
 		"type": "start"
 	},
 	{
 		"id": 3, 
 		"name": "Kenny",
-		"color": "whitesmoke",
+		"colors": {
+			"primary": "whitesmoke",
+			"secondary": "black"
+		},
 		"type": "start"
 	},
 	{
 		"id": 4, 
 		"name": "Frederico",
-		"color": "black",
+		"colors": {
+			"primary": "black",
+			"secondary": "white"
+		},
 		"type": "end"
 	},
 	{
 		"id": 5,
 		"name": "Papa Smurf", 
-		"color": "DodgerBlue",
+		"colors": {
+			"primary": "DodgerBlue",
+			"secondary": "white"
+		},
 		"type": "begin"
 	},
 	{
 		"id": 6, 
-		"name": "Clover",
-		"color": "Lime",
+		"name": "Lucky Clover",
+		"colors": {
+			"primary": "Lime",
+			"secondary": "black"
+		},
 		"type": "middle"
 	},
 	{
 		"id": 7, 
 		"name": "Solar",
-		"color": "Gold",
+		"colors": {
+			"primary": "Gold",
+			"secondary": "black"
+		},
 		"type": "end"
 	},
 	{
 		"id": 8, 
 		"name": "Nemo",
-		"color": "Coral",
+		"colors": {
+			"primary": "Coral",
+			"secondary": "black"
+		},
 		"type": "end"
 	}
 ]

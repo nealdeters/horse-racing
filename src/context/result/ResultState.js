@@ -22,7 +22,7 @@ const ResultState = props => {
       let result = {
         rank: null,
         name: racer.name,
-        color: racer.color,
+        colors: racer.colors,
         racerId: racer.id,
         time: isNaN(duration) ? null : duration
       }

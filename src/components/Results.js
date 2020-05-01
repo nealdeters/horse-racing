@@ -24,7 +24,7 @@ const Results = (props) => {
 		  <Modal.Header closeButton>
 		    Race Results
 		  </Modal.Header>
-		  <Modal.Body style={{backgroundColor: props.track.trackColor}}>
+		  <Modal.Body style={{backgroundColor: props.track.colors.track}}>
 		    <ResultsBoard />
 		  </Modal.Body>
 		  <Modal.Footer>

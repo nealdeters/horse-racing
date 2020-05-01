@@ -2,25 +2,31 @@
 	{
 		"type": 1,
 		"name": "Churchill Downs",
-		"trackColor": "SeaGreen",
-		"groundColor": "SandyBrown",
-		"railColor": "black",
+		"colors": {
+			"track": "SeaGreen",
+			"ground": "SandyBrown",
+			"rail": "black"
+		},
 		"distance": 20
 	},
 	{
 		"type": 2,
 		"name": "Pimlico Race Course",
-		"trackColor": "DarkOliveGreen",
-		"groundColor": "OliveDrab",
-		"railColor": "white",
+		"colors": {
+			"track": "DarkOliveGreen",
+			"ground": "OliveDrab",
+			"rail": "white"
+		},
 		"distance": 10
 	},
 	{
 		"type": 3,
 		"name": "Belmont Park",
-		"trackColor": "ForestGreen",
-		"groundColor": "BurlyWood",
-		"railColor": "LightGrey",
+		"colors": {
+			"track": "ForestGreen",
+			"ground": "BurlyWood",
+			"rail": "LightGrey"
+		},
 		"distance": 40
 	}
 ]

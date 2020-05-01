@@ -49,9 +49,9 @@ class RaceLane extends React.Component {
 }
 
 RaceLane.defaultProps = {
-  sqSize: 200,
-  percentage: 25,
-  strokeWidth: 10,
+  sqSize: 75,
+  percentage: 0,
+  strokeWidth: 5,
   color: 'red',
   sizer: 30
 };

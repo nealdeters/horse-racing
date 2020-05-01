@@ -24,19 +24,17 @@ const App = () => {
       <ResultState>
         <div
           style={{
-            backgroundColor: track.trackColor,
+            backgroundColor: track.colors.track,
             minHeight: `100%`
           }}>
           <Results 
             track={track} />
-          <h1 className="header white-text">Cat Cave Derby</h1>
+          <h1 className="header white-text">Derby</h1>
           <h3 className="header white-text">{track.name}</h3>
           <RaceTrack 
             racers={racers}
-            trackColor={track.trackColor} 
-            groundColor={track.groundColor} 
-            railColor={track.railColor}
-            trackDistance={track.distance} />
+            colors={track.colors} 
+            distance={track.distance} />
         </div>
       </ResultState>
     </Fragment>

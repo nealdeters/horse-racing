@@ -12,30 +12,24 @@ const RaceTrack = (props) => {
   const resultContext = useContext(ResultContext);
   const { setResults, clearResults } = resultContext;
 
-  const [racers, setRacers] = useState(props.racers);
+  const [racers, setRacers] = useState(props.racers.map((racer) => {
+    // racer.percentage = 0.25;
+    return racer;
+  }));
   const [sqSize] = useState(props.sqSize);
   const [inProgress, setInProgress] = useState(false);
-
-  // useEffect(() => {
-  //   if(racers){
-  //     racers.forEach(racer => {
-  //       racer.percentage+= 1;
-  //     });
-  //     console.log('set racers')
-  //     setRacers(racers);
-  //   }
-  // }, []);
 
   const startRace = () => {
     clearResults();
     let startTime = moment();
-    racers.forEach(racer => {
+    let updates = racers.map(racer => {
       racer.startTime = startTime;
-      // racer.extraBoost = 3;
       racer.injured = false;
-      updateRacer(racer);
+      racer.percentage = 0.25;
       moveRacer(racer);
+      return racer;
     });
+    setRacers(updates);
     setInProgress(true);
   }
 
@@ -54,14 +48,14 @@ const RaceTrack = (props) => {
   const moveRacer = (racer) => {
     const increment = Utility.randomInt(1, 10);
     let divisable = null;
-    
+
     if(debugging){
       divisable = 1;
     } else {
-      divisable = props.trackDistance;
+      divisable = props.distance;
 
-      const upperBound = Math.floor(props.trackDistance * 0.90);
-      const lowerBound = Math.floor(props.trackDistance * 0.70);
+      const upperBound = Math.floor(props.distance * 0.90);
+      const lowerBound = Math.floor(props.distance * 0.70);
 
       if(racer.type === 'start' && racer.percentage < 33){
         divisable = Utility.randomInt(lowerBound, upperBound);
@@ -72,8 +66,10 @@ const RaceTrack = (props) => {
       }
     }
 
-    const injuryChance = Utility.randomInt(1, 10000);
-    if(injuryChance === Utility.randomInt(1, 10000)){
+    const injuryChance = 10000;
+    const injuryChance1 = Utility.randomInt(1, injuryChance);
+    const injuryChance2 = Utility.randomInt(1, injuryChance);
+    if(injuryChance1 === injuryChance2){
       racer.injured = true;
       // console.log(`${racer.name} got injured`)
     }
@@ -110,14 +106,8 @@ const RaceTrack = (props) => {
     startRace();
   }
 
-  // race track will have a groundColor and track color
-  // track color will be passed to race lane 
-  // create race lanes for each racer. increase the sizing of each lane for the racers
-  // the number of racers will determine the overall race track size
-  // race track will determine the position of the race lanes on the element
-
-  const { groundColor, trackColor, railColor } = props;
-  const stroke = 10;
+  const { colors } = props;
+  const stroke = 5;
   const sizer = 30;
   const increment = racers.length * sizer;
   const rSize = sqSize + increment;
@@ -129,21 +119,21 @@ const RaceTrack = (props) => {
   const insideRail = (cSize - sizer) / 2;
 
   const groundStyle = {
-    fill: groundColor
+    fill: colors.ground
   }
 
   const trackStyle = {
-    fill: trackColor
+    fill: colors.track
   }
 
   const railStyle = {
-    fill: groundColor,
-    stroke: railColor
+    fill: colors.ground,
+    stroke: colors.rail
   }
 
   const insideRailStyle = {
-    fill: trackColor,
-    stroke: railColor
+    fill: colors.track,
+    stroke: colors.rail
   }
 
   return (
@@ -195,11 +185,11 @@ const RaceTrack = (props) => {
             strokeWidth={stroke}
             sqSize={cSize}
             laneIndex={i}
-            sizer={sizer}
+            sizer={sizer / 1.5}
             zIndex={racers.length - (i + 1)}
             percentage={racer.percentage}
-            racerColor={racer.color}
-            groundColor={groundColor} />
+            racerColor={racer.colors.primary}
+            groundColor={colors.ground} />
         ))}
       </svg>
 
@@ -216,11 +206,13 @@ const RaceTrack = (props) => {
 }
 
 RaceTrack.defaultProps = {
-  sqSize: 200,
-  groundColor: 'SandyBrown',
-  trackColor: 'SeaGreen',
-  railColor: 'black',
-  trackDistance: 20,
+  sqSize: 75,
+  colors: {
+    ground: 'SandyBrown',
+    track: 'SeaGreen',
+    rail: 'black'
+  },
+  distance: 20,
   racers: []
 };
 

@@ -11,8 +11,11 @@ const ResultsBoard = () => {
   return (
   	<Fragment>
   		<div 
-        className={`racer-img-${results[0].racerId}${results[0].racerId > 4 ? ' far fa-user racer-default-img': ''}`}
-        style={{backgroundColor: results[0].racerId > 4 ? results[0].color : 'white'}}></div>
+        className="far fa-user racer-default-img"
+        style={{
+          backgroundColor: results[0].colors.primary,
+          color: results[0].colors.secondary
+        }}></div>
       <Table className="white-text" striped bordered hover size="sm">
   			<thead>
   				<tr>
@@ -30,7 +33,7 @@ const ResultsBoard = () => {
                 <div 
                   className="racer-color"
                   style={{
-                    backgroundColor: result.color
+                    backgroundColor: result.colors.primary
                   }}>
                 </div>
               </td>

@@ -33,7 +33,7 @@ const RaceKey = (props) => {
               <td>
                 <div className="racer-color"
                 style={{
-                  backgroundColor: racer.color
+                  backgroundColor: racer.colors.primary
                 }}></div>
               </td>
   						<td>{racer.name}</td>

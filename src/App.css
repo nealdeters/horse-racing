@@ -26,7 +26,8 @@ body {
 
 .race-again {
   display: block;
-  margin: auto
+  margin: auto;
+  margin-top: 15px;
 }
 
 .white-text {
@@ -36,8 +37,6 @@ body {
 .race-key {
   display: block;
   margin: 30px auto;
-  /*margin-top: 15px;*/
-
   width: 300px;
 }
 
@@ -47,40 +46,20 @@ body {
   margin-top: .3rem;
 }
 
-[class^="racer-img-"].racer-default-img {
-  font-size: 300px;
+.racer-default-img {
+  font-size: 20rem;
   margin: auto;
   display: block;
   text-align: center;
   padding-top: 30px;
   margin-bottom: 15px;
-  color: white;
-}
 
-[class^="racer-img-"] {
   width: 400px;
   height: 400px;
   margin: auto;
   background-size: cover;
   border-radius: 25%;
   margin-bottom: 15px;
-}
-
-.racer-img-1 {
-  background-image: url(./images/1.jpg);
-}
-
-.racer-img-2 {
-  background-image: url(./images/2.jpg);
-}
-
-.racer-img-3 {
-  background-image: url(./images/3.jpg);
-  height: 300px;
-}
-
-.racer-img-4 {
-  background-image: url(./images/4.jpg);
 }
 
 /* ----------- iPhone 6, 6S, 7 and 8 ----------- */
@@ -90,14 +69,10 @@ body {
   and (min-device-width: 375px) 
   and (max-device-width: 667px) 
   and (-webkit-min-device-pixel-ratio: 2) { 
-    [class^="racer-img-"] {
+    .racer-default-img {
       width: 300px;
       height: 300px;
-    }
-
-    .racer-img-3 {
-      width: 200px;
-      height: 200px;
+      font-size: 15rem;
     }
 }
 
@@ -108,13 +83,9 @@ body {
   and (min-device-width: 320px) 
   and (max-device-width: 568px)
   and (-webkit-min-device-pixel-ratio: 2) {
-    [class^="racer-img-"] {
+    .racer-default-img {
       width: 200px;
       height: 200px;
-    }
-
-    .racer-img-3 {
-      width: 100px;
-      height: 100px;
+      font-size: 10rem;
     }
 }
