@@ -1,3 +1,8 @@
+body {
+  height: 100%;
+  margin: 0;
+}
+
 .header {
   text-align: center;
 }
@@ -30,8 +35,9 @@
 
 .race-key {
   display: block;
-  margin: auto;
-  margin-top: 15px;
+  margin: 30px auto;
+  /*margin-top: 15px;*/
+
   width: 300px;
 }
 
@@ -39,6 +45,16 @@
   width: 15px;
   height: 15px;
   margin-top: .3rem;
+}
+
+[class^="racer-img-"].racer-default-img {
+  font-size: 300px;
+  margin: auto;
+  display: block;
+  text-align: center;
+  padding-top: 30px;
+  margin-bottom: 15px;
+  color: white;
 }
 
 [class^="racer-img-"] {
@@ -65,4 +81,40 @@
 
 .racer-img-4 {
   background-image: url(./images/4.jpg);
+}
+
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2) { 
+    [class^="racer-img-"] {
+      width: 300px;
+      height: 300px;
+    }
+
+    .racer-img-3 {
+      width: 200px;
+      height: 200px;
+    }
+}
+
+/* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+    [class^="racer-img-"] {
+      width: 200px;
+      height: 200px;
+    }
+
+    .racer-img-3 {
+      width: 100px;
+      height: 100px;
+    }
 }

@@ -22,22 +22,26 @@ const ResultState = props => {
       let result = {
         rank: null,
         name: racer.name,
+        color: racer.color,
         racerId: racer.id,
-        time: duration
+        time: isNaN(duration) ? null : duration
       }
       results.push(result);
     })
 
     results.sort((a, b) => {
-      if ( a.time < b.time) {
-        return -1;
-      }
-
-      if ( a.time > b.time) {
+      // nulls sort after anything else
+      if (a.time === null) {
         return 1;
+      } else if (b.time === null) {
+        return -1;
+      } else if ( a.time < b.time) {
+        return -1;
+      } else if ( a.time > b.time) {
+        return 1;
+      } else {
+        return 0;
       }
-
-      return 0;
     })
 
     dispatch({

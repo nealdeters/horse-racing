@@ -6,6 +6,8 @@ import ResultContext from '../context/result/resultContext';
 import Utility from '../Utility';
 import moment from 'moment';
 
+let debugging = false;
+
 const RaceTrack = (props) => {
   const resultContext = useContext(ResultContext);
   const { setResults, clearResults } = resultContext;
@@ -14,12 +16,23 @@ const RaceTrack = (props) => {
   const [sqSize] = useState(props.sqSize);
   const [inProgress, setInProgress] = useState(false);
 
+  // useEffect(() => {
+  //   if(racers){
+  //     racers.forEach(racer => {
+  //       racer.percentage+= 1;
+  //     });
+  //     console.log('set racers')
+  //     setRacers(racers);
+  //   }
+  // }, []);
+
   const startRace = () => {
     clearResults();
     let startTime = moment();
     racers.forEach(racer => {
       racer.startTime = startTime;
-      racer.extraBoost = 3;
+      // racer.extraBoost = 3;
+      racer.injured = false;
       updateRacer(racer);
       moveRacer(racer);
     });
@@ -38,26 +51,44 @@ const RaceTrack = (props) => {
     })
   }
 
-  const randomInt = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
   const moveRacer = (racer) => {
-    let increment = randomInt(1, 10);
-    let chance = randomInt(1, 40);
-    let divisable = 20;
-    if(racer.extraBoost > 0 && chance === randomInt(1, 500)){
-      divisable = randomInt(5, 10);
-      racer.extraBoost--;
-      console.log(`${racer.name} got a boost of ${increment/divisable}!`);
+    const increment = Utility.randomInt(1, 10);
+    let divisable = null;
+    
+    if(debugging){
+      divisable = 1;
+    } else {
+      divisable = props.trackDistance;
+
+      const upperBound = Math.floor(props.trackDistance * 0.90);
+      const lowerBound = Math.floor(props.trackDistance * 0.70);
+
+      if(racer.type === 'start' && racer.percentage < 33){
+        divisable = Utility.randomInt(lowerBound, upperBound);
+      } else if(racer.type === 'middle' && (racer.percentage >= 33 && racer.percentage <= 66)){
+        divisable = Utility.randomInt(lowerBound, upperBound);
+      } else if(racer.type === 'end' && racer.percentage > 66){
+        divisable = Utility.randomInt(lowerBound, upperBound);
+      }
+    }
+
+    const injuryChance = Utility.randomInt(1, 10000);
+    if(injuryChance === Utility.randomInt(1, 10000)){
+      racer.injured = true;
+      // console.log(`${racer.name} got injured`)
     }
 
     racer.percentage += (increment / divisable);
     let endTime = moment();
 
-    if(racer.percentage >= 100){
-      racer.endTime = endTime;
-      racer.percentage = 100;
+    if(racer.percentage >= 100 || racer.injured){
+      if(racer.injured){
+        racer.endTime = null;
+        racer.percentage = 0;
+      } else {
+        racer.percentage = 100;
+        racer.endTime = endTime;
+      }
       racer.finished = true;
       updateRacer(racer);
       
@@ -189,6 +220,7 @@ RaceTrack.defaultProps = {
   groundColor: 'SandyBrown',
   trackColor: 'SeaGreen',
   railColor: 'black',
+  trackDistance: 20,
   racers: []
 };
 

@@ -10,11 +10,14 @@ const ResultsBoard = () => {
 
   return (
   	<Fragment>
-  		<div className={`racer-img-${results[0].racerId}`}></div>
+  		<div 
+        className={`racer-img-${results[0].racerId}${results[0].racerId > 4 ? ' far fa-user racer-default-img': ''}`}
+        style={{backgroundColor: results[0].racerId > 4 ? results[0].color : 'white'}}></div>
       <Table className="white-text" striped bordered hover size="sm">
   			<thead>
   				<tr>
   					<th>Rank</th>
+            <th>Color</th>
   					<th>Name</th>
   					<th>Time</th>
   				</tr>
@@ -23,12 +26,22 @@ const ResultsBoard = () => {
   				{results && results.map((result, i) => (
   					<tr key={result.racerId}>
   						<td>{i + 1}</td>
+              <td>
+                <div 
+                  className="racer-color"
+                  style={{
+                    backgroundColor: result.color
+                  }}>
+                </div>
+              </td>
   						<td>{result.name}</td>
   						<td>
-  							<Moment 
-  								format='mm:ss:SSS'>
-  									{result.time}
-  							</Moment>
+  							{result.time === null ? '-' : (
+                  <Moment 
+                    format='mm:ss:SSS'>
+                      {result.time}
+                  </Moment>
+                )}
   						</td>
   					</tr>
   				))}

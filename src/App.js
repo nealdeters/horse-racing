@@ -25,7 +25,7 @@ const App = () => {
         <div
           style={{
             backgroundColor: track.trackColor,
-            height: '150vh'
+            minHeight: `100%`
           }}>
           <Results 
             track={track} />
@@ -35,7 +35,8 @@ const App = () => {
             racers={racers}
             trackColor={track.trackColor} 
             groundColor={track.groundColor} 
-            railColor={track.railColor} />
+            railColor={track.railColor}
+            trackDistance={track.distance} />
         </div>
       </ResultState>
     </Fragment>

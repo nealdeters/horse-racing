@@ -2,25 +2,49 @@
 	{
 		"id": 1,
 		"name": "Spiral Ham", 
-		"color": "brown",
-		"img_id": 1
+		"color": "DeepPink",
+		"type": "middle"
 	},
 	{
 		"id": 2, 
 		"name": "Carmella's Dream",
-		"color": "darkgoldenrod",
-		"img_id": 2
+		"color": "Red",
+		"type": "start"
 	},
 	{
 		"id": 3, 
 		"name": "Kenny",
 		"color": "whitesmoke",
-		"img_id": 3
+		"type": "start"
 	},
 	{
 		"id": 4, 
 		"name": "Frederico",
 		"color": "black",
-		"img_id": 4
+		"type": "end"
+	},
+	{
+		"id": 5,
+		"name": "Papa Smurf", 
+		"color": "DodgerBlue",
+		"type": "begin"
+	},
+	{
+		"id": 6, 
+		"name": "Clover",
+		"color": "Lime",
+		"type": "middle"
+	},
+	{
+		"id": 7, 
+		"name": "Solar",
+		"color": "Gold",
+		"type": "end"
+	},
+	{
+		"id": 8, 
+		"name": "Nemo",
+		"color": "Coral",
+		"type": "end"
 	}
 ]
