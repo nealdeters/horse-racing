@@ -6,7 +6,7 @@ import ResultContext from '../context/result/resultContext';
 import Utility from '../Utility';
 import moment from 'moment';
 
-let debugging = true;
+let debugging = false;
 
 const RaceTrack = (props) => {
   const resultContext = useContext(ResultContext);
