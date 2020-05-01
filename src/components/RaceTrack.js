@@ -195,9 +195,9 @@ const RaceTrack = (props) => {
 
       {inProgress ? null : (
         <Button 
-          className="race-again grey darken-3"
           waves="light"
-          flat="true"
+          flat={true}
+          className="race-again grey darken-3 white-text"
           onClick={raceAgain}>Race</Button>
       )}
 
