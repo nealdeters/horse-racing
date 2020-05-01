@@ -46,7 +46,7 @@ const RaceState = props => {
 
   const setResults = (racers) => {
     let results = [];
-    racers.forEach(racer => {
+    racers.forEach((racer, index) => {
       let duration = moment(racer.endTime).diff(racer.startTime);
       let result = {
         rank: null,
@@ -55,7 +55,7 @@ const RaceState = props => {
         racerId: racer.id,
         injured: racer.injured,
         time: isNaN(duration) ? null : duration,
-        lane: null
+        lane: index + 1
       }
       results.push(result);
     })

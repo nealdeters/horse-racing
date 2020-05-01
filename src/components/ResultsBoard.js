@@ -25,6 +25,7 @@ const ResultsBoard = (props) => {
   					<th>Rank</th>
             <th>Color</th>
   					<th>Name</th>
+            <th>Lane</th>
   					<th>Time</th>
   				</tr>
   			</thead>
@@ -41,6 +42,7 @@ const ResultsBoard = (props) => {
                 </div>
               </td>
   						<td className={result.injured ? 'strike-name' : ''}>{result.name}</td>
+              <td>{result.lane}</td>
   						<td>
   							{result.time === null ? '-' : (
                   <Moment 

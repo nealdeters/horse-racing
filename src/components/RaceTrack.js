@@ -6,7 +6,7 @@ import RaceContext from '../context/race/raceContext';
 import Utility from '../Utility';
 import moment from 'moment';
 
-let debugging = true;
+let debugging = false;
 
 const RaceTrack = (props) => {
   const raceContext = useContext(RaceContext);
@@ -21,7 +21,7 @@ const RaceTrack = (props) => {
 
   const startRace = () => {
     setCountdown(true);
-    startTimer(1, document.querySelector('#timer'));
+    startTimer(5, document.querySelector('#timer'));
   }
 
   const startTimer = (duration, display) => {
