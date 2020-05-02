@@ -52,6 +52,7 @@ const RaceTrack = (props) => {
     ctx.clearRect(0, 0, width, height);
     drawGround(ctx, rotation, startAngle, endAngle);
     drawInfield(ctx, rotation, startAngle, endAngle);
+    drawFinishLine(ctx);
   }
 
   const racersToBlocks = () => {
@@ -62,7 +63,6 @@ const RaceTrack = (props) => {
   }
 
   const drawGround = (ctx, rotation, startAngle, endAngle) => {
-    // Draw the ground
     ctx.beginPath();
     ctx.ellipse(
       cX, cY, 
@@ -78,10 +78,16 @@ const RaceTrack = (props) => {
     ctx.stroke();
   }
 
+  const drawFinishLine = (ctx) => {
+    ctx.beginPath();
+    ctx.moveTo(cX, cY + 49);
+    ctx.lineTo(cX, height - 1);
+    ctx.stroke();
+  }
+
   const drawInfield = (ctx, rotation, startAngle, endAngle) => {
     const insideRail = (radius - laneIncrement) / 2;
 
-    // Draw the ground
     ctx.beginPath();
     ctx.ellipse(
       cX, cY, 
