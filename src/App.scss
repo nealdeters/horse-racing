@@ -56,16 +56,16 @@ h6 {
 }
 
 .race-track {
-  display: block;
+  position: relative;
   margin: auto;
-}
 
-.race-track > button {
-  display: block;
-}
+  canvas {
+    position:absolute;
+  }
 
-.race-track > .ground {
-
+  button {
+    display: block;
+  }
 }
 
 .race-lane-progress {
@@ -110,16 +110,22 @@ h6 {
   margin-bottom: 15px;
 }
 
-.modal.bottom-sheet {
-  max-height: 75%;
-}
+.modal {
+  h4 {
+    color: white;
+  }
 
-.modal h4 {
-  color: white;
-}
+  &.bottom-sheet {
+    max-height: 75%;
+  }
 
-.modal .modal-footer {
-  background-color: inherit;
+  .modal-footer {
+    background-color: inherit;
+
+    button {
+      color: white;
+    }
+  }
 }
 
 .strike-name {
