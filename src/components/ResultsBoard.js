@@ -19,6 +19,7 @@ const ResultsBoard = (props) => {
           color: results === null ? 'white' : results[0].colors.secondary
         }}
         ></div>
+      <h3 className="white-text text-center">{results[0].name} Wins!</h3>
       <table className="white-text">
   			<thead>
   				<tr>
