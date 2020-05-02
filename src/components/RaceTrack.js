@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState, useContext } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import RaceKey from './RaceKey';
 import { Button } from 'react-materialize';
 import RaceContext from '../context/race/raceContext';
@@ -10,15 +10,13 @@ let debugging = false;
 
 const RaceTrack = (props) => {
   const raceContext = useContext(RaceContext);
-  const { racers, track, results, setRacers, setResults } = raceContext;
+  const { racers, track, setRacers, setResults } = raceContext;
 
   const [sqSize] = useState(props.sqSize);
   const [inProgress, setInProgress] = useState(false);
   const [countdown, setCountdown] = useState(false);
-  const canvasRef = React.useRef(null);
 
   // canvas data
-  let ctx = null;
   const stroke = 3;
   const sizer = 20;
   const increment = racers.length * sizer;
@@ -44,8 +42,8 @@ const RaceTrack = (props) => {
   }, [track])
 
   const drawTrack = () => {
-    const canvas = canvasRef.current;
-    ctx = canvas.getContext('2d');
+    const canvas = document.getElementById('race-track');
+    const ctx = canvas.getContext('2d');
 
     // clear the canvas
     ctx.clearRect(0, 0, rSize * rY, rSize);
@@ -55,7 +53,7 @@ const RaceTrack = (props) => {
 
   const racersToBlocks = () => {
     racers.forEach(racer => {
-      drawRacer(ctx, racer);
+      drawRacer(racer);
     });
   }
 
@@ -95,11 +93,12 @@ const RaceTrack = (props) => {
     ctx.stroke();
   };
 
-  const drawRacer = (ctx, racer) => {
-    if(ctx === null){
-      const canvas = canvasRef.current;
-      ctx = canvas.getContext('2d');
-    }
+  const drawRacer = (racer) => {
+    const canvas = document.getElementById(`race-lane-${racer.lane}`);
+    const ctx = canvas.getContext('2d');
+
+    // clear the canvas
+    ctx.clearRect(0, 0, rSize * rY, rSize);
 
     const num = 2;
     const incrementSize = (racer.lane) * (sizer / 2.5);
@@ -206,7 +205,7 @@ const RaceTrack = (props) => {
     }
 
     racer.percentage += (increment / divisable);
-    drawRacer(ctx, racer);
+    drawRacer(racer);
     let endTime = moment();
     updateRacer(racer);
 
@@ -225,6 +224,7 @@ const RaceTrack = (props) => {
         setResults(racers);
         drawTrack();
         setRacers();
+        racersToBlocks();
         setInProgress(false);
       }
     } else {
@@ -236,12 +236,25 @@ const RaceTrack = (props) => {
 
   return (
     <Fragment>
-      <canvas
+      <div 
         className="race-track"
-        ref={canvasRef}
-        width={rSize * rY}
-        height={rSize}>
-      </canvas>
+        style={{ 
+          height: rSize, 
+          width: (rSize * rY) 
+        }}>
+        <canvas
+          id="race-track"
+          width={rSize * rY}
+          height={rSize} />
+
+        { racers.map(racer => (
+          <canvas 
+            key={racer.lane}
+            id={`race-lane-${racer.lane}`}
+            width={rSize * rY}
+            height={rSize} />
+        ))}
+      </div>
 
       {inProgress || countdown ? null : (
         <Button 
