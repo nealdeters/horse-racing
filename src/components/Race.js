@@ -32,7 +32,7 @@ const Race = () => {
 		  }}>
 		  <Results 
 		    track={track} />
-		  <h1 className="header white-text margin-0">Derby</h1>
+		  <h1 className="header white-text margin-0 uppercase">derby</h1>
 		  <h3 className="header white-text track-name">{track.name}</h3>
 		  <RaceTrack />
 		</div>
