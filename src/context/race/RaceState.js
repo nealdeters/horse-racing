@@ -29,9 +29,12 @@ const RaceState = props => {
         racer.percentage = 0.25;
         racer.finished = false;
         racer.injured = false;
-        racer.lane = index + 1;
         return racer;
       }));
+
+      racers.forEach((racer, index) => {
+        racer.lane = index + 1;
+      })
     }
 
     dispatch({

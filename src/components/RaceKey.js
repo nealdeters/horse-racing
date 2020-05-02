@@ -6,6 +6,10 @@ const RaceKey = (props) => {
   const raceContext = useContext(RaceContext);
   const { racers } = raceContext;
 
+  // racers.sort((a, b) => {
+  //   return a.lane - b.lane;
+  // })
+
   return (
     <div className="race-key">
       <table className="white-text">
