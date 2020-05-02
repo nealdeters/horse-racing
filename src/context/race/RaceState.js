@@ -26,7 +26,7 @@ const RaceState = props => {
       racers = Utility.shuffle(racersJson.map((racer, index) => {
         racer.startTime = null;
         racer.endTime = null;
-        racer.percentage = 0;
+        racer.percentage = 0.25;
         racer.finished = false;
         racer.injured = false;
         racer.lane = index + 1;

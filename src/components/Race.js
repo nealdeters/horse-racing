@@ -34,10 +34,7 @@ const Race = () => {
 		    track={track} />
 		  <h1 className="header white-text margin-0">Derby</h1>
 		  <h3 className="header white-text track-name">{track.name}</h3>
-		  <RaceTrack 
-		    racers={racers}
-		    colors={track.colors} 
-		    distance={track.distance} />
+		  <RaceTrack />
 		</div>
 	);
 }

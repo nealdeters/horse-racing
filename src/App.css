@@ -27,8 +27,24 @@ h6 {
   font-size: .5rem;
 }
 
+.text-center {
+  text-align: center;
+}
+
+.normal {
+  font-weight: normal;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
 .margin-0 {
   margin: 0;
+}
+
+.margin-auto {
+  margin: auto;
 }
 
 .track-name {
@@ -98,6 +114,14 @@ h6 {
   max-height: 75%;
 }
 
+.modal h4 {
+  color: white;
+}
+
+.modal .modal-footer {
+  background-color: inherit;
+}
+
 .strike-name {
   text-decoration: line-through;
 }
@@ -108,7 +132,12 @@ h6 {
   font-size: 3rem;
   color: white;
   text-align: center;
-  /*position: absolute;
-  top: 27%;
-  left: 44%;*/
+}
+
+.progress {
+  background-color: white;
+}
+
+.progress .determinate {
+  background-color: black;
 }

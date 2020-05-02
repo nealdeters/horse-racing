@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import RaceContext from '../context/race/raceContext';
+import { ProgressBar } from 'react-materialize';
 
 const RaceKey = (props) => {
   const raceContext = useContext(RaceContext);
@@ -10,23 +11,26 @@ const RaceKey = (props) => {
       <table className="white-text">
   			<thead>
   				<tr>
-  					<th>Lane</th>
-            <th>Color</th>
-  					<th>Name</th>
+  					<th className="uppercase normal">Color</th>
+            <th className="uppercase normal">Name</th>
+            <th className="uppercase normal">Lane</th>
+            <th className="uppercase normal">Progress</th>
   				</tr>
   			</thead>
   			<tbody>
   				{racers && racers.map((racer, i) => (
   					<tr key={racer.id}>
-  						<td>{racer.lane}</td>
-              <td>
-                <div className="racer-color"
+  						<td>
+                <div className="margin-auto racer-color"
                 style={{
                   backgroundColor: racer.colors.primary
                 }}></div>
               </td>
-  						<td
-                className={racer.injured ? 'strike-name' : ''}>{racer.name}</td>
+              <td className={racer.injured ? 'strike-name' : ''}>{racer.name}</td>
+              <td className="text-center">{racer.lane}</td>
+              <td>
+                <ProgressBar progress={racer.percentage} />
+              </td>
   					</tr>
   				))}
   			</tbody>

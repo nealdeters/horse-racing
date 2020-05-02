@@ -4,19 +4,18 @@ import { Button } from 'react-materialize';
 import RaceContext from '../context/race/raceContext';
 import Utility from '../Utility';
 import moment from 'moment';
+import M from "materialize-css/dist/js/materialize.min.js";
 
 let debugging = false;
 
 const RaceTrack = (props) => {
   const raceContext = useContext(RaceContext);
-  const { racers, setRacers, setResults } = raceContext;
+  const { racers, track, setRacers, setResults } = raceContext;
 
   const [sqSize] = useState(props.sqSize);
   const [inProgress, setInProgress] = useState(false);
   const [countdown, setCountdown] = useState(false);
   const canvasRef = React.useRef(null);
-
-  const { colors } = props;
 
   // canvas data
   let ctx = null;
@@ -34,6 +33,7 @@ const RaceTrack = (props) => {
 
   useEffect(() => {
     drawTrack();
+    racersToBlocks();
 
     return () => {
       
@@ -51,6 +51,12 @@ const RaceTrack = (props) => {
     drawInfield(ctx, rotation, startAngle, endAngle);
   }
 
+  const racersToBlocks = () => {
+    racers.forEach(racer => {
+      drawRacer(ctx, racer);
+    });
+  }
+
   const drawGround = (ctx, rotation, startAngle, endAngle) => {
     // Draw the ground
     ctx.beginPath();
@@ -61,10 +67,10 @@ const RaceTrack = (props) => {
       true);
  
     ctx.restore();
-    ctx.fillStyle = colors.ground;
+    ctx.fillStyle = track.colors.ground;
     ctx.fill();
     ctx.lineWidth = 2;
-    ctx.strokeStyle = colors.rail;
+    ctx.strokeStyle = track.colors.rail;
     ctx.stroke();
   }
 
@@ -80,10 +86,10 @@ const RaceTrack = (props) => {
       true);
     
     ctx.restore();
-    ctx.fillStyle = colors.track;
+    ctx.fillStyle = track.colors.track;
     ctx.fill();
     ctx.lineWidth = 2;
-    ctx.strokeStyle = colors.rails;
+    ctx.strokeStyle = track.colors.rails;
     ctx.stroke();
   };
 
@@ -94,8 +100,8 @@ const RaceTrack = (props) => {
     }
 
     const num = 2;
-    const incrementSize = (racer.lane) * (sizer / 3);
-    const r = ( (radius - stroke)  / num) + incrementSize ;
+    const incrementSize = (racer.lane) * (sizer / 2.5);
+    const r = ( (radius - stroke - sizer) / num) + incrementSize ;
     let startAngle = (Math.PI/180) * 360;
     let endAngle = startAngle - startAngle * racer.percentage / 100;
     ctx.beginPath();
@@ -175,10 +181,10 @@ const RaceTrack = (props) => {
     if(debugging){
       divisable = 1;
     } else {
-      divisable = props.distance;
+      divisable = track.distance;
 
-      const upperBound = Math.floor(props.distance * 0.90);
-      const lowerBound = Math.floor(props.distance * 0.70);
+      const upperBound = Math.floor(track.distance * 0.90);
+      const lowerBound = Math.floor(track.distance * 0.70);
 
       if(racer.type === 'starter' && racer.percentage < 33){
         divisable = Utility.randomInt(lowerBound, upperBound);
@@ -189,12 +195,12 @@ const RaceTrack = (props) => {
       }
     }
 
-    const injuryChance = 10000;
+    const injuryChance = 1000;
     const injuryChance1 = Utility.randomInt(1, injuryChance);
     const injuryChance2 = Utility.randomInt(1, injuryChance);
     if(injuryChance1 === injuryChance2){
       racer.injured = true;
-      // toast injury
+      M.toast({html: `${racer.name} had an injury!`});
     }
 
     racer.percentage += (increment / divisable);
@@ -204,7 +210,6 @@ const RaceTrack = (props) => {
 
     if(racer.percentage >= 100 || racer.injured){
       if(racer.injured){
-        racer.percentage = 0;
         racer.endTime = null;
       } else {
         racer.percentage = 100;
@@ -218,6 +223,7 @@ const RaceTrack = (props) => {
         setResults(racers);
         drawTrack();
         setRacers();
+        racersToBlocks();
         setInProgress(false);
       }
     } else {
