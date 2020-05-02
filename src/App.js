@@ -3,7 +3,7 @@ import Race from './components/Race';
 import RaceState from './context/race/RaceState';
 import "materialize-css/dist/css/materialize.min.css";
 import M from "materialize-css/dist/js/materialize.min.js";
-import './App.css';
+import './App.scss';
 
 const App = () => {
   useEffect(() => {

@@ -134,10 +134,14 @@ h6 {
   text-align: center;
 }
 
-.progress {
-  background-color: white;
-}
+.racer-progress {
+  background-color: inherit;
 
-.progress .determinate {
-  background-color: black;
+  .progress {
+    background-color: white;
+
+    .determinate {
+      background-color: black;
+    }
+  }
 }

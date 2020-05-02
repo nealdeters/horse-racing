@@ -29,7 +29,9 @@ const RaceKey = (props) => {
               <td className={racer.injured ? 'strike-name' : ''}>{racer.name}</td>
               <td className="text-center">{racer.lane}</td>
               <td>
-                <ProgressBar progress={racer.percentage} />
+                <div className="racer-progress" style={{backgroundColor: racer.colors.primary}}>
+                  <ProgressBar progress={racer.percentage} />
+                </div>
               </td>
   					</tr>
   				))}

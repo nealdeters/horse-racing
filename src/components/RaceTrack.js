@@ -195,7 +195,7 @@ const RaceTrack = (props) => {
       }
     }
 
-    const injuryChance = 1000;
+    const injuryChance = 2000;
     const injuryChance1 = Utility.randomInt(1, injuryChance);
     const injuryChance2 = Utility.randomInt(1, injuryChance);
     if(injuryChance1 === injuryChance2){
