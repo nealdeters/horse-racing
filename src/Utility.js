@@ -17,13 +17,6 @@ const Utility = {
 
 	  return array;
 	},
-	resetRacers: (racers) => {
-	  racers.forEach(racer => {
-	    racer.percentage = 0;
-	    racer.finished = false;
-	  });
-	  return racers;
-	},
 	randomInt: (min, max) => {
 	  return Math.floor(Math.random() * (max - min + 1)) + min;
 	}

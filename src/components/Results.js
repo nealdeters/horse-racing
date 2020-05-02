@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react';
 import ResultsBoard from './ResultsBoard';
 import RaceContext from '../context/race/raceContext';
-import { Modal, Button } from 'react-materialize';
+import { Modal } from 'react-materialize';
 
 const Results = (props) => {
 	const raceContext = useContext(RaceContext);
@@ -36,14 +36,6 @@ const Results = (props) => {
 			{ show ? (
 				<Modal
 				  style={{backgroundColor: track.colors.track}}
-				  actions={[
-				    <Button 
-				    	waves="light"
-				    	flat={true}
-				    	className="grey darken-3 white-text"
-				    	modal="close"
-				    	node="button">Close</Button>
-				  ]}
 				  bottomSheet
 				  large="true"
 				  fixedFooter={false}

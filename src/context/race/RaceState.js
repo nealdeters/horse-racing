@@ -21,14 +21,18 @@ const RaceState = props => {
 
   const [state, dispatch] = useReducer(raceReducer, initialState);
 
-  const setRacers = () => {
-    const racers = Utility.shuffle(racersJson.map(racer => {
-      racer.percentage = 0;
-      racer.finished = false;
-      racer.startTime = null;
-      racer.endTime = null;
-      return racer;
-    }));
+  const setRacers = (racers) => {
+    if(!racers){
+      racers = Utility.shuffle(racersJson.map((racer, index) => {
+        racer.startTime = null;
+        racer.endTime = null;
+        racer.percentage = 0;
+        racer.finished = false;
+        racer.injured = false;
+        racer.lane = index + 1;
+        return racer;
+      }));
+    }
 
     dispatch({
       type: SET_RACERS,
@@ -52,10 +56,10 @@ const RaceState = props => {
         rank: null,
         name: racer.name,
         colors: racer.colors,
-        racerId: racer.id,
+        id: racer.id,
         injured: racer.injured,
         time: isNaN(duration) ? null : duration,
-        lane: index + 1
+        lane: racer.lane
       }
       results.push(result);
     })

@@ -1,6 +1,5 @@
-import React, { Fragment, useState, useContext } from 'react';
+import React, { Fragment, useEffect, useRef, useState, useContext } from 'react';
 import RaceKey from './RaceKey';
-import RaceLane from './RaceLane';
 import { Button } from 'react-materialize';
 import RaceContext from '../context/race/raceContext';
 import Utility from '../Utility';
@@ -10,14 +9,108 @@ let debugging = false;
 
 const RaceTrack = (props) => {
   const raceContext = useContext(RaceContext);
-  const { setResults } = raceContext;
+  const { racers, setRacers, setResults } = raceContext;
 
-  const [racers, setRacers] = useState(props.racers.map((racer) => {
-    return racer;
-  }));
   const [sqSize] = useState(props.sqSize);
   const [inProgress, setInProgress] = useState(false);
   const [countdown, setCountdown] = useState(false);
+  const canvasRef = React.useRef(null);
+
+  const { colors } = props;
+
+  // canvas data
+  let ctx = null;
+  const stroke = 3;
+  const sizer = 20;
+  const increment = racers.length * sizer;
+  const rSize = sqSize + increment;
+  const radius = (rSize - stroke) / 2;
+  const rY = 1.5;
+  const cX = (rSize * rY) / 2;
+  const cY = rSize / 2;
+  const rotation = Math.PI / 2;
+  const startAngle = 0;
+  const endAngle = Math.PI * 4;
+
+  useEffect(() => {
+    drawTrack();
+
+    return () => {
+      
+    };
+    // eslint-disable-next-line
+  }, [])
+
+  const drawTrack = () => {
+    const canvas = canvasRef.current;
+    ctx = canvas.getContext('2d');
+
+    // clear the canvas
+    ctx.clearRect(0, 0, rSize * rY, rSize);
+    drawGround(ctx, rotation, startAngle, endAngle);
+    drawInfield(ctx, rotation, startAngle, endAngle);
+  }
+
+  const drawGround = (ctx, rotation, startAngle, endAngle) => {
+    // Draw the ground
+    ctx.beginPath();
+    ctx.ellipse(
+      cX, cY, 
+      radius, radius * rY, 
+      rotation, startAngle, endAngle,
+      true);
+ 
+    ctx.restore();
+    ctx.fillStyle = colors.ground;
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = colors.rail;
+    ctx.stroke();
+  }
+
+  const drawInfield = (ctx, rotation, startAngle, endAngle) => {
+    const insideRail = (radius - sizer) / 2;
+
+    // Draw the ground
+    ctx.beginPath();
+    ctx.ellipse(
+      cX, cY, 
+      insideRail, insideRail * rY, 
+      rotation, startAngle, endAngle,
+      true);
+    
+    ctx.restore();
+    ctx.fillStyle = colors.track;
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = colors.rails;
+    ctx.stroke();
+  };
+
+  const drawRacer = (ctx, racer) => {
+    if(ctx === null){
+      const canvas = canvasRef.current;
+      ctx = canvas.getContext('2d');
+    }
+
+    const num = 2;
+    const incrementSize = (racer.lane) * (sizer / 3);
+    const r = ( (radius - stroke)  / num) + incrementSize ;
+    let startAngle = (Math.PI/180) * 360;
+    let endAngle = startAngle - startAngle * racer.percentage / 100;
+    ctx.beginPath();
+    ctx.ellipse(
+      cX, cY, 
+      r, r * rY,
+      rotation, startAngle, endAngle,
+      true);
+
+    ctx.restore();
+    ctx.lineCap = "round";
+    ctx.lineWidth = stroke;
+    ctx.strokeStyle = racer.colors.primary;
+    ctx.stroke();
+  }
 
   const startRace = () => {
     setCountdown(true);
@@ -51,8 +144,6 @@ const RaceTrack = (props) => {
         const startTime = moment();
         const rUpdates = racers.map(racer => {
           racer.startTime = startTime;
-          racer.injured = false;
-          racer.percentage = 0;
           moveRacer(racer);
           return racer;
         });
@@ -103,28 +194,30 @@ const RaceTrack = (props) => {
     const injuryChance2 = Utility.randomInt(1, injuryChance);
     if(injuryChance1 === injuryChance2){
       racer.injured = true;
-      // console.log(`${racer.name} got injured`)
+      // toast injury
     }
 
     racer.percentage += (increment / divisable);
+    drawRacer(ctx, racer);
     let endTime = moment();
     updateRacer(racer);
 
     if(racer.percentage >= 100 || racer.injured){
       if(racer.injured){
-        racer.endTime = null;
         racer.percentage = 0;
+        racer.endTime = null;
       } else {
         racer.percentage = 100;
         racer.endTime = endTime;
       }
+
       racer.finished = true;
       updateRacer(racer);
       
       if(raceIsFinished(racers)){
         setResults(racers);
-        let updates = Utility.resetRacers(racers);
-        setRacers(updates);
+        drawTrack();
+        setRacers();
         setInProgress(false);
       }
     } else {
@@ -134,95 +227,14 @@ const RaceTrack = (props) => {
     }
   }
 
-  const { colors } = props;
-  const stroke = 4;
-  const sizer = 20;
-  const increment = racers.length * sizer;
-  const rSize = sqSize + increment;
-  const cSize = (rSize / 2);
-  const viewBox = `0 0 ${rSize} ${rSize}`;
-  const radius = (rSize - stroke) / 2;
-  const transformRotate = `rotate(90 ${cSize} ${cSize})`;
-  const strokeWidth = `${stroke}px`;
-  const insideRail = (cSize - sizer) / 2;
-
-  const groundStyle = {
-    fill: colors.ground
-  }
-
-  const trackStyle = {
-    fill: colors.track
-  }
-
-  const railStyle = {
-    fill: colors.ground,
-    stroke: colors.rail
-  }
-
-  const insideRailStyle = {
-    fill: colors.track,
-    stroke: colors.rail
-  }
-
-  const rY = 1.5;
-
   return (
     <Fragment>
-      <svg
-        height={rSize}
+      <canvas
+        className="race-track"
+        ref={canvasRef}
         width={rSize * rY}
-        viewBox={viewBox}
-        className="race-track">
-
-        <rect
-          className="track"
-          width={rSize}
-          height={rSize}
-          style={trackStyle} />
-
-        <ellipse
-          className="ground"
-          cx={cSize}
-          cy={cSize}
-          ry={radius * rY}
-          rx={radius}
-          style={groundStyle}
-          strokeWidth={strokeWidth}
-          transform={transformRotate} />
-
-        <ellipse
-          className="railing"
-          cx={cSize}
-          cy={cSize}
-          ry={radius * rY}
-          rx={radius}
-          style={railStyle}
-          strokeWidth={2}
-          transform={transformRotate} />
-
-        <ellipse
-          className="railing"
-          cx={cSize}
-          cy={cSize}
-          ry={insideRail * rY}
-          rx={insideRail}
-          style={insideRailStyle}
-          strokeWidth={2}
-          transform={transformRotate} />
-
-        { racers.map( (racer, i) => (
-          <RaceLane
-            key={racer.id}
-            strokeWidth={stroke}
-            sqSize={cSize}
-            laneIndex={i}
-            sizer={sizer / rY}
-            zIndex={racers.length - (i + 1)}
-            percentage={racer.percentage}
-            racerColor={racer.colors.primary}
-            groundColor={colors.ground} />
-        ))}
-      </svg>
+        height={rSize}>
+      </canvas>
 
       {inProgress || countdown ? null : (
         <Button 

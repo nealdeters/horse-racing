@@ -18,7 +18,7 @@ const RaceKey = (props) => {
   			<tbody>
   				{racers && racers.map((racer, i) => (
   					<tr key={racer.id}>
-  						<td>{i + 1}</td>
+  						<td>{racer.lane}</td>
               <td>
                 <div className="racer-color"
                 style={{

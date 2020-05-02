@@ -31,7 +31,7 @@ const ResultsBoard = (props) => {
   			</thead>
   			<tbody>
   				{results && results.map((result, i) => (
-  					<tr key={result.racerId}>
+  					<tr key={result.id}>
   						<td>{i + 1}</td>
               <td>
                 <div 
