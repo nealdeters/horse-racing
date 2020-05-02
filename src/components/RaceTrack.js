@@ -202,7 +202,7 @@ const RaceTrack = (props) => {
     const injuryChance2 = Utility.randomInt(1, injuryChance);
     if(injuryChance1 === injuryChance2){
       racer.injured = true;
-      M.toast({html: `${racer.name} had an injury!`});
+      M.toast({html: `${racer.name} was injured!`});
     }
 
     racer.percentage += (increment / divisable);
