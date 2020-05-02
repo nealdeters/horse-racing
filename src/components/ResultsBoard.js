@@ -23,11 +23,11 @@ const ResultsBoard = (props) => {
       <table className="white-text">
   			<thead>
   				<tr>
-  					<th>Rank</th>
-            <th>Color</th>
-  					<th>Name</th>
-            <th>Lane</th>
-  					<th>Time</th>
+  					<th className="uppercase normal">Rank</th>
+            <th className="uppercase normal">Color</th>
+  					<th className="uppercase normal">Name</th>
+            <th className="uppercase normal">Lane</th>
+  					<th className="uppercase normal">Time</th>
   				</tr>
   			</thead>
   			<tbody>

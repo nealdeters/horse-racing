@@ -29,6 +29,8 @@ const RaceTrack = (props) => {
   const rotation = Math.PI / 2;
   const startAngle = 0;
   const endAngle = Math.PI * 4;
+  const racerStartAngle = (Math.PI/180) * 360;
+  const racerAngles = {};
 
   useEffect(() => {
     if(track){
@@ -54,6 +56,7 @@ const RaceTrack = (props) => {
 
   const racersToBlocks = () => {
     racers.forEach(racer => {
+      racerAngles[racer.lane] = (racerStartAngle) + (.2 - ( (racer.lane / .8) / 100) );
       drawRacer(racer);
     });
   }
@@ -93,12 +96,6 @@ const RaceTrack = (props) => {
     ctx.strokeStyle = track.colors.rails;
     ctx.stroke();
   };
-
-  const racerStartAngle = (Math.PI/180) * 360;
-  const racerAngles = {};
-  racers.forEach(racer => {
-    racerAngles[racer.lane] = (racerStartAngle) + (.2 - ( (racer.lane / .8) / 100) );
-  });
 
   const drawRacer = (racer) => {
     const canvas = document.getElementById(`race-lane-${racer.lane}`);
