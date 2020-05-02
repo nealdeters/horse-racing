@@ -12,19 +12,20 @@ const RaceTrack = (props) => {
   const raceContext = useContext(RaceContext);
   const { racers, track, setRacers, setResults } = raceContext;
 
-  const [sqSize] = useState(props.sqSize);
+  const [size] = useState(props.size);
   const [inProgress, setInProgress] = useState(false);
   const [countdown, setCountdown] = useState(false);
 
   // canvas data
-  const stroke = 3;
-  const sizer = 20;
-  const increment = racers.length * sizer;
-  const rSize = sqSize + increment;
-  const radius = (rSize - stroke) / 2;
+  const stroke = 4;
+  const laneIncrement = 20;
   const rY = 1.5;
-  const cX = (rSize * rY) / 2;
-  const cY = rSize / 2;
+  const totalLaneIncrement = racers.length * laneIncrement;
+  const height = size + totalLaneIncrement;
+  const width = height * rY;
+  const radius = (height - stroke) / 2;
+  const cX = (width) / 2;
+  const cY = height / 2;
   const rotation = Math.PI / 2;
   const startAngle = 0;
   const endAngle = Math.PI * 4;
@@ -46,7 +47,7 @@ const RaceTrack = (props) => {
     const ctx = canvas.getContext('2d');
 
     // clear the canvas
-    ctx.clearRect(0, 0, rSize * rY, rSize);
+    ctx.clearRect(0, 0, width, height);
     drawGround(ctx, rotation, startAngle, endAngle);
     drawInfield(ctx, rotation, startAngle, endAngle);
   }
@@ -75,7 +76,7 @@ const RaceTrack = (props) => {
   }
 
   const drawInfield = (ctx, rotation, startAngle, endAngle) => {
-    const insideRail = (radius - sizer) / 2;
+    const insideRail = (radius - laneIncrement) / 2;
 
     // Draw the ground
     ctx.beginPath();
@@ -93,18 +94,26 @@ const RaceTrack = (props) => {
     ctx.stroke();
   };
 
+  const racerStartAngle = (Math.PI/180) * 360;
+  const racerAngles = {};
+  racers.forEach(racer => {
+    racerAngles[racer.lane] = (racerStartAngle) + (.2 - ( (racer.lane / .8) / 100) );
+  });
+
   const drawRacer = (racer) => {
     const canvas = document.getElementById(`race-lane-${racer.lane}`);
     const ctx = canvas.getContext('2d');
 
     // clear the canvas
-    ctx.clearRect(0, 0, rSize * rY, rSize);
+    ctx.clearRect(0, 0, width, height);
 
     const num = 2;
-    const incrementSize = (racer.lane) * (sizer / 2.5);
-    const r = ( (radius - stroke - sizer) / num) + incrementSize ;
-    let startAngle = (Math.PI/180) * 360;
-    let endAngle = startAngle - startAngle * racer.percentage / 100;
+    const incrementSize = (racer.lane) * (laneIncrement / 2.5);
+    const r = ( (radius - stroke - laneIncrement) / num) + incrementSize ;
+    let startAngle = racerAngles[racer.lane];
+    let endAngle = racerStartAngle - ( (racerStartAngle * racer.percentage) / 100);
+    racerAngles[racer.lane] = (endAngle) + (.2 - ( (racer.lane / .8) / 100) );
+
     ctx.beginPath();
     ctx.ellipse(
       cX, cY, 
@@ -239,20 +248,20 @@ const RaceTrack = (props) => {
       <div 
         className="race-track"
         style={{ 
-          height: rSize, 
-          width: (rSize * rY) 
+          height: height, 
+          width: (width) 
         }}>
         <canvas
           id="race-track"
-          width={rSize * rY}
-          height={rSize} />
+          width={width}
+          height={height} />
 
         { racers.map(racer => (
           <canvas 
             key={racer.lane}
             id={`race-lane-${racer.lane}`}
-            width={rSize * rY}
-            height={rSize} />
+            width={width}
+            height={height} />
         ))}
       </div>
 
@@ -272,7 +281,7 @@ const RaceTrack = (props) => {
 }
 
 RaceTrack.defaultProps = {
-  sqSize: 75,
+  size: 75,
   colors: {
     ground: 'SandyBrown',
     track: 'SeaGreen',
