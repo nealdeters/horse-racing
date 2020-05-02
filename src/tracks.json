@@ -1,7 +1,7 @@
 [
 	{
 		"type": 1,
-		"name": "Churchill Downs",
+		"name": "Park Hills",
 		"colors": {
 			"track": "SeaGreen",
 			"ground": "SandyBrown",
@@ -11,7 +11,7 @@
 	},
 	{
 		"type": 2,
-		"name": "Pimlico Race Course",
+		"name": "Moss Course",
 		"colors": {
 			"track": "DarkOliveGreen",
 			"ground": "OliveDrab",
@@ -21,7 +21,7 @@
 	},
 	{
 		"type": 3,
-		"name": "Belmont Park",
+		"name": "Boardwalk",
 		"colors": {
 			"track": "ForestGreen",
 			"ground": "BurlyWood",
