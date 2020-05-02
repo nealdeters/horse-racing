@@ -10,7 +10,7 @@ let debugging = false;
 
 const RaceTrack = (props) => {
   const raceContext = useContext(RaceContext);
-  const { racers, track, setRacers, setResults } = raceContext;
+  const { racers, track, results, setRacers, setResults } = raceContext;
 
   const [sqSize] = useState(props.sqSize);
   const [inProgress, setInProgress] = useState(false);
@@ -32,14 +32,16 @@ const RaceTrack = (props) => {
   const endAngle = Math.PI * 4;
 
   useEffect(() => {
-    drawTrack();
-    racersToBlocks();
+    if(track){
+      drawTrack();
+      racersToBlocks();
+    }
 
     return () => {
       
     };
     // eslint-disable-next-line
-  }, [])
+  }, [track])
 
   const drawTrack = () => {
     const canvas = canvasRef.current;
@@ -223,7 +225,6 @@ const RaceTrack = (props) => {
         setResults(racers);
         drawTrack();
         setRacers();
-        racersToBlocks();
         setInProgress(false);
       }
     } else {
