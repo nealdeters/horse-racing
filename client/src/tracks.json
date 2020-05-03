@@ -11,6 +11,16 @@
 	},
 	{
 		"type": 2,
+		"name": "Sea Grove",
+		"colors": {
+			"track": "MediumSeaGreen",
+			"ground": "Tan",
+			"rail": "DarkSlateGrey"
+		},
+		"distance": 40
+	},
+	{
+		"type": 3,
 		"name": "Moss Course",
 		"colors": {
 			"track": "DarkOliveGreen",
@@ -20,7 +30,7 @@
 		"distance": 10
 	},
 	{
-		"type": 3,
+		"type": 4,
 		"name": "Boardwalk",
 		"colors": {
 			"track": "ForestGreen",
