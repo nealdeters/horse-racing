@@ -3,27 +3,35 @@ import moment from 'moment';
 import RaceContext from './raceContext';
 import raceReducer from './raceReducer';
 import Utility from '../../Utility';
-import racersJson from '../../racers.json';
-import tracksJson from '../../tracks.json'
+// import racersJson from '../../racers.json';
+// import tracksJson from '../../tracks.json'
 import {
   SET_TRACK,
-  SET_RACERS,
+  SET_TRACK_RACERS,
   SET_RESULTS,
-  CLEAR_RESULTS
+  CLEAR_RESULTS,
+  GET_RACERS,
+  GET_TRACKS,
+  ERROR,
+  SET_LOADING
 } from '../types';
 
 const RaceState = props => {
   const initialState = {
     racers: null,
+    tracks: null,
+    trackRacers: null,
     track: null,
-    results: null
+    results: null,
+    error: null,
+    loading: null
   };
 
   const [state, dispatch] = useReducer(raceReducer, initialState);
 
-  const setRacers = (racers) => {
-    if(!racers){
-      racers = Utility.shuffle(racersJson.map((racer, index) => {
+  const setTrackRacers = async (trackRacers) => {
+    if(!trackRacers){
+      trackRacers = Utility.shuffle(state.racers.map((racer, index) => {
         racer.startTime = null;
         racer.endTime = null;
         racer.percentage = 0;
@@ -32,19 +40,58 @@ const RaceState = props => {
         return racer;
       }));
 
-      racers.forEach((racer, index) => {
+      trackRacers.forEach((racer, index) => {
         racer.lane = index + 1;
-      })
+      });
     }
 
     dispatch({
-      type: SET_RACERS,
-      payload: racers
+      type: SET_TRACK_RACERS,
+      payload: trackRacers
     })
   }
 
-  const setTrack = () => {
-    const track = Utility.shuffle(tracksJson)[0]
+  const getRacers = async () => {
+    try {
+      setLoading();
+
+      const res = await fetch('api/racers');
+      let data = await res.json();
+
+      dispatch({
+        type: GET_RACERS,
+        payload: data
+      });
+    } catch (err) {
+      dispatch({
+        type: ERROR,
+        payload: err.response
+      });
+    }
+  }
+
+  const getTracks = async (setTheTrack) => {
+    try {
+      setLoading();
+
+      const res = await fetch('api/tracks');
+      let data = await res.json();
+
+      dispatch({
+        type: GET_TRACKS,
+        payload: data
+      });
+    } catch (err) {
+      dispatch({
+        type: ERROR,
+        payload: err.response
+      });
+    }
+  }
+
+  const setTrack = async () => {
+    const track = Utility.shuffle(state.tracks)[0];
+
     dispatch({
       type: SET_TRACK,
       payload: track
@@ -58,7 +105,8 @@ const RaceState = props => {
       let result = {
         rank: null,
         name: racer.name,
-        colors: racer.colors,
+        primaryColor: racer.primaryColor,
+        secondaryColor: racer.secondaryColor,
         id: racer.id,
         injured: racer.injured,
         time: isNaN(duration) ? null : duration,
@@ -94,16 +142,27 @@ const RaceState = props => {
     })
   }
 
+  const setLoading = () => {
+    dispatch({
+      type: SET_LOADING
+    })
+  }
+
   return (
     <RaceContext.Provider
       value={{
         racers: state.racers,
+        trackRacers: state.trackRacers,
+        tracks: state.tracks,
         track: state.track,
         results: state.results,
-        setRacers,
+        loading: state.loading,
+        setTrackRacers,
         setTrack,
         setResults,
-        clearResults
+        clearResults,
+        getRacers,
+        getTracks
       }}
     >
       {props.children}

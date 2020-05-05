@@ -1,23 +1,14 @@
 const express = require('express');
-const connectDB = require('./config/db');
-const path = require('path');
-const users = require('./routes/users');
+const routes = require('../routes');
 
 const app = express();
-
-// Connect Database
-// connectDB();
 
 // Init Middleware
 app.use(express.json({ extended: false }));
 
-// Define Routes
-app.use('/api/users', users);
-// app.use('/api/auth', require('./routes/auth'));
-// app.use('/api/racers', require('./routes/racers'));
-// app.use('/api/tracks', require('./routes/tracks'));
+app.use('/api', routes);
 
-// server static assets in production
+// app static assets in production
 if(process.env.NODE_ENV === 'production'){
 	// set static folder
 	app.use(express.static('client/build'));
@@ -32,3 +23,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
 	console.log(`Server started on port ${PORT}`);
 });
+
+module.exports = app;

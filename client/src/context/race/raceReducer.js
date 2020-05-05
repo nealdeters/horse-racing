@@ -1,8 +1,12 @@
 import {
   SET_TRACK,
-  SET_RACERS,
+  SET_TRACK_RACERS,
   SET_RESULTS,
-  CLEAR_RESULTS
+  CLEAR_RESULTS,
+  GET_RACERS,
+  GET_TRACKS,
+  SET_LOADING,
+  ERROR
 } from '../types';
 
 export default (state, action) => {
@@ -12,10 +16,22 @@ export default (state, action) => {
         ...state,
         track: action.payload
       };
-    case SET_RACERS:
+    case SET_TRACK_RACERS:
       return {
         ...state,
-        racers: action.payload
+        trackRacers: action.payload
+      };
+    case GET_RACERS:
+      return {
+        ...state,
+        racers: action.payload,
+        loading: false
+      };
+    case GET_TRACKS:
+      return {
+        ...state,
+        tracks: action.payload,
+        loading: false
       };
     case SET_RESULTS:
       return {
@@ -26,6 +42,17 @@ export default (state, action) => {
       return {
         ...state,
         results: null
+      };
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true
+      };
+    case ERROR:
+      console.error(action.payload);
+      return {
+        ...state,
+        error: action.payload
       };
     default:
       return state;

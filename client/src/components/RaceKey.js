@@ -23,13 +23,13 @@ const RaceKey = (props) => {
   						<td>
                 <div className="margin-auto racer-color"
                 style={{
-                  backgroundColor: racer.colors.primary
+                  backgroundColor: racer.primaryColor
                 }}></div>
               </td>
               <td className={racer.injured ? 'strike-name' : ''}>{racer.name}</td>
               <td className="text-center">{racer.lane}</td>
               <td>
-                <div className="racer-progress" style={{backgroundColor: racer.colors.primary}}>
+                <div className="racer-progress" style={{backgroundColor: racer.primaryColor}}>
                   <ProgressBar progress={racer.percentage} />
                 </div>
               </td>

@@ -10,17 +10,17 @@ let debugging = false;
 
 const RaceTrack = (props) => {
   const raceContext = useContext(RaceContext);
-  const { racers, track, setRacers, setResults } = raceContext;
+  const { racers, trackRacers, track, setTrackRacers, setResults } = raceContext;
 
   const [size] = useState(props.size);
   const [inProgress, setInProgress] = useState(false);
   const [countdown, setCountdown] = useState(false);
 
   // canvas data
-  const stroke = 4;
+  const stroke = 5;
   const laneIncrement = 20;
   const rY = 1.5;
-  const totalLaneIncrement = racers.length * laneIncrement;
+  const totalLaneIncrement = trackRacers.length * laneIncrement;
   const height = size + totalLaneIncrement;
   const width = height * rY;
   const radius = (height - stroke) / 2;
@@ -33,7 +33,7 @@ const RaceTrack = (props) => {
   const racerAngles = {};
 
   useEffect(() => {
-    if(track){
+    if(track && trackRacers && trackRacers.length){
       drawTrack();
       racersToBlocks();
     }
@@ -56,7 +56,7 @@ const RaceTrack = (props) => {
   }
 
   const racersToBlocks = () => {
-    racers.forEach(racer => {
+    trackRacers.forEach(racer => {
       racerAngles[racer.lane] = (racerStartAngle) + (.2 - ( (racer.lane / .8) / 100) );
       drawRacer(racer);
     });
@@ -71,10 +71,10 @@ const RaceTrack = (props) => {
       true);
  
     ctx.restore();
-    ctx.fillStyle = track.colors.ground;
+    ctx.fillStyle = track.groundColor;
     ctx.fill();
     ctx.lineWidth = 2;
-    ctx.strokeStyle = track.colors.rail;
+    ctx.strokeStyle = track.railColor;
     ctx.stroke();
   }
 
@@ -96,10 +96,10 @@ const RaceTrack = (props) => {
       true);
     
     ctx.restore();
-    ctx.fillStyle = track.colors.track;
+    ctx.fillStyle = track.trackColor;
     ctx.fill();
     ctx.lineWidth = 2;
-    ctx.strokeStyle = track.colors.rails;
+    ctx.strokeStyle = track.rails_color;
     ctx.stroke();
   };
 
@@ -127,7 +127,7 @@ const RaceTrack = (props) => {
     ctx.restore();
     ctx.lineCap = "round";
     ctx.lineWidth = stroke;
-    ctx.strokeStyle = racer.colors.primary;
+    ctx.strokeStyle = racer.primaryColor;
     ctx.stroke();
   }
 
@@ -161,12 +161,12 @@ const RaceTrack = (props) => {
         display.textContent = "";
 
         const startTime = moment();
-        const rUpdates = racers.map(racer => {
+        const rUpdates = trackRacers.map(racer => {
           racer.startTime = startTime;
           moveRacer(racer);
           return racer;
         });
-        setRacers(rUpdates);
+        setTrackRacers(rUpdates);
         setInProgress(true);
 
         clearInterval(inter);
@@ -176,13 +176,13 @@ const RaceTrack = (props) => {
   }
 
   const updateRacer = (racer) => {
-    setRacers(racers.map(r => {
+    setTrackRacers(trackRacers.map(r => {
       return r.id === racer.id ? racer : r;
     }));
   }
 
-  const raceIsFinished = (racers) => {
-    return racers.every(racer => {
+  const raceIsFinished = (trackRacers) => {
+    return trackRacers.every(racer => {
       return racer.finished;
     })
   }
@@ -232,11 +232,10 @@ const RaceTrack = (props) => {
       racer.finished = true;
       updateRacer(racer);
       
-      if(raceIsFinished(racers)){
-        setResults(racers);
+      if(raceIsFinished(trackRacers)){
+        setResults(trackRacers);
         drawTrack();
-        setRacers();
-        racersToBlocks();
+        setTrackRacers(racers);
         setInProgress(false);
       }
     } else {
@@ -259,7 +258,7 @@ const RaceTrack = (props) => {
           width={width}
           height={height} />
 
-        { racers.map(racer => (
+        { trackRacers.map(racer => (
           <canvas 
             key={racer.lane}
             id={`race-lane-${racer.lane}`}
@@ -278,20 +277,13 @@ const RaceTrack = (props) => {
 
       <div id="timer" className="timer"></div>
 
-      <RaceKey racers={racers}/>
+      <RaceKey racers={trackRacers}/>
     </Fragment>
   );
 }
 
 RaceTrack.defaultProps = {
-  size: 75,
-  colors: {
-    ground: 'SandyBrown',
-    track: 'SeaGreen',
-    rail: 'black'
-  },
-  distance: 20,
-  racers: []
+  size: 75
 };
 
 export default RaceTrack;

@@ -15,8 +15,8 @@ const ResultsBoard = (props) => {
   		<div 
         className="fas fa-horse fa-flip-horizontal racer-default-img"
         style={{
-          backgroundColor: results === null ? 'white' : results[0].colors.primary,
-          color: results === null ? 'white' : results[0].colors.secondary
+          backgroundColor: results === null ? 'white' : results[0].primaryColor,
+          color: results === null ? 'white' : results[0].secondaryColor
         }}
         ></div>
       <h3 className="white-text text-center">{results[0].name} Wins!</h3>
@@ -38,7 +38,7 @@ const ResultsBoard = (props) => {
                 <div 
                   className="racer-color"
                   style={{
-                    backgroundColor: result.colors.primary
+                    backgroundColor: result.primaryColor
                   }}>
                 </div>
               </td>

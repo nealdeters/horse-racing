@@ -5,29 +5,32 @@ import RaceContext from '../context/race/raceContext';
 
 const Race = () => {
 	const raceContext = useContext(RaceContext);
-	const { racers, track, setTrack, setRacers } = raceContext;
+	const { racers, tracks, track, trackRacers, getRacers, getTracks, setTrack, setTrackRacers } = raceContext;
 
 	useEffect(() => {
 	  if(racers === null){
-	  	setRacers();
-			setTrack();
+  		getRacers();
+  		getTracks();
+	  } else {
+	  	setTrackRacers();
+	  	setTrack();
 	  }
 
 	  if(track){
-	  	document.body.style = `background-color: ${track.colors.track};`;
+	  	document.body.style = `background-color: ${track.trackColor};`;
 	  }
 	  
 	  // eslint-disable-next-line
-	}, [track])
+	}, [track, tracks])
 
-	if(track === null || racers === null){
+	if(track === null || trackRacers === null){
 		return null;
 	}
 
 	return (
 		<div
 		  style={{
-		    backgroundColor: track.colors.track,
+		    backgroundColor: track.trackColor,
 		    minHeight: `100%`
 		  }}>
 		  <Results 

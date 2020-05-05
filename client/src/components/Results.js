@@ -5,7 +5,7 @@ import { Modal } from 'react-materialize';
 
 const Results = (props) => {
 	const raceContext = useContext(RaceContext);
-	const { track, results, clearResults, setTrack, setRacers } = raceContext;
+	const { track, results, clearResults, setTrack, setTrackRacers } = raceContext;
 	const [show, setShow] = useState(false);
 
 	useEffect(() => {
@@ -23,7 +23,7 @@ const Results = (props) => {
 
 	const onClose = () => {
 		clearResults();
-		setRacers();
+		setTrackRacers();
 		setTrack();
 	}
 
@@ -35,7 +35,7 @@ const Results = (props) => {
 		<Fragment>
 			{ show ? (
 				<Modal
-				  style={{backgroundColor: track.colors.track}}
+				  style={{backgroundColor: track.trackColor}}
 				  bottomSheet
 				  large="true"
 				  fixedFooter={false}
