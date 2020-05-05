@@ -1,7 +1,11 @@
-const racer = require('./racerController');
-const track = require('./trackController');
+const racer = require('./racer.controller');
+const track = require('./track.controller');
+const user = require('./user.controller');
+const auth = require('./auth.controller');
 
 module.exports = {
   racer,
-  track
+  track,
+  user,
+  auth
 }
