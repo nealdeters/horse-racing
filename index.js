@@ -1,25 +1,37 @@
 const express = require('express');
 const bodyParser = require("body-parser");
-const morgan = require('morgan');
+const logger = require('morgan');
 const passport = require('passport');
 const { sequelize } = require('./database/models');
 const routes = require('./database/routes');
-const strategy = require('./database/middleware/passportJWT');
 require('dotenv').config();
 
 const app = express();
 
 // Init Middleware
 
-// use the strategy
-passport.use(strategy);
+// import the passport and passport-jwt strategy
+require('./database/middleware/passport');
+
+// init passport
 app.use(passport.initialize());
+
+// Passport session setup.
+// passport.serializeUser(function(user, done) {
+//   console.log("serializing " + user.username);
+//   done(null, user);
+// });
+
+// passport.deserializeUser(function(obj, done) {
+//   console.log("deserializing " + obj);
+//   done(null, obj);
+// });
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// set morgan to log info about our requests for development use.
-app.use(morgan('dev'));
+// request info logger for development
+app.use(logger('dev'));
 
 app.use('/api', routes);
 
@@ -34,7 +46,7 @@ if(process.env.NODE_ENV === 'production'){
 }
 
 const PORT = process.env.PORT || 5000;
-const eraseDatabaseOnSync = true;
+const eraseDatabaseOnSync = false;
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(() => {
 	app.listen(PORT, () => {

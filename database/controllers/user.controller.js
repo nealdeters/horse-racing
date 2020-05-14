@@ -1,22 +1,67 @@
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 
-const createUser = async (req, res) => {
-  try {
-    const { firstName, lastName, email, password, passwordConfirm } = req.body;
-    const user = {
-      firstName, lastName,
-      email,
-      password,
-      passwordConfirm
+const login = (req, res, next) => {
+  passport.authenticate('login', (err, users, info) => {
+    if (err) {
+      console.error(`error ${err}`);
     }
-    const newUser = await User.create(user);
-    return res.status(200).json(newUser);
-  } catch (error) {
-    return res.status(500).json({error: error.message})
-  }
+    if (info !== undefined) {
+      console.error(info.message);
+      if (info.message === 'bad username') {
+        res.status(401).send(info.message);
+      } else {
+        res.status(403).send(info.message);
+      }
+    } else {
+      req.logIn(users, () => {
+        User.findOne({
+          where: {
+            email: req.body.email,
+          },
+        }).then(user => {
+          const token = jwt.sign(
+            { id: user.id }, 
+            process.env.PASSPORT_JWT_SECRET, 
+            {
+              expiresIn: 60 * 60,
+            }
+          );
+          res.status(200).send({
+            token,
+            msg: 'User logged in.',
+          });
+        });
+      });
+    }
+  })(req, res, next);
 }
 
-const getAllUsers = async (req, res) => {
+const logout = (req, res, next) => {
+  req.logout();
+  return res.status(200).send("User has been logged out.");
+}
+
+const register = (req, res, next) => {
+  passport.authenticate('register', (err, user, info) => {
+    if (err) {
+      console.error(err);
+    }
+    if (info !== undefined) {
+      res.status(403).send(info.message);
+    } else {
+      req.logIn(user, error => {
+        res.status(200).json({ 
+          msg: "User registered",
+          user: user
+        });
+      });
+    }
+  })(req, res, next);
+}
+
+const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.findAll();
     return res.status(200).json(users);
@@ -25,7 +70,7 @@ const getAllUsers = async (req, res) => {
   }
 }
 
-const getUserById = async (req, res) => {
+const getUserById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const user = await User.findOne({
@@ -40,7 +85,7 @@ const getUserById = async (req, res) => {
   }
 }
 
-const updateUser = async (req, res) => {
+const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const [ updated ] = await User.update(req.body, {
@@ -56,25 +101,11 @@ const updateUser = async (req, res) => {
   }
 }
 
-const deleteUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleted = await User.destroy({
-      where: { id: id }
-    });
-    if (deleted) {
-      return res.status(204).send("User deleted");
-    }
-    throw new Error("User not found");
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-}
-
 module.exports = {
-  createUser,
+  register,
+  login,
+  logout,
   getAllUsers,
   getUserById,
-  updateUser,
-  deleteUser
+  updateUser
 }

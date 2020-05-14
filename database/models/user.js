@@ -1,5 +1,4 @@
 'use strict';
-const bcrypt = require("bcrypt");
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -34,20 +33,18 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
-
-  User.beforeSave( async (user, options) => {
-    if (user.changed('password')) {
-      user.password = await bcrypt.hash(user.password, 12);
-    }
-  });
-
+  
   User.associate = function(models) {
-    // associations can be defined here
+    User.belongsToMany(models.Capability, {
+      uniqueKey: 'capabilityId',
+      foreignKey: 'userId',
+      through: models.UserCapability
+    });
   };
 
-  User.sync()
-  .then(() => console.log('User table created successfully'))
-  .catch(err => console.log('oooh, did you enter wrong database credentials?'));
+  // User.sync()
+  // .then(() => console.log('User table created successfully'))
+  // .catch(err => console.log('oooh, did you enter wrong database credentials?'));
 
   return User;
 };
