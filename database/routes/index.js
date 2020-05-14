@@ -1,10 +1,16 @@
 const { Router } = require('express');
 const router = Router();
 const { racer, track, user, auth} = require('../controllers');;
-const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
 router.get('/', (req, res) => res.send('Welcome to our API'))
+
+const isAuthenticated = () => {
+	return passport.authenticate('jwt', { session: false })
+	// , function(req, res) {
+	// 	res.json({ msg: 'Congrats! You are seeing this because you are authorized'});
+	// }
+}
 
 // racers
 router.post('/racers', racer.createRacer);
@@ -22,7 +28,7 @@ router.delete('/tracks/:id', track.deleteTrack);
 
 // user
 router.post('/users', user.createUser);
-router.get('/users/:id', user.getUserById);
+router.get('/users/:id', passport.authenticate('jwt', { session: false }), user.getUserById);
 router.put('/users/:id', user.updateUser);
 router.delete('/users/:id', user.deleteUser);
 

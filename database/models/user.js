@@ -41,30 +41,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  User.prototype.comparePassword = function (password, callback) {
-    bcrypt.compare(password, this.password, function (err, isMatch) {
-        if (err) {
-            return callback(err);
-        }
-        callback(null, isMatch);
-    });
-  };
-
-  User.findByEmail = async email => {
-    let user = await User.findOne({
-      where: { email: email },
-    });
-  
-    return user;
-  };
-
-  User.validPassword = function(password){
-    return bcrypt.compareSync(password, this.password);
-  };
-
   User.associate = function(models) {
     // associations can be defined here
   };
+
+  User.sync()
+  .then(() => console.log('User table created successfully'))
+  .catch(err => console.log('oooh, did you enter wrong database credentials?'));
 
   return User;
 };
