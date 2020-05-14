@@ -3,35 +3,67 @@ const bcrypt = require("bcrypt");
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    name: DataTypes.STRING,
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: {
+        args: true,
+        msg: 'Email address already in use!'
+      },
       validate: {
-        isEmail: true
+        isEmail: true,
+        len: [1,255]
       }
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
-    },
-    role: {
-      type: DataTypes.STRING
+      allowNull: false,
+      validate: {
+        len: {
+          args: [8, Infinity],
+          msg: 'Password must be a minimum of 8 characters.'
+        }
+      }
     }
-  }, {
-		hooks: {
-			beforeCreate: function(user) {
-			user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
-			}
-		}
   });
-  User.associate = function(models) {
-    // associations can be defined here
+
+  User.beforeSave( async (user, options) => {
+    if (user.changed('password')) {
+      user.password = await bcrypt.hash(user.password, 12);
+    }
+  });
+
+  User.prototype.comparePassword = function (password, callback) {
+    bcrypt.compare(password, this.password, function (err, isMatch) {
+        if (err) {
+            return callback(err);
+        }
+        callback(null, isMatch);
+    });
   };
 
-  User.prototype.validPassword = function(password) {
+  User.findByEmail = async email => {
+    let user = await User.findOne({
+      where: { email: email },
+    });
+  
+    return user;
+  };
+
+  User.validPassword = function(password){
     return bcrypt.compareSync(password, this.password);
+  };
+
+  User.associate = function(models) {
+    // associations can be defined here
   };
 
   return User;

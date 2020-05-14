@@ -1,8 +1,8 @@
-const models = require('../database/models');
+const { Racer } = require('../models');
 
 const createRacer = async (req, res) => {
   try {
-    const racer = await models.Racer.create(req.body);
+    const racer = await Racer.create(req.body);
     return res.status(201).json(racer);
   } catch (error) {
     return res.status(500).json({error: error.message})
@@ -11,7 +11,7 @@ const createRacer = async (req, res) => {
 
 const getAllRacers = async (req, res) => {
   try {
-    const racers = await models.Racer.findAll();
+    const racers = await Racer.findAll();
     return res.status(200).json(racers);
   } catch (error) {
     return res.status(500).send(error.message);
@@ -21,7 +21,7 @@ const getAllRacers = async (req, res) => {
 const getRacerById = async (req, res) => {
   try {
     const { id } = req.params;
-    const racer = await models.Racer.findOne({
+    const racer = await Racer.findOne({
       where: { id: id }
     });
     if (racer) {
@@ -36,11 +36,11 @@ const getRacerById = async (req, res) => {
 const updateRacer = async (req, res) => {
   try {
     const { id } = req.params;
-    const [ updated ] = await models.Racer.update(req.body, {
+    const [ updated ] = await Racer.update(req.body, {
       where: { id: id }
     });
     if (updated) {
-      const updatedRacer = await models.Racer.findOne({ where: { id: id } });
+      const updatedRacer = await Racer.findOne({ where: { id: id } });
       return res.status(200).json(updatedRacer);
     }
     throw new Error('Racer not found');
@@ -52,7 +52,7 @@ const updateRacer = async (req, res) => {
 const deleteRacer = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await models.Racer.destroy({
+    const deleted = await Racer.destroy({
       where: { id: id }
     });
     if (deleted) {

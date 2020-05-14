@@ -1,15 +1,14 @@
-const { User } = require('../database/models');
+const { User } = require('../models');
 
 const createUser = async (req, res) => {
-  const { name, email, password } = req.body;
-
   try {
+    const { firstName, lastName, email, password, passwordConfirm } = req.body;
     const user = {
-      name,
+      firstName, lastName,
       email,
-      password
+      password,
+      passwordConfirm
     }
-
     const newUser = await User.create(user);
     return res.status(200).json(newUser);
   } catch (error) {

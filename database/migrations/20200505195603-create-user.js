@@ -8,7 +8,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      firstName: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      lastName: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -16,20 +20,22 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-          isEmail:true
+          isEmail: true
         },
         unique: {
           args: true,
           msg: 'Email address already in use!'
         }
       },
-      role: {
-        type: Sequelize.STRING,
-        defaultValue: null
-      },
       password: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+          len: {
+            args: [8, Infinity],
+            msg: 'Password must be a minimum of 8 characters.'
+          }
+        }
       },
       createdAt: {
         allowNull: false,
