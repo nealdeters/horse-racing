@@ -8,7 +8,10 @@ module.exports = (sequelize, DataTypes) => {
     distance: DataTypes.INTEGER
   }, {});
   Track.associate = function(models) {
-    // associations can be defined here
+    Track.hasMany(models.Race, {
+      foreignKey: 'trackId', 
+      sourceKey: 'id'
+    });
   };
   return Track;
 };

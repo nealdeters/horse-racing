@@ -8,9 +8,12 @@ module.exports = (sequelize, DataTypes) => {
 
   Capability.associate = function(models) {
     Capability.belongsToMany(models.User, {
-      uniqueKey: 'userId',
+      otherKey: 'userId',
       foreignKey: 'capabilityId',
-      through: models.UserCapability
+      through: models.UserCapability,
+      onDelete: 'cascade',
+      onUpdate: 'cascade',
+      hooks: true
     });
   };
 

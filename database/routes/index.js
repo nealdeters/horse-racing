@@ -1,17 +1,15 @@
 const { Router } = require('express');
 const router = Router();
-const { racer, track, user} = require('../controllers');
-const { User } = require('../models');
+const {Race, RacerRace, Racer, Track, User} = require('../controllers');
 const passport = require('passport');
 
-// custom error handling for jwt
-const isAuthenticatedAdmin = (req, res, next) => {
+// custom error handling for jwt for admin user
+const isAdmin = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user, info) => {
     if (err) {
       console.log(err);
     }
     if (info !== undefined) {
-      console.log(info.message);
       res.status(401).send(info.message);
     } else if (user.Capabilities.length) {
       const isAdmin = user.Capabilities.find(capability => {
@@ -34,27 +32,38 @@ const isAuthenticatedAdmin = (req, res, next) => {
   })(req, res, next);
 }
 
-router.get('/', (req, res) => res.send('Welcome to our API'))
+router.get('/', (req, res) => res.send('Welcome to the Derby API'))
 
 // racers
-router.post('/racers', isAuthenticatedAdmin, racer.createRacer);
-router.get('/racers', racer.getAllRacers);
-router.get('/racers/:id', racer.getRacerById);
-router.put('/racers/:id', isAuthenticatedAdmin, racer.updateRacer);
-router.delete('/racers/:id', isAuthenticatedAdmin, racer.deleteRacer);
+router.post('/racers', isAdmin, Racer.createRacer);
+router.get('/racers', Racer.getAllRacers);
+router.get('/racers/:id', Racer.getRacerById);
+router.put('/racers/:id', isAdmin, Racer.updateRacer);
+router.delete('/racers/:id', isAdmin, Racer.deleteRacer);
 
 // tracks
-router.post('/tracks', isAuthenticatedAdmin, track.createTrack);
-router.get('/tracks', track.getAllTracks);
-router.get('/tracks/:id', track.getTrackById);
-router.put('/tracks/:id', isAuthenticatedAdmin, track.updateTrack);
-router.delete('/tracks/:id', isAuthenticatedAdmin, track.deleteTrack);
+router.post('/tracks', isAdmin, Track.createTrack);
+router.get('/tracks', Track.getAllTracks);
+router.get('/tracks/:id', Track.getTrackById);
+router.put('/tracks/:id', isAdmin, Track.updateTrack);
+router.delete('/tracks/:id', isAdmin, Track.deleteTrack);
 
-// user
-router.post('/register', user.register);
-router.post('/login', user.login);
-router.post('/logout', user.logout);
-router.get('/users/:id', isAuthenticatedAdmin, user.getUserById);
-router.put('/users/:id', isAuthenticatedAdmin, user.updateUser);
+// users
+router.post('/register', User.register);
+router.post('/login', User.login);
+router.post('/logout', User.logout);
+router.get('/users/:id', isAdmin, User.getUserById);
+router.put('/users/:id', isAdmin, User.updateUser);
+
+// races
+router.post('/races', isAdmin, Race.createRace);
+router.get('/races', Race.getAllRaces);
+router.get('/races/:id', Race.getRaceById);
+router.put('/races/:id', isAdmin, Race.updateRace);
+router.delete('/races/:id', isAdmin, Race.deleteRace);
+
+// racer races (results)
+router.get('/results',  RacerRace.getAllRacerRaces);
+router.get('/results/:id', RacerRace.getRacerRaceById);
 
 module.exports = router;
