@@ -23,6 +23,16 @@ module.exports = {
       raceId: {
         type: Sequelize.INTEGER,
       },
+      duration: {
+        type: Sequelize.TIME,
+      },
+      injured: {
+        type: Sequelize.BOOLEAN,
+        default: false
+      },
+      lane: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

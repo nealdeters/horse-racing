@@ -3,8 +3,6 @@ import moment from 'moment';
 import RaceContext from './raceContext';
 import raceReducer from './raceReducer';
 import Utility from '../../Utility';
-// import racersJson from '../../racers.json';
-// import tracksJson from '../../tracks.json'
 import {
   SET_TRACK,
   SET_TRACK_RACERS,
