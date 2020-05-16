@@ -180,7 +180,7 @@ const continueCountdown = (nextStartTime, socket) => {
 }
 
 const racerCronJob = async (socket) => {
-  const endOfDay = moment().endOf('day');
+  const dayFromNow = moment().add(24, 'hours');
 
   if(!raceInProgress){
     const now = moment();
@@ -192,7 +192,7 @@ const racerCronJob = async (socket) => {
     const result = await Race.findAll({
       where: {
         startTime: {
-          [Op.between]: [now, endOfDay]
+          [Op.between]: [now, dayFromNow]
         },
         endTime: null
       },
