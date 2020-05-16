@@ -43,7 +43,6 @@ const _moveRacer = (racer, track, racers) => {
   }
 
   racer.RacerRace.percentage += (increment / divisable);
-  console.log(racer.RacerRace.percentage)
 
   if(racer.RacerRace.percentage >= 100 || racer.RacerRace.injured){
     if(racer.RacerRace.injured){
@@ -166,14 +165,12 @@ const _setRacerLanes = (race) => {
 let message = null;
 
 const continueCountdown = (nextStartTime, socket) => {
-  // const time = nextStartTime.fromNow('ss');
   const time = nextStartTime.diff(moment(), 'seconds');
   message = `Next Race in ${time} seconds`;
   socket.emit('nextRaceCountdown', message);
-  console.log('countdown')
 
   setTimeout(() => {
-    if(time !== 0){
+    if(time !== 1){
       continueCountdown(nextStartTime, socket);
     } else {
       socket.emit('nextRaceCountdown', null);

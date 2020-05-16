@@ -15,13 +15,11 @@ export default (state, action) => {
         race: action.payload
       };
     case SET_TRACK:
-      console.log(action.payload)
       return {
         ...state,
         track: action.payload
       };
     case SET_RACERS:
-      console.log(action.payload)
       return {
         ...state,
         racers: action.payload

@@ -6,7 +6,7 @@ import {
   SET_TRACK,
   SET_RACERS,
   SET_RESULTS,
-  CLEAR_RESULTS,
+  CLEAR_RESULTS
 } from '../types';
 
 const defaultTrack = {

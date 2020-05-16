@@ -8,7 +8,7 @@ let io = socketIOClient(process.env.SOCKET_URL);
 
 const Race = () => {
 	const raceContext = useContext(RaceContext);
-	const { race, track, racers, setRace } = raceContext;
+	const { track, setRace } = raceContext;
 
 	// on mount
 	useEffect(() => {

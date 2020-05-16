@@ -63,7 +63,20 @@ const createRace = async (req, res) => {
 
     const newRace = await Race.create(race);
 
-    if(racers && racers.length){
+    if(racers === true){
+      // if racers is true, apply 8 random ones
+      const randRacers = await Racer.findAll({
+        order: sequelize.random(),
+        limit: 8
+      });
+
+      await newRace.setRacers(randRacers);
+    } else if (racers && racers.length){
+      // if provided racers array is larger than 8, cut it down
+      if(racers.length > 8){
+        racers = racers.splice(0, 8);
+      }
+
       await newRace.setRacers(_shuffle(racers.map(racer => {
         if(typeof racer === 'number'){
           return racer;

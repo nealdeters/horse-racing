@@ -1,13 +1,33 @@
-import React, { Fragment, useEffect, useState, useContext } from 'react';
+import React, { Fragment, useRef, useEffect, useState, useContext } from 'react';
 import RaceKey from './RaceKey';
 import RaceContext from '../context/race/raceContext';
+import M from "materialize-css/dist/js/materialize.min.js";
 import socketIOClient from "socket.io-client";
 
 let io = socketIOClient(process.env.SOCKET_URL);
 
+// Hook
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = useRef();
+
+  // Store current value in ref
+  useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
+
+}
+
+let injuries = {};
+let racerAngles = {};
+
 const RaceTrack = (props) => {
   const raceContext = useContext(RaceContext);
-  const { racers, track } = raceContext;
+  const { race, racers, track } = raceContext;
 
   const [size] = useState(props.size);
   const [countdown, setCountdown] = useState('');
@@ -27,7 +47,6 @@ const RaceTrack = (props) => {
   const startAngle = 0;
   const endAngle = Math.PI * 4;
   const racerStartAngle = (Math.PI/180) * 360;
-  const racerAngles = {};
 
   // on mount
   useEffect(() => {
@@ -43,11 +62,30 @@ const RaceTrack = (props) => {
     }
 
     if(racers){
-      racersToBlocks();
+      moveRacers(racers);
+      toastInjuries(racers);
     }
 
     // eslint-disable-next-line
-  }, [track, racers])
+  }, [track, racers]);
+
+  const prevRace = usePrevious(race);
+  
+  if(prevRace && prevRace.id !== race.id){
+    injuries = {};
+    racerAngles = {};
+  }
+
+  const toastInjuries = (racers) => {
+    racers.forEach(racer => {
+      if(!injuries[racer.id]){
+        if(racer.RacerRace.injured){
+          M.toast({html: `${racer.name} was injured!`});
+          injuries[racer.id] = true;
+        }
+      }
+    })
+  }
 
   const drawTrack = () => {
     const canvas = document.getElementById('race-track');
@@ -60,9 +98,13 @@ const RaceTrack = (props) => {
     drawFinishLine(ctx);
   }
 
-  const racersToBlocks = () => {
+  const moveRacers = (racers) => {
     racers.forEach(racer => {
-      racerAngles[racer.RacerRace.lane] = (racerStartAngle) + (.2 - ( (racer.RacerRace.lane / .8) / 100) );
+      if(racer.RacerRace.percentage === 0){
+        // racers to block
+        racerAngles[racer.RacerRace.lane] = (racerStartAngle) + (.2 - ( (racer.RacerRace.lane / .8) / 100) );
+      }
+
       drawRacer(racer);
     });
   }
@@ -104,7 +146,7 @@ const RaceTrack = (props) => {
     ctx.fillStyle = track.trackColor;
     ctx.fill();
     ctx.lineWidth = 2;
-    ctx.strokeStyle = track.rails_color;
+    ctx.strokeStyle = track.railColor;
     ctx.stroke();
   };
 
