@@ -8,6 +8,7 @@ const routes = require('./database/routes');
 const cron = require('node-cron');
 const moment = require('moment');
 const http = require('http');
+const path = require('path');
 const { racerCronJob } = require('./moveRacer');;
 
 require('dotenv').config();
