@@ -1,10 +1,7 @@
-import React, { Fragment, useContext } from 'react';
-import RaceContext from '../context/race/raceContext';
-import Moment from 'react-moment';
+import React, { Fragment } from 'react';
 
 const ResultsBoard = (props) => {
-  const raceContext = useContext(RaceContext);
-  const { results } = raceContext;
+  const { results } = props;
 
   if(results === null){
     return null;
@@ -15,8 +12,8 @@ const ResultsBoard = (props) => {
   		<div 
         className="fas fa-horse fa-flip-horizontal racer-default-img"
         style={{
-          backgroundColor: results === null ? 'white' : results[0].colors.primary,
-          color: results === null ? 'white' : results[0].colors.secondary
+          backgroundColor: results === null ? 'white' : results[0].primaryColor,
+          color: results === null ? 'white' : results[0].secondaryColor
         }}
         ></div>
       <h3 className="white-text text-center">{results[0].name} Wins!</h3>
@@ -33,24 +30,19 @@ const ResultsBoard = (props) => {
   			<tbody>
   				{results && results.map((result, i) => (
   					<tr key={result.id}>
-  						<td>{i + 1}</td>
+  						<td>{result.RacerRace.place}</td>
               <td>
                 <div 
                   className="racer-color"
                   style={{
-                    backgroundColor: result.colors.primary
+                    backgroundColor: result.primaryColor
                   }}>
                 </div>
               </td>
-  						<td className={result.injured ? 'strike-name' : ''}>{result.name}</td>
-              <td>{result.lane}</td>
+  						<td className={result.RacerRace.injured ? 'strike-name' : ''}>{result.name}</td>
+              <td>{result.RacerRace.lane}</td>
   						<td>
-  							{result.time === null ? '-' : (
-                  <Moment 
-                    format='mm:ss:SSS'>
-                      {result.time}
-                  </Moment>
-                )}
+                <Fragment>{result.RacerRace.duration}</Fragment>
   						</td>
   					</tr>
   				))}

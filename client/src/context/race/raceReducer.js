@@ -1,12 +1,19 @@
 import {
+  SET_RACE,
   SET_TRACK,
   SET_RACERS,
   SET_RESULTS,
-  CLEAR_RESULTS
+  CLEAR_RESULTS,
+  ERROR
 } from '../types';
 
 export default (state, action) => {
   switch (action.type) {
+    case SET_RACE:
+      return {
+        ...state,
+        race: action.payload
+      };
     case SET_TRACK:
       return {
         ...state,
@@ -26,6 +33,12 @@ export default (state, action) => {
       return {
         ...state,
         results: null
+      };
+    case ERROR:
+      console.error(action.payload);
+      return {
+        ...state,
+        error: action.payload
       };
     default:
       return state;
