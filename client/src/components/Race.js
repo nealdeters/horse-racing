@@ -8,36 +8,25 @@ let io = socketIOClient(process.env.SOCKET_URL);
 
 const Race = () => {
 	const raceContext = useContext(RaceContext);
-	const { racers, tracks, track, trackRacers, getRacers, getTracks, setTrack, setTrackRacers } = raceContext;
+	const { race, track, racers, setRace } = raceContext;
 
 	// on mount
 	useEffect(() => {
     io.on("raceResults", data => {
-      console.log(data)
-      // setSocket(data.racers);
+      setRace(data);
     });
+
+    // eslint-disable-next-line
 	}, []);
 
 	// on update
 	useEffect(() => {
-	  if(racers === null){
-  		getRacers();
-  		getTracks();
-	  } else {
-	  	setTrackRacers();
-	  	setTrack();
-	  }
-
 	  if(track){
 	  	document.body.style = `background-color: ${track.trackColor};`;
 	  }
-	  
-	  // eslint-disable-next-line
-	}, [track, tracks])
 
-	if(track === null || trackRacers === null){
-		return null;
-	}
+	  // eslint-disable-next-line
+	}, [track])
 
 	return (
 		<div

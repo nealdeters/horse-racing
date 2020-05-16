@@ -34,7 +34,8 @@ app.use('/api', routes);
 
 // web socket connection
 io.on('connection', (socket) => {
-	console.log('user connected')
+	console.log('user connected');
+	racerCronJob(io);
 
 	socket.on('disconnect', () => {
     console.log('user disconnected');

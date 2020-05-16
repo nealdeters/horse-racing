@@ -5,7 +5,7 @@ import { Modal } from 'react-materialize';
 
 const Results = (props) => {
 	const raceContext = useContext(RaceContext);
-	const { track, results, clearResults, setTrack, setTrackRacers } = raceContext;
+	const { track, results, clearResults } = raceContext;
 	const [show, setShow] = useState(false);
 
 	useEffect(() => {
@@ -23,8 +23,6 @@ const Results = (props) => {
 
 	const onClose = () => {
 		clearResults();
-		setTrackRacers();
-		setTrack();
 	}
 
 	if(results === null){

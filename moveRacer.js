@@ -43,6 +43,7 @@ const _moveRacer = (racer, track, racers) => {
   }
 
   racer.RacerRace.percentage += (increment / divisable);
+  console.log(racer.RacerRace.percentage)
 
   if(racer.RacerRace.percentage >= 100 || racer.RacerRace.injured){
     if(racer.RacerRace.injured){
@@ -162,6 +163,24 @@ const _setRacerLanes = (race) => {
   return race;
 }
 
+let message = null;
+
+const continueCountdown = (nextStartTime, socket) => {
+  // const time = nextStartTime.fromNow('ss');
+  const time = nextStartTime.diff(moment(), 'seconds');
+  message = `Next Race in ${time} seconds`;
+  socket.emit('nextRaceCountdown', message);
+  console.log('countdown')
+
+  setTimeout(() => {
+    if(time !== 0){
+      continueCountdown(nextStartTime, socket);
+    } else {
+      socket.emit('nextRaceCountdown', null);
+    }
+  }, 1000);
+}
+
 const racerCronJob = async (socket) => {
   const endOfDay = moment().endOf('day');
 
@@ -204,15 +223,27 @@ const racerCronJob = async (socket) => {
         // begin race calculations
         _setRacerLanes(nextRace);
         _startRace(nextRace, socket);
+        socket.emit('nextRaceCountdown', null);
       } else {
         const time = nextStartTime.fromNow();
-        const message = `Next race ${time}`;
+        message = `Next Race ${time}`;
         _setRacerLanes(nextRace);
         socket.emit('raceResults', nextRace);
-        
-        // pass websocket to start timer
-        socket.emit('nextRaceCountdown', message);
+        console.log(typeof time)
+        // if less than a minute pass seconds countdown
+        if(
+          time === 'in a few seconds' || time === 'in a minute'
+        ){
+          socket.emit('nextRaceCountdown', message);
+          continueCountdown(nextStartTime, socket);
+        } else {
+          // pass websocket to start timer
+          socket.emit('nextRaceCountdown', message);
+        }
       }
+    } else {
+      socket.emit('raceResults', null);
+      socket.emit('nextRaceCountdown', 'No Races Scheduled for Today.');
     }
   } else {
     console.log('race still in progress')

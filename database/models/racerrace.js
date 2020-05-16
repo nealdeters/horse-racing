@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
     duration: {
-      type: DataTypes.STRING(9),
+      type: DataTypes.STRING(15),
     },
     injured: {
       type: DataTypes.BOOLEAN,
