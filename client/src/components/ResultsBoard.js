@@ -1,10 +1,7 @@
-import React, { Fragment, useContext } from 'react';
-import RaceContext from '../context/race/raceContext';
-import Moment from 'react-moment';
+import React, { Fragment } from 'react';
 
 const ResultsBoard = (props) => {
-  const raceContext = useContext(RaceContext);
-  const { results } = raceContext;
+  const { results } = props;
 
   if(results === null){
     return null;
@@ -42,14 +39,11 @@ const ResultsBoard = (props) => {
                   }}>
                 </div>
               </td>
-  						<td className={result.injured ? 'strike-name' : ''}>{result.name}</td>
-              <td>{result.lane}</td>
+  						<td className={result.RacerRace.injured ? 'strike-name' : ''}>{result.name}</td>
+              <td>{result.RacerRace.lane}</td>
   						<td>
-  							{result.time === null ? '-' : (
-                  <Moment 
-                    format='mm:ss:SSS'>
-                      {result.time}
-                  </Moment>
+  							{result.RacerRace.duration === null ? '-' : (
+                  <div>{result.RacerRace.time}</div>
                 )}
   						</td>
   					</tr>

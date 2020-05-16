@@ -62,14 +62,15 @@ const _moveRacer = (racer, track, racers) => {
   }
 }
 
-const isRaceFinished = (race, socket) => {
+const isRaceFinished = async (race, socket) => {
   raceFinished = race.racers.every(racer => {
     return racer.RacerRace.finished;
   });
   if(raceFinished){
     raceInProgress = false;
-    _updateRace(race);
-    _updateRacerRaces(race.racers);
+    await _updateRace(race);
+    await _updateRacerRaces(race.racers);
+    race.finished = true;
     socket.emit('raceResults', race);
   } else {
     setTimeout(() => {
@@ -226,7 +227,7 @@ const racerCronJob = async (socket) => {
         message = `Next Race ${time}`;
         _setRacerLanes(nextRace);
         socket.emit('raceResults', nextRace);
-        console.log(typeof time)
+
         // if less than a minute pass seconds countdown
         if(
           time === 'in a few seconds' || time === 'in a minute'

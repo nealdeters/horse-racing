@@ -1,12 +1,27 @@
-import React, { Fragment, useState, useEffect, useContext } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import ResultsBoard from './ResultsBoard';
-import RaceContext from '../context/race/raceContext';
+// import RaceContext from '../context/race/raceContext';
 import { Modal } from 'react-materialize';
+import socketIOClient from "socket.io-client";
+
+let io = socketIOClient(process.env.SOCKET_URL);
 
 const Results = (props) => {
-	const raceContext = useContext(RaceContext);
-	const { track, results, clearResults } = raceContext;
 	const [show, setShow] = useState(false);
+	const [results, setResults] = useState(null);
+	const [track, setTrack] = useState(null);
+
+	// on mount
+	useEffect(() => {
+    io.on("raceResults", data => {
+      if(data && data.finished){
+      	setResults(data.racers);
+      	setTrack(data.Track);
+      }
+    });
+
+    // eslint-disable-next-line
+	}, []);
 
 	useEffect(() => {
 		if(results && results.length){
@@ -16,13 +31,12 @@ const Results = (props) => {
 		}
 
 		return () => {
-      // console.log('Do some cleanup');
       setShow(false);
     }
-	}, [results]);
+	}, [results])
 
 	const onClose = () => {
-		clearResults();
+		setResults(null);
 	}
 
 	if(results === null){

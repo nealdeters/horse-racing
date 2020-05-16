@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import RaceTrack from '../components/RaceTrack';
-import Results from '../components/Results';
 import RaceContext from '../context/race/raceContext';
 import socketIOClient from "socket.io-client";
 
@@ -34,8 +33,6 @@ const Race = () => {
 		    backgroundColor: track.trackColor,
 		    minHeight: `100%`
 		  }}>
-		  <Results 
-		    track={track} />
 		  <h1 className="header white-text margin-0 uppercase">derby</h1>
 		  <h3 className="header white-text track-name">{track.name}</h3>
 		  <RaceTrack />
