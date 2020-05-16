@@ -24,7 +24,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       duration: {
-        type: Sequelize.TIME,
+        type: Sequelize.STRING(9),
       },
       injured: {
         type: Sequelize.BOOLEAN,

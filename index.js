@@ -16,8 +16,6 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-// const expressWs = require('express-ws')(app);
-
 // Init Middleware
 
 // import the passport and passport-jwt strategy
@@ -37,27 +35,15 @@ app.use('/api', routes);
 // web socket connection
 io.on('connection', (socket) => {
 	console.log('user connected')
-	// console.log(moment().format('mm:ss.SSS'))
 
 	socket.on('disconnect', () => {
     console.log('user disconnected');
   });
 });
 
-let counter = 0;
-
-const raceProgress = () => {
-	io.emit('raceProgress', counter++);
-
-	setTimeout(() => {
-		raceProgress();
-	}, 1000);
-}
-
 // cron job every minute
 cron.schedule('* * * * *', () => {
-	console.log('CRON JOB')
-	racerCronJob();
+	racerCronJob(io);
 });
 
 // app static assets in production
@@ -72,14 +58,15 @@ if(process.env.NODE_ENV === 'production'){
 
 const PORT = process.env.PORT || 5000;
 const eraseDatabaseOnSync = false;
+// console.log(moment().toISOString())
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(() => {
-	app.listen(PORT, () => {
+	server.listen(PORT, () => {
 		console.log(`Server started on port ${PORT}`);
 	});
 
 
-	server.listen(3001, () => console.log(`Listening on port 3001`))
+	// server.listen(3001, () => console.log(`Listening on port 3001`))
 });
 
 module.exports = app;

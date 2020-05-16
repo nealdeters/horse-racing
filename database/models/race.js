@@ -28,6 +28,6 @@ module.exports = (sequelize, DataTypes) => {
       targetKey: 'id'
     });
   };
-
+  
   return Race; 
 };

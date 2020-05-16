@@ -1,6 +1,25 @@
 const { sequelize } = require('../models');
 const { Race, RacerRace, Racer, Track } = require('../models');
 
+const _shuffle = (array) => {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
 const createRace = async (req, res) => {
   try {
     const {startTime, endTime, racers, track} = req.body;
@@ -45,13 +64,13 @@ const createRace = async (req, res) => {
     const newRace = await Race.create(race);
 
     if(racers && racers.length){
-      await newRace.setRacers(racers.map(racer => {
+      await newRace.setRacers(_shuffle(racers.map(racer => {
         if(typeof racer === 'number'){
           return racer;
         } else if(racer.id && typeof racer === 'number'){
           return racer.id;
         }
-      }))
+      })))
     } else {
       // if no racers added, apply 4 random ones
       const randRacers = await Racer.findAll({

@@ -5,6 +5,9 @@ import RaceContext from '../context/race/raceContext';
 import Utility from '../Utility';
 import moment from 'moment';
 import M from "materialize-css/dist/js/materialize.min.js";
+import socketIOClient from "socket.io-client";
+
+let io = socketIOClient(process.env.SOCKET_URL);
 
 let debugging = false;
 
@@ -31,6 +34,12 @@ const RaceTrack = (props) => {
   const endAngle = Math.PI * 4;
   const racerStartAngle = (Math.PI/180) * 360;
   const racerAngles = {};
+
+  useEffect(() => {
+    io.on("nextRaceCountdown", data => {
+      console.log(data)
+    });
+  }, []);
 
   useEffect(() => {
     if(track && trackRacers && trackRacers.length){

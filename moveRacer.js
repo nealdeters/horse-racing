@@ -1,9 +1,10 @@
 const { sequelize, Sequelize } = require('./database/models');
-const { Race, Racer, Track } = sequelize.models;
+const { Race, Racer, Track, RacerRace } = sequelize.models;
 const Op = Sequelize.Op;
 const moment = require('moment');
 
 const debugging = false;
+const timeout = 100;
 let raceFinished = false;
 let raceInProgress = false;
 
@@ -42,7 +43,6 @@ const _moveRacer = (racer, track, racers) => {
   }
 
   racer.RacerRace.percentage += (increment / divisable);
-  console.log(racer.RacerRace.percentage)
 
   if(racer.RacerRace.percentage >= 100 || racer.RacerRace.injured){
     if(racer.RacerRace.injured){
@@ -58,71 +58,111 @@ const _moveRacer = (racer, track, racers) => {
   } else {
     setTimeout(() => {
       _moveRacer(racer, track, racers);
-    }, 100);
+    }, timeout);
   }
 }
 
-const isRaceFinished = (race, raceInProgress, raceFinished) => {
+const isRaceFinished = (race, socket) => {
   raceFinished = race.racers.every(racer => {
     return racer.RacerRace.finished;
   });
-  console.log(isRaceFinished)
   if(raceFinished){
     raceInProgress = false;
     _updateRace(race);
     _updateRacerRaces(race.racers);
+    socket.emit('raceResults', race);
   } else {
     setTimeout(() => {
-      isRaceFinished(race, raceInProgress, raceFinished);
-    }, 1000);
+      isRaceFinished(race, socket);
+      socket.emit('raceResults', race);
+    }, timeout);
   }
 
   return raceFinished;
 }
 
 const _updateRacerRaces = (racers) => {
-  // racers.sort((a, b) => {
-  //   // nulls sort after anything else
-  //   if (a.RacerRace.duration === null) {
-  //     return 1;
-  //   } else if (b.RacerRace.duration === null) {
-  //     return -1;
-  //   } else if ( a.RacerRace.duration < b.RacerRace.duration) {
-  //     return -1;
-  //   } else if ( a.RacerRace.duration > b.RacerRace.duration) {
-  //     return 1;
-  //   } else {
-  //     return 0;
-  //   }
-  // });
-  console.log(racers)
+  // sort racers by duration
+  racers.sort((a, b) => {
+    // nulls sort after anything else
+    if (a.RacerRace.duration === null) {
+      return 1;
+    } else if (b.RacerRace.duration === null) {
+      return -1;
+    } else if ( a.RacerRace.duration < b.RacerRace.duration) {
+      return -1;
+    } else if ( a.RacerRace.duration > b.RacerRace.duration) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
+  const _updateRacerRace = async (racer, index) => {
+    const rr = racer.RacerRace;
+    rr.endTime = moment(rr.endTime).toISOString();
+    rr.duration = moment(rr.duration).format('mm:ss.SSS');
+    rr.place = index + 1;
+    
+    try {
+      // update join table with results
+      const res = await RacerRace.update(rr, {
+        where: {raceId: rr.raceId, racerId: rr.racerId}
+      });
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  // call to update racerRaces
+  racers.forEach(_updateRacerRace);
 }
 
-const _updateRace = (race) => {
+const _updateRace = async (race) => {
   race.endTime = moment().toISOString();
-  console.log(race)
+  const updatedRace = {
+    id: race.id,
+    endTime: race.endTime
+  }
+
+  try {
+    // update race table with end time
+    const res = await Race.update(race, {
+      where: {id: updatedRace.id}
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
 }
 
-const _startRace = (race) => {
+const _startRace = (race, socket) => {
   raceFinished = false;
   const racers = race.racers;
   const track = race.Track;
-  console.log(race)
+
   if(race.racers && race.racers.length && race.Track){
     raceInProgress = true;
     race.racers.forEach(racer => {
       racer.RacerRace.startTime = moment();
-      racer.RacerRace.percentage = 0;
       _moveRacer(racer, race.Track, race.racers);
     });
 
-    isRaceFinished(race, raceInProgress, raceFinished);
+    isRaceFinished(race, socket);
   } else {
     raceFinished = true;
   }
 }
 
-const racerCronJob = async () => {
+const _setRacerLanes = (race) => {
+  race.racers.forEach( (racer, index) => {
+    racer.RacerRace.percentage = 0;
+    racer.RacerRace.lane = index + 1;
+  });
+
+  return race;
+}
+
+const racerCronJob = async (socket) => {
   const endOfDay = moment().endOf('day');
 
   if(!raceInProgress){
@@ -142,10 +182,7 @@ const racerCronJob = async () => {
       include: [
         {
           model: Racer, 
-          as: 'racers',
-          through: {
-            // attributes: []
-          }
+          as: 'racers'
         },{
           model: Track
         }
@@ -157,27 +194,28 @@ const racerCronJob = async () => {
     });
 
     const res = result && result[0] ? result[0] : null;
-    // const startTime = moment(res.startTime);
     
     if( res ){
       const nextRace = JSON.parse(JSON.stringify(res));
       const nextStartTime = moment(nextRace.startTime);
-      // const tenFromRace = moment(nextStartTime).add(10, 'minutes');
 
       // if next race now 
       if(nextStartTime.isSame(now, 'minute')){
         // begin race calculations
-        // pass websocket for results
-        console.log('race starts now')
-        _startRace(nextRace);
+        _setRacerLanes(nextRace);
+        _startRace(nextRace, socket);
       } else {
+        const time = nextStartTime.fromNow();
+        const message = `Next race ${time}`;
+        _setRacerLanes(nextRace);
+        socket.emit('raceResults', nextRace);
+        
         // pass websocket to start timer
-        // shuffle racers and set lanes
-        console.log(`next race starts ${nextStartTime.fromNow()}`);
+        socket.emit('nextRaceCountdown', message);
       }
     }
   } else {
-    console.log('race in progress still')
+    console.log('race still in progress')
   }
 }
 

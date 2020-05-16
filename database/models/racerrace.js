@@ -15,6 +15,25 @@ module.exports = (sequelize, DataTypes) => {
 	      model: 'Racers',
 	      key: 'id'
 	    }
+    },
+    startTime: {
+      type: DataTypes.DATE,
+    },
+    endTime: {
+      type: DataTypes.DATE,
+    },
+    place: {
+      type: DataTypes.INTEGER,
+    },
+    duration: {
+      type: DataTypes.STRING(9),
+    },
+    injured: {
+      type: DataTypes.BOOLEAN,
+      default: false
+    },
+    lane: {
+      type: DataTypes.INTEGER,
     }
   });
 
