@@ -59,15 +59,11 @@ if(process.env.NODE_ENV === 'production'){
 
 const PORT = process.env.PORT || 5000;
 const eraseDatabaseOnSync = false;
-// console.log(moment().toISOString())
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(() => {
 	server.listen(PORT, () => {
 		console.log(`Server started on port ${PORT}`);
 	});
-
-
-	// server.listen(3001, () => console.log(`Listening on port 3001`))
 });
 
 module.exports = app;
