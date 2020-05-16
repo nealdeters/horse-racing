@@ -71,7 +71,7 @@ const RaceTrack = (props) => {
 
   const prevRace = usePrevious(race);
   
-  if(prevRace && prevRace.id !== race.id){
+  if(prevRace && race && prevRace.id !== race.id){
     injuries = {};
     racerAngles = {};
   }

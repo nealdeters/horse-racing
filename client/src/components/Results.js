@@ -15,6 +15,7 @@ const Results = (props) => {
 	useEffect(() => {
     io.on("raceResults", data => {
       if(data && data.finished){
+      	setShow(false);
       	setResults(data.racers);
       	setTrack(data.Track);
       }

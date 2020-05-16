@@ -102,8 +102,8 @@ const _updateRacerRaces = (racers) => {
   const _updateRacerRace = async (racer, index) => {
     const rr = racer.RacerRace;
     rr.endTime = moment(rr.endTime).toISOString();
-    rr.duration = moment(rr.duration).format('mm:ss.SSS');
-    rr.place = index + 1;
+    rr.duration = rr.duration ? moment(rr.duration).format('mm:ss.SSSS') : '-';
+    rr.place = rr.duration === '-' ? null : index + 1;
     
     try {
       // update join table with results

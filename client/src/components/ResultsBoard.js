@@ -30,7 +30,7 @@ const ResultsBoard = (props) => {
   			<tbody>
   				{results && results.map((result, i) => (
   					<tr key={result.id}>
-  						<td>{i + 1}</td>
+  						<td>{result.RacerRace.place}</td>
               <td>
                 <div 
                   className="racer-color"
@@ -42,9 +42,7 @@ const ResultsBoard = (props) => {
   						<td className={result.RacerRace.injured ? 'strike-name' : ''}>{result.name}</td>
               <td>{result.RacerRace.lane}</td>
   						<td>
-  							{result.RacerRace.duration === null ? '-' : (
-                  <div>{result.RacerRace.time}</div>
-                )}
+                <Fragment>{result.RacerRace.duration}</Fragment>
   						</td>
   					</tr>
   				))}
