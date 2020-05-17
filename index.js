@@ -33,16 +33,16 @@ app.use('/api', routes);
 // web socket connection
 io.on('connection', (socket) => {
 	console.log(`User ${socket.id} connected.`);
-	racerCronJob(io);
+
+	// cron job every minute
+	cron.schedule('*/1 * * * * *', () => {
+		// console.log('cron job')
+		racerCronJob(io);
+	});
 
 	io.on('disconnect', (socket) => {
 		console.log(`User ${socket.id} disconnected.`);
 	});
-});
-
-// cron job every minute
-cron.schedule('* * * * *', () => {
-	racerCronJob(io);
 });
 
 // app static assets in production

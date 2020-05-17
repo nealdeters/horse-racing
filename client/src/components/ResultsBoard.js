@@ -42,7 +42,7 @@ const ResultsBoard = (props) => {
   						<td className={result.RacerRace.injured ? 'strike-name' : ''}>{result.name}</td>
               <td>{result.RacerRace.lane}</td>
   						<td>
-                <Fragment>{result.RacerRace.duration}</Fragment>
+                <Fragment>{result.RacerRace.duration ? result.RacerRace.duration : '-'}</Fragment>
   						</td>
   					</tr>
   				))}

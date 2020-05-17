@@ -7,14 +7,16 @@ module.exports = (sequelize, DataTypes) => {
 	    references: {
 	      model: 'Races',
 	      key: 'id'
-	    }
+	    },
+      onDelete: 'cascade'
     },
     racerId: {
     	type: DataTypes.INTEGER,
 	    references: {
 	      model: 'Racers',
 	      key: 'id'
-	    }
+	    },
+      onDelete: 'cascade'
     },
     startTime: {
       type: DataTypes.DATE,
@@ -26,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
     duration: {
-      type: DataTypes.STRING(15),
+      type: DataTypes.TIME,
     },
     injured: {
       type: DataTypes.BOOLEAN,
