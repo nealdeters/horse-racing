@@ -1,3 +1,4 @@
+const express = require('express');
 const bodyParser = require("body-parser");
 const logger = require('morgan');
 const passport = require('passport');
@@ -10,7 +11,7 @@ const { racerCronJob } = require('./moveRacer');;
 
 require('dotenv').config();
 
-const app = require('express')();
+const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
