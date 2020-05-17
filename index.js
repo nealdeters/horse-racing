@@ -1,5 +1,3 @@
-const express = require('express');
-const socketIO = require('socket.io')
 const bodyParser = require("body-parser");
 const logger = require('morgan');
 const passport = require('passport');
@@ -7,15 +5,14 @@ const { sequelize, Sequelize } = require('./database/models');
 const routes = require('./database/routes');
 const cron = require('node-cron');
 const moment = require('moment');
-const http = require('http');
 const path = require('path');
 const { racerCronJob } = require('./moveRacer');;
 
 require('dotenv').config();
 
-const app = express();
-const server = http.createServer(app);
-const io = socketIO(server);
+const app = require('express')();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 // Init Middleware
 
@@ -35,12 +32,12 @@ app.use('/api', routes);
 
 // web socket connection
 io.on('connection', (socket) => {
-	console.log('user connected');
+	console.log(`User ${socket.id} connected.`);
 	racerCronJob(io);
 
-	socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
+	io.on('disconnect', (socket) => {
+		console.log(`User ${socket.id} disconnected.`);
+	});
 });
 
 // cron job every minute

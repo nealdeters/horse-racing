@@ -1,10 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import ResultsBoard from './ResultsBoard';
-// import RaceContext from '../context/race/raceContext';
 import { Modal } from 'react-materialize';
-import socketIOClient from "socket.io-client";
-
-let io = socketIOClient(process.env.SOCKET_URL);
+import Utility from '../Utility';
+const io = Utility.io();
 
 const Results = (props) => {
 	const [show, setShow] = useState(false);

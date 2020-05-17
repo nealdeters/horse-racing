@@ -1,3 +1,6 @@
+import clientIo from 'socket.io-client'
+const io = clientIo(process.env.SOCKET_URL);
+
 const Utility = {
 	shuffle: (array) => {
 	  var currentIndex = array.length, temporaryValue, randomIndex;
@@ -19,6 +22,9 @@ const Utility = {
 	},
 	randomInt: (min, max) => {
 	  return Math.floor(Math.random() * (max - min + 1)) + min;
+	},
+	io: () => {
+		return io;
 	}
 }
 

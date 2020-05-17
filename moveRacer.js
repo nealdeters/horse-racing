@@ -137,12 +137,12 @@ const _updateRace = async (race) => {
 }
 
 const _startRace = (race, socket) => {
+  raceInProgress = true;
   raceFinished = false;
   const racers = race.racers;
   const track = race.Track;
 
   if(race.racers && race.racers.length && race.Track){
-    raceInProgress = true;
     race.racers.forEach(racer => {
       racer.RacerRace.startTime = moment();
       _moveRacer(racer, race.Track, race.racers);
@@ -151,6 +151,7 @@ const _startRace = (race, socket) => {
     isRaceFinished(race, socket);
   } else {
     raceFinished = true;
+    raceInProgress = false;
   }
 }
 
@@ -165,15 +166,27 @@ const _setRacerLanes = (race) => {
 
 let message = null;
 
-const continueCountdown = (nextStartTime, socket) => {
-  const time = nextStartTime.diff(moment(), 'seconds');
-  message = `Next Race in ${time} seconds`;
+const continueCountdown = (nextRace, nextStartTime, socket) => {
+  let time = nextStartTime.diff(moment(), 'seconds');
+
+  if(time >= 60){
+    let fromNow = nextStartTime.fromNow();
+    message = `Next Race ${fromNow}`;
+  } else {
+    if(time >= 10){
+      message = `00:${time}`;
+    } else {
+      message = `00:0${time}`;
+    }
+  }
+
   socket.emit('nextRaceCountdown', message);
 
   setTimeout(() => {
     if(time !== 1){
-      continueCountdown(nextStartTime, socket);
+      continueCountdown(nextRace, nextStartTime, socket);
     } else {
+      _startRace(nextRace, socket);
       socket.emit('nextRaceCountdown', null);
     }
   }, 1000);
@@ -185,14 +198,11 @@ const racerCronJob = async (socket) => {
   if(!raceInProgress){
     const now = moment();
 
-    // find upcoming race
-    // return racers and racerraces with data
-    // limit to only those with endTime = null
-    // order by startTime ascending
+    // find next race
     const result = await Race.findAll({
       where: {
         startTime: {
-          [Op.between]: [now, dayFromNow]
+          [Op.gte]: now
         },
         endTime: null
       },
@@ -216,29 +226,18 @@ const racerCronJob = async (socket) => {
       const nextRace = JSON.parse(JSON.stringify(res));
       const nextStartTime = moment(nextRace.startTime);
 
-      // if next race now 
-      if(nextStartTime.isSame(now, 'minute')){
-        // begin race calculations
-        _setRacerLanes(nextRace);
-        _startRace(nextRace, socket);
-        socket.emit('nextRaceCountdown', null);
-      } else {
-        const time = nextStartTime.fromNow();
-        message = `Next Race ${time}`;
-        _setRacerLanes(nextRace);
-        socket.emit('raceResults', nextRace);
+      const time = nextStartTime.fromNow();
+      message = `Next Race ${time}`;
+      _setRacerLanes(nextRace);
+      socket.emit('raceResults', nextRace);
 
-        // if less than a minute pass seconds countdown
-        if(
-          time === 'in a few seconds' || time === 'in a minute'
-        ){
-          socket.emit('nextRaceCountdown', message);
-          continueCountdown(nextStartTime, socket);
-        } else {
-          // pass websocket to start timer
-          socket.emit('nextRaceCountdown', message);
-        }
+      // if in a minute, start countdown
+      if(time === 'in a minute'){
+        continueCountdown(nextRace, nextStartTime, socket);
       }
+      
+      // pass websocket to start timer
+      socket.emit('nextRaceCountdown', message);
     } else {
       socket.emit('raceResults', null);
       socket.emit('nextRaceCountdown', 'No Races Scheduled for Today.');
@@ -246,6 +245,10 @@ const racerCronJob = async (socket) => {
   } else {
     console.log('race still in progress')
   }
+
+  // setTimeout(() => {
+  //   racerCronJob(socket);
+  // }, 60000);
 }
 
 module.exports = {
