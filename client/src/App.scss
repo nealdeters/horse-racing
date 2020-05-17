@@ -155,14 +155,20 @@ h6 {
 nav {
   ul a:hover {
     background-color: white;
-    color: black;
+    color: #191919;
   }
 
   .nav-wrapper {
-    background-color: black;
+    background-color: #191919;
 
     .brand-logo {
       padding: 0 15px;
     } 
+  }
+}
+
+table {
+  th {
+    font-size: 18px;
   }
 }
