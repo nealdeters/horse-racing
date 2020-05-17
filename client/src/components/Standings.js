@@ -36,7 +36,7 @@ const Standings = () => {
 
         return moment(race.startTime).isBefore(now) && race.endTime;
       });
-      let starts = races.length + 1;
+      let starts = races.length;
 
       racer.starts = starts;
       racer.first = first;
@@ -46,6 +46,9 @@ const Standings = () => {
     })
 
     // sort array by wins
+    data.sort((a, b) => {
+      return b.first - a.first || b.second - a.second || b.third - a.third;
+    })
 
     setStandings(data);
   }
