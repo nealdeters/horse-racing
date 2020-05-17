@@ -1,5 +1,8 @@
 import React, { Fragment, useEffect } from 'react';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
+import Navigation from './Navigation';
 import Race from './components/Race';
+import Standings from './components/Standings';
 import Results from './components/Results';
 import RaceState from './context/race/RaceState';
 import "materialize-css/dist/css/materialize.min.css";
@@ -14,10 +17,18 @@ const App = () => {
   
   return (
     <Fragment>
-      <RaceState>
-        <Results />
-        <Race />
-      </RaceState>
+      <Router>
+        <Navigation />
+        <Switch>
+          <Route exact path="/">
+            <RaceState>
+              <Results />
+              <Race />
+            </RaceState>
+          </Route>
+          <Route exact path="/standings" component={Standings} />
+        </Switch>
+      </Router>
     </Fragment>
   );
 }

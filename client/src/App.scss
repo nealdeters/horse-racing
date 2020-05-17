@@ -151,3 +151,18 @@ h6 {
     }
   }
 }
+
+nav {
+  ul a:hover {
+    background-color: white;
+    color: black;
+  }
+
+  .nav-wrapper {
+    background-color: black;
+
+    .brand-logo {
+      padding: 0 15px;
+    } 
+  }
+}

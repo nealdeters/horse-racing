@@ -7,6 +7,8 @@ const debugging = false;
 const timeout = 100;
 let raceFinished = false;
 let raceInProgress = false;
+let nextRace = null;
+let message = null;
 
 const _randomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -102,8 +104,8 @@ const _updateRacerRaces = (racers) => {
   const _updateRacerRace = async (racer, index) => {
     const rr = racer.RacerRace;
     rr.endTime = moment(rr.endTime).toISOString();
-    rr.duration = rr.duration ? moment(rr.duration).format('mm:ss.SSSS') : '-';
-    rr.place = rr.duration === '-' ? null : index + 1;
+    rr.duration = rr.duration ? moment(rr.duration).format('mm:ss.SSSS') : null;
+    rr.place = rr.duration === null ? null : index + 1;
     
     try {
       // update join table with results
@@ -139,6 +141,7 @@ const _updateRace = async (race) => {
 const _startRace = (race, socket) => {
   raceInProgress = true;
   raceFinished = false;
+  nextRace = null;
   const racers = race.racers;
   const track = race.Track;
 
@@ -164,91 +167,78 @@ const _setRacerLanes = (race) => {
   return race;
 }
 
-let message = null;
-
-const continueCountdown = (nextRace, nextStartTime, socket) => {
+const countdown = (nextRace, nextStartTime, socket) => {
   let time = nextStartTime.diff(moment(), 'seconds');
 
   if(time >= 60){
     let fromNow = nextStartTime.fromNow();
     message = `Next Race ${fromNow}`;
+    socket.emit('nextRaceCountdown', message);
   } else {
-    if(time >= 10){
-      message = `00:${time}`;
-    } else {
-      message = `00:0${time}`;
-    }
-  }
-
-  socket.emit('nextRaceCountdown', message);
-
-  setTimeout(() => {
-    if(time !== 1){
-      continueCountdown(nextRace, nextStartTime, socket);
-    } else {
+    if(time === 1){
       _startRace(nextRace, socket);
       socket.emit('nextRaceCountdown', null);
+    } else if (time >= 10){
+      message = `00:${time}`;
+      socket.emit('nextRaceCountdown', message);
+    } else {
+      message = `00:0${time}`;
+      socket.emit('nextRaceCountdown', message);
     }
-  }, 1000);
+  }
+}
+
+const initNextRace = (nextRace, socket) => {
+  if( nextRace ){
+    const nextStartTime = moment(nextRace.startTime);
+    _setRacerLanes(nextRace);
+    socket.emit('raceResults', nextRace);
+    countdown(nextRace, nextStartTime, socket);
+  } else {
+    socket.emit('raceResults', null);
+    socket.emit('nextRaceCountdown', 'No Races Scheduled for Today.');
+  }
 }
 
 const racerCronJob = async (socket) => {
   const dayFromNow = moment().add(24, 'hours');
 
   if(!raceInProgress){
-    const now = moment();
+    if(nextRace === null){
+      const now = moment();
 
-    // find next race
-    const result = await Race.findAll({
-      where: {
-        startTime: {
-          [Op.gte]: now
+      // find next race
+      const result = await Race.findAll({
+        where: {
+          startTime: {
+            [Op.gte]: now
+          },
+          endTime: null
         },
-        endTime: null
-      },
-      include: [
-        {
-          model: Racer, 
-          as: 'racers'
-        },{
-          model: Track
-        }
-      ],
-      order: [
-        ['startTime', 'ASC']
-      ],
-      limit: 1
-    });
+        include: [
+          {
+            model: Racer, 
+            as: 'racers'
+          },{
+            model: Track
+          }
+        ],
+        order: [
+          ['startTime', 'ASC']
+        ],
+        limit: 1
+      });
 
-    const res = result && result[0] ? result[0] : null;
-    
-    if( res ){
-      const nextRace = JSON.parse(JSON.stringify(res));
-      const nextStartTime = moment(nextRace.startTime);
-
-      const time = nextStartTime.fromNow();
-      message = `Next Race ${time}`;
-      _setRacerLanes(nextRace);
-      socket.emit('raceResults', nextRace);
-
-      // if in a minute, start countdown
-      if(time === 'in a minute'){
-        continueCountdown(nextRace, nextStartTime, socket);
-      }
-      
-      // pass websocket to start timer
-      socket.emit('nextRaceCountdown', message);
-    } else {
-      socket.emit('raceResults', null);
-      socket.emit('nextRaceCountdown', 'No Races Scheduled for Today.');
+      const res = result && result[0] ? result[0] : null;
+      nextRace = JSON.parse(JSON.stringify(res));
+      initNextRace(nextRace, socket);   
+    } else if(moment(nextRace.startTime).isAfter(moment())){
+      initNextRace(nextRace, socket);
     }
-  } else {
-    console.log('race still in progress')
-  }
-
-  // setTimeout(() => {
-  //   racerCronJob(socket);
-  // }, 60000);
+  } 
+  // else {
+  //   console.log('race still in progress')
+  // }
 }
 
 module.exports = {
