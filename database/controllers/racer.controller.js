@@ -1,4 +1,4 @@
-const { Racer } = require('../models');
+const { Racer, Race } = require('../models');
 
 const createRacer = async (req, res) => {
   try {
@@ -11,7 +11,14 @@ const createRacer = async (req, res) => {
 
 const getAllRacers = async (req, res) => {
   try {
-    const racers = await Racer.findAll();
+    const racers = await Racer.findAll({
+      include: [
+        {
+          model: Race,
+          as: 'races'
+        }
+      ]
+    });
     return res.status(200).json(racers);
   } catch (error) {
     return res.status(500).send(error.message);

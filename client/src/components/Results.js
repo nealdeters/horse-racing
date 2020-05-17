@@ -7,7 +7,7 @@ const io = Utility.io();
 const Results = (props) => {
 	const [show, setShow] = useState(false);
 	const [results, setResults] = useState(null);
-	const [track, setTrack] = useState(null);
+	// const [track, setTrack] = useState(null);
 
 	// on mount
 	useEffect(() => {
@@ -15,7 +15,7 @@ const Results = (props) => {
       if(data && data.finished){
       	setShow(false);
       	setResults(data.racers);
-      	setTrack(data.Track);
+      	// setTrack(data.Track);
       }
     });
 
@@ -46,7 +46,7 @@ const Results = (props) => {
 		<Fragment>
 			{ show ? (
 				<Modal
-				  style={{backgroundColor: track.trackColor}}
+				  style={{backgroundColor: '#191919'}}
 				  bottomSheet
 				  large="true"
 				  fixedFooter={false}
