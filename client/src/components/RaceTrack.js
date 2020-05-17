@@ -2,9 +2,9 @@ import React, { Fragment, useRef, useEffect, useState, useContext } from 'react'
 import RaceKey from './RaceKey';
 import RaceContext from '../context/race/raceContext';
 import M from "materialize-css/dist/js/materialize.min.js";
-import socketIOClient from "socket.io-client";
+import Utility from '../Utility';
+const io = Utility.io();
 
-let io = socketIOClient(process.env.SOCKET_URL);
 
 // Hook
 function usePrevious(value) {

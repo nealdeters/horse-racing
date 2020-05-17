@@ -20,7 +20,7 @@ const ResultsBoard = (props) => {
       <table className="white-text">
   			<thead>
   				<tr>
-  					<th className="uppercase normal">Rank</th>
+  					<th className="uppercase normal">Place</th>
             <th className="uppercase normal">Color</th>
   					<th className="uppercase normal">Name</th>
             <th className="uppercase normal">Lane</th>

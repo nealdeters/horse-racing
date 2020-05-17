@@ -1,9 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import RaceTrack from '../components/RaceTrack';
 import RaceContext from '../context/race/raceContext';
-import socketIOClient from "socket.io-client";
-
-let io = socketIOClient(process.env.SOCKET_URL);
+import Utility from '../Utility';
+const io = Utility.io();
 
 const Race = () => {
 	const raceContext = useContext(RaceContext);
