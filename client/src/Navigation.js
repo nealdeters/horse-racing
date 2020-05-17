@@ -23,7 +23,7 @@ const Navigation = () => {
       </div>
 
       <ul className="sidenav" id="mobile-demo">
-        <li><Link to="/standings">Standings</Link></li>
+        <li className="sidenav-close"><Link to="/standings">Standings</Link></li>
       </ul>
     </Fragment>
   )
