@@ -8,7 +8,7 @@ const Navigation = () => {
         <nav>
           <div className="nav-wrapper">
             <Link to="/"
-              className="brand-logo">DERBY</Link>
+              className="brand-logo">DRBY</Link>
             <Link
               to="/"
               data-target="mobile-demo" 

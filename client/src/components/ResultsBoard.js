@@ -21,7 +21,6 @@ const ResultsBoard = (props) => {
   			<thead>
   				<tr>
   					<th className="uppercase normal">Place</th>
-            <th className="uppercase normal">Color</th>
   					<th className="uppercase normal">Name</th>
             <th className="uppercase normal">Lane</th>
   					<th className="uppercase normal">Time</th>
@@ -32,14 +31,17 @@ const ResultsBoard = (props) => {
   					<tr key={result.id}>
   						<td>{result.RacerRace.place}</td>
               <td>
+                <span className={result.RacerRace.injured ? 'strike-name' : ''}>{result.name}</span>
                 <div 
                   className="racer-color"
                   style={{
-                    backgroundColor: result.primaryColor
+                    backgroundColor: result.primaryColor,
+                    display: 'inline-block',
+                    marginRight: '10%',
+                    float: 'right'
                   }}>
-                </div>
+                </div>  
               </td>
-  						<td className={result.RacerRace.injured ? 'strike-name' : ''}>{result.name}</td>
               <td>{result.RacerRace.lane}</td>
   						<td>
                 <Fragment>{result.RacerRace.duration ? result.RacerRace.duration : '-'}</Fragment>
