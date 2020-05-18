@@ -37,17 +37,20 @@ const Standings = () => {
         return moment(race.startTime).isBefore(now) && race.endTime;
       });
       let starts = races.length;
+      let winPrct = ((first/starts) * 100).toFixed(2) + '%';
 
       racer.starts = starts;
       racer.first = first;
       racer.second = second;
       racer.third = third;
+      racer.winPrct = winPrct;
       racer.injuries = injuries;
     })
 
     // sort array by wins
     data.sort((a, b) => {
-      return b.first - a.first || b.second - a.second || b.third - a.third;
+      return b.first - a.first || b.second - a.second || 
+        b.third - a.third || a.injuries - b.injuries;
     })
 
     setStandings(data);
@@ -60,12 +63,21 @@ const Standings = () => {
           <thead>
             <tr>
               <th className="uppercase normal">Name</th>
-              <th className="uppercase normal hide-on-small-only">Color</th>
-              <th className="uppercase normal">Starts</th>
+              <th className="uppercase normal tooltipped hide-on-small-only"
+                data-position="bottom" 
+                data-tooltip="Starts"
+                aria-label="Starts">Sts</th>
               <th className="uppercase normal">1st</th>
               <th className="uppercase normal">2nd</th>
               <th className="uppercase normal">3rd</th>
-              <th className="uppercase normal hide-on-small-only">Injuries</th>
+              <th className="uppercase normal tooltipped"
+                data-position="bottom" 
+                data-tooltip="Win Percentage"
+                aria-label="Win Percentage">Win %</th>
+              <th className="uppercase normal tooltipped hide-on-small-only"
+                data-position="bottom" 
+                data-tooltip="Did Not Finish"
+                aria-label="Did Not Finish">Dnf</th>
             </tr>
           </thead>
           <tbody>
@@ -74,7 +86,7 @@ const Standings = () => {
                 <td>
                   <span>{racer.name}</span>
                   <div 
-                    className="racer-color hide-on-med-and-up"
+                    className="racer-color"
                     style={{
                       backgroundColor: racer.primaryColor,
                       display: 'inline-block',
@@ -83,18 +95,11 @@ const Standings = () => {
                     }}>
                   </div>
                 </td>
-                <td class="hide-on-small-only">
-                  <div 
-                    className="racer-color"
-                    style={{
-                      backgroundColor: racer.primaryColor,
-                    }}>
-                  </div>
-                </td>
-                <td>{racer.starts}</td>
+                <td className="hide-on-small-only">{racer.starts}</td>
                 <td>{racer.first}</td>
                 <td>{racer.second}</td>
                 <td>{racer.third}</td>
+                <td>{racer.winPrct}</td>
                 <td className="hide-on-small-only">{racer.injuries}</td>
               </tr>
             ))}

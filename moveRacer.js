@@ -35,7 +35,7 @@ const _moveRacer = (racer, track, racers) => {
     }
   }
 
-  const injuryChance = 2000;
+  const injuryChance = 7000;
   const injuryChance1 = _randomInt(1, injuryChance);
   const injuryChance2 = _randomInt(1, injuryChance);
   if(injuryChance1 === injuryChance2){
