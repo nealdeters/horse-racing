@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import RaceWinner from './RaceWinner';
 import ResultsBoard from './ResultsBoard';
 import { Modal } from 'react-materialize';
 import Utility from '../Utility';
@@ -67,7 +68,10 @@ const Results = (props) => {
 				  }}
 				> 
 					{ results === null ? null : (
-				  	<ResultsBoard id="results-board" results={results}/>
+				  	<Fragment>
+				  		<RaceWinner racers={results}/>
+				  		<ResultsBoard id="results-board" results={results}/>
+				  	</Fragment>
 				  )}
 				</Modal>
 			) : null}

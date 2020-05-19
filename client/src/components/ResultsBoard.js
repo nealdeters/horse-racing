@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import RaceWinner from '../components/RaceWinner';
+import RacerName from '../components/RacerName';
 
 const ResultsBoard = (props) => {
   const { results } = props;
@@ -28,7 +28,6 @@ const ResultsBoard = (props) => {
 
   return (
   	<Fragment>
-  		<RaceWinner racers={results.racers}/>
       <table className="white-text">
   			<thead>
   				<tr>
@@ -43,16 +42,7 @@ const ResultsBoard = (props) => {
   					<tr key={result.id}>
   						<td>{result.RacerRace.place}</td>
               <td>
-                <span className={result.RacerRace.injured ? 'strike-name' : ''}>{result.name}</span>
-                <div 
-                  className="racer-color"
-                  style={{
-                    backgroundColor: result.primaryColor,
-                    display: 'inline-block',
-                    marginRight: '10%',
-                    float: 'right'
-                  }}>
-                </div>  
+                <RacerName racer={result} strikeName={true} />  
               </td>
               <td>{result.RacerRace.lane}</td>
   						<td>
