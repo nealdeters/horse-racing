@@ -64,10 +64,29 @@ const deleteRacerRace = async (req, res) => {
   }
 }
 
+const deleteAllRacerRaces = async () => {
+  // BE CAREFUL WHEN USING THIS. THIS IS REALLY ONLY MEANT FOR DEVELOPMENT
+  try {
+    const deleted = await RacerRace.destroy({
+      where: {}, 
+      truncate: true
+    });
+    
+    if(deleted){
+      console.log('All results deleted.')
+    } else {
+      throw new Error("Issue deleting all results.");
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
 module.exports = {
   createRacerRace,
   getAllRacerRaces,
   getRacerRaceById,
   updateRacerRace,
-  deleteRacerRace
+  deleteRacerRace,
+  deleteAllRacerRaces
 }

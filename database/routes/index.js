@@ -58,6 +58,7 @@ router.put('/users/:id', isAdmin, User.updateUser);
 // races
 router.post('/races', isAdmin, Race.createRace);
 router.get('/races', Race.getAllRaces);
+router.get('/races/schedule', Race.getSchedule);
 router.get('/races/:id', Race.getRaceById);
 router.put('/races/:id', isAdmin, Race.updateRace);
 router.delete('/races/:id', isAdmin, Race.deleteRace);

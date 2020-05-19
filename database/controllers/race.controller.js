@@ -1,5 +1,6 @@
 const moment = require('moment');
 const { sequelize, Sequelize } = require('../models');
+// const sqs = require('sequelize-querystring');
 const { Race, RacerRace, Racer, Track } = require('../models');
 const Op = Sequelize.Op;
 
@@ -121,14 +122,7 @@ const createRace = async (req, res) => {
           id: newRace.id
         },
         include: [
-          {
-            model: Racer,
-            as: 'racers'
-          },
-          {
-            model: Track,
-            as: 'Track'
-          }
+          'racers', 'Track'
         ]
       })
       
@@ -147,20 +141,39 @@ const createRace = async (req, res) => {
 
 const getAllRaces = async (req, res) => {
   try {
-    const races = await Race.findAll({
+    let payload = {
       include: [ 
-        {
-          model: Racer,
-          as: 'racers'
-        }, {
-          model: Track,
-          as: 'Track'
-        }
+        'racers', 'Track'
+      ]
+    }
+
+    const races = await Race.findAll(payload);
+    return res.status(200).json(races);
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
+const getSchedule = async (req, res) => {
+  try {
+    const now = moment().format();
+    const endOfDay = moment().endOf('day').format();
+    let payload = {
+      where: {
+        startTime: {
+          [Op.between]: [now, endOfDay]
+        },
+        endTime: null
+      },
+      include: [ 
+        'racers', 'Track'
       ],
       order: [
-        ['startTime' ,'ASC']
+        ['startTime', 'ASC'],
       ]
-    });
+    }
+
+    const races = await Race.findAll(payload);
     return res.status(200).json(races);
   } catch (error) {
     return res.status(500).send(error.message);
@@ -211,11 +224,32 @@ const deleteOldRaces = async () => {
   }
 }
 
+const deleteAllRaces = async () => {
+  // BE CAREFUL WHEN USING THIS. THIS IS REALLY ONLY MEANT FOR DEVELOPMENT
+  try {
+    const deleted = await Race.destroy({
+      where: {}, 
+      truncate: true
+    });
+    
+    if(deleted){
+      console.log('All races deleted.')
+    } else {
+      throw new Error("Issue deleting all races.");
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
 const getRaceById = async (req, res) => {
   try {
     const { id } = req.params;
     const race = await Race.findOne({
-      where: { id: id }
+      where: { id: id },
+      include: [
+        'racers', 'Track'
+      ]
     });
     if (race) {
       return res.status(200).json(race);
@@ -297,9 +331,11 @@ module.exports = {
   createRace,
   createTomorrowRaces,
   getAllRaces,
+  getSchedule,
   getRaceById,
   updateRace,
   deleteRace,
   deleteEmptyRaces,
-  deleteOldRaces
+  deleteOldRaces,
+  deleteAllRaces
 }
