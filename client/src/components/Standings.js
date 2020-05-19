@@ -37,7 +37,7 @@ const Standings = () => {
         return moment(race.startTime).isBefore(now) && race.endTime;
       });
       let starts = races.length;
-      let winPrct = ((first/starts) * 100).toFixed(2) + '%';
+      let winPrct = ((first/starts) * 100).toFixed(2);
 
       racer.starts = starts;
       racer.first = first;
@@ -49,8 +49,8 @@ const Standings = () => {
 
     // sort array by wins
     data.sort((a, b) => {
-      return b.first - a.first || b.second - a.second || 
-        b.third - a.third || a.injuries - b.injuries;
+      return b.winPrct - a.winPrct || b.first - a.first || b.second - a.second || 
+        b.third - a.third
     })
 
     setStandings(data);
@@ -59,6 +59,7 @@ const Standings = () => {
   return (
     <Fragment>
       <div className="container">
+        <h1 className="header white-text track-name">Standings</h1>
         <table className="standings-board white-text">
           <thead>
             <tr>
@@ -99,7 +100,7 @@ const Standings = () => {
                 <td>{racer.first}</td>
                 <td>{racer.second}</td>
                 <td>{racer.third}</td>
-                <td>{racer.winPrct}</td>
+                <td>{racer.winPrct + '%'}</td>
                 <td className="hide-on-small-only">{racer.injuries}</td>
               </tr>
             ))}

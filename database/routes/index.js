@@ -13,7 +13,7 @@ const isAdmin = (req, res, next) => {
       res.status(401).send(info.message);
     } else if (user.Capabilities.length) {
       const isAdmin = user.Capabilities.find(capability => {
-      	return capability.name === 'Administrator';
+        return capability.name === 'Administrator';
       });
 
       if(isAdmin){
