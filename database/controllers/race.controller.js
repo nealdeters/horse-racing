@@ -302,10 +302,16 @@ const scheduleRaces = async (startDay, everyNMins, numDays) => {
       }
     }
 
-    if(startDay.hour() === 18){
-      // all racers on Boardwalk track
-      req.body.racers = true;
-      req.body.track = 4;
+    switch( startDay.hour() ){
+      case 17: case 18: case 19: case 20: case 21:
+        if(startDay.minute() === 0){
+          // all racers on Boardwalk track
+          req.body.racers = true;
+          req.body.track = 4;
+        }
+        break;
+      default:
+        break;
     }
     
     try {
