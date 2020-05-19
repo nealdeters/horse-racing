@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useEffect, useState, useContext } from 'react';
+import React, { Fragment, useContext } from 'react';
 import Track from './Track';
 import RaceCountdown from './RaceCountdown';
 import RaceKey from './RaceKey';

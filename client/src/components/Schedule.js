@@ -28,7 +28,7 @@ const Schedule = () => {
               <th className="uppercase normal">Start Time</th>
               <th className="uppercase normal">Track</th>
               <th className="uppercase normal">Distance</th>
-              <th className="uppercase normal"># Racers</th>
+              <th className="uppercase normal">Racers</th>
             </tr>
           </thead>
           <tbody>

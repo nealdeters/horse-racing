@@ -26,7 +26,8 @@ const getRacerById = async (req, res) => {
   try {
     const { id } = req.params;
     const racer = await Racer.findOne({
-      where: { id: id }
+      where: { id: id },
+      include: ['races']
     });
     if (racer) {
       return res.status(200).json(racer);

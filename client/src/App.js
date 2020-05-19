@@ -4,7 +4,9 @@ import Navigation from './components/Navigation';
 import LiveRace from './components/LiveRace';
 import Standings from './components/Standings';
 import Schedule from './components/Schedule';
+import TrackData from './components/TrackData';
 import Results from './components/Results';
+import Racer from './components/Racer';
 import Race from './components/Race';
 import RaceState from './context/race/RaceState';
 import "materialize-css/dist/css/materialize.min.css";
@@ -31,6 +33,8 @@ const App = () => {
           <Route exact path="/schedule" component={Schedule} />
           <Route exact path="/standings" component={Standings} />
           <Route exact path="/races/:id" component={Race} />
+          <Route exact path="/tracks/:id" component={TrackData} />
+          <Route exact path="/racers/:id" component={Racer} />
         </Switch>
       </Router>
     </Fragment>
