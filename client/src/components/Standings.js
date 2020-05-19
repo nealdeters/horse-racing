@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
+import RacerName from '../components/RacerName';
 
 const Standings = () => {
   const [standings, setStandings] = useState([]);
@@ -85,16 +86,7 @@ const Standings = () => {
               {standings && standings.map((racer, i) => (
                 <tr key={racer.id}>
                   <td>
-                    <span>{racer.name}</span>
-                    <div 
-                      className="racer-color"
-                      style={{
-                        backgroundColor: racer.primaryColor,
-                        display: 'inline-block',
-                        marginRight: '10%',
-                        float: 'right'
-                      }}>
-                    </div>
+                    <RacerName racer={racer} strikeName={false} />
                   </td>
                   <td className="hide-on-small-only">{racer.starts}</td>
                   <td>{racer.first}</td>

@@ -1,12 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react';
-// import Track from '../components/Track';
-import ResultsBoard from '../components/ResultsBoard';
-import moment from 'moment';
+import RacerIcon from '../components/RacerIcon';
 
-const Race = ({ racers }) => {
+const RaceWinner = ({ racers }) => {
   const [winner, setWinner] = useState(null);
 
-  // on mount
+  // on update
   useEffect(() => {
     if(racers){
       const champ = racers.find(racer => {
@@ -18,7 +16,7 @@ const Race = ({ racers }) => {
       }
     }
     // eslint-disable-next-line
-  }, []);
+  }, [racers]);
 
   if(!winner){
     return null;
@@ -26,16 +24,10 @@ const Race = ({ racers }) => {
 
   return (
     <Fragment>
-      <div 
-        className="fas fa-horse fa-flip-horizontal racer-default-img"
-        style={{
-          backgroundColor: winner === null ? 'white' : winner.primaryColor,
-          color: winner === null ? 'white' : winner.secondaryColor
-        }}
-        ></div>
+      <RacerIcon racer={winner} />
       <h3 className="white-text text-center">Winner {winner.name}!</h3>
     </Fragment>
   );
 }
 
-export default Race;
+export default RaceWinner;
