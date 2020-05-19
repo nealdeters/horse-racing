@@ -7,7 +7,6 @@ const io = Utility.io();
 const Results = (props) => {
 	const [show, setShow] = useState(false);
 	const [results, setResults] = useState(null);
-	// const [track, setTrack] = useState(null);
 
 	// on mount
 	useEffect(() => {
@@ -15,7 +14,6 @@ const Results = (props) => {
       if(data && data.finished){
       	setShow(false);
       	setResults(data.racers);
-      	// setTrack(data.Track);
       }
     });
 

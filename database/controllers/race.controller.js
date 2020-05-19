@@ -41,7 +41,12 @@ const createRace = async (req, res) => {
 
     raceInRange = JSON.parse(JSON.stringify(raceInRange));
     if(raceInRange && raceInRange.length){
-      return res.status(400).json({error: 'Cannot create a race with same start time, or a start time within the range of 5 minutes of another.'})
+      const err = 'Cannot create a race with same start time, or a start time within the range of 5 minutes of another.';
+      if(res){
+        return res.status(400).json({error: err})
+      } else {
+        console.error(err);
+      }
     } else {
       // check if a track id was passed in
       if(typeof track !== 'undefined'){
@@ -116,25 +121,93 @@ const createRace = async (req, res) => {
           id: newRace.id
         },
         include: [
-          'racers',
-          Track
+          {
+            model: Racer,
+            as: 'racers'
+          },
+          {
+            model: Track,
+            as: 'Track'
+          }
         ]
       })
-      return res.status(201).json(result);
+      
+      if(res){
+        return res.status(201).json(result);
+      }
     }
   } catch (error) {
-    return res.status(500).json({error: error.message})
+    if(res){
+      return res.status(500).json({error: error.message})
+    } else {
+      console.error(error.message);
+    }
   }
 }
 
 const getAllRaces = async (req, res) => {
   try {
     const races = await Race.findAll({
-      include: [ Racer, Track ]
+      include: [ 
+        {
+          model: Racer,
+          as: 'racers'
+        }, {
+          model: Track,
+          as: 'Track'
+        }
+      ],
+      order: [
+        ['startTime' ,'ASC']
+      ]
     });
     return res.status(200).json(races);
   } catch (error) {
     return res.status(500).send(error.message);
+  }
+}
+
+const deleteEmptyRaces = async () => {
+  try {
+    const deleted = await Race.destroy({
+      where: {
+        startTime: {
+          [Op.lt]: moment().format()
+        },
+        endTime: null
+      }
+    });
+
+    if(deleted){
+      console.log('Empty races deleted.')
+    } else {
+      throw new Error("Empty races not found.");
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+const deleteOldRaces = async () => {
+  try {
+    const deleted = await Race.destroy({
+      where: {
+        startTime: {
+          [Op.ne]: null
+        },
+        endTime: {
+          [Op.lt]: moment().subtract(10, 'days').format()
+        }
+      }
+    });
+    
+    if(deleted){
+      console.log('Old races deleted.')
+    } else {
+      throw new Error("Old races not found.");
+    }
+  } catch (error) {
+    console.error(error.message);
   }
 }
 
@@ -184,10 +257,49 @@ const deleteRace = async (req, res) => {
   }
 }
 
+const scheduleRaces = async (startDay, everyNMins, numDays) => {
+  const hoursInDay = 24;
+  const hoursToAdd = numDays * (everyNMins * hoursInDay);
+
+  for(let i = 0; i < hoursToAdd; i++){
+    const req = {
+      body: {
+        startTime: startDay.format()
+      }
+    }
+
+    if(startDay.hour() === 18){
+      // all racers on Boardwalk track
+      req.body.racers = true;
+      req.body.track = 4;
+    }
+    
+    try {
+      // call to create race
+      const res = createRace(req);
+      startDay.add(10, 'minutes');
+      console.log(req.body.startTime);
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+}
+
+const createTomorrowRaces = () => {
+  let scheduleDay = moment();
+  const everyNMins = 10;
+  const remainder = everyNMins - (scheduleDay.minute() % everyNMins);
+  scheduleDay = scheduleDay.add(remainder, "minutes").seconds(0);
+  scheduleRaces(scheduleDay, everyNMins, 1);
+}
+
 module.exports = {
   createRace,
+  createTomorrowRaces,
   getAllRaces,
   getRaceById,
   updateRace,
-  deleteRace
+  deleteRace,
+  deleteEmptyRaces,
+  deleteOldRaces
 }

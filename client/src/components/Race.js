@@ -32,7 +32,7 @@ const Race = () => {
 		    backgroundColor: track.trackColor,
 		    minHeight: `100%`
 		  }}>
-		  <h3 className="header white-text track-name">{track.name}</h3>
+		  <h1 className="header white-text track-name">{track.name}</h1>
 		  <RaceTrack />
 		</div>
 	);
