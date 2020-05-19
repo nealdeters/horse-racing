@@ -1,7 +1,26 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+import RaceWinner from '../components/RaceWinner';
 
 const ResultsBoard = (props) => {
   const { results } = props;
+  const [sortedResults, setSortedResults] = useState(null);
+
+  // on mount
+  useEffect(() => {
+    if(results){
+      results.sort((a, b) => {
+        return (
+          a.RacerRace.place === null) - (b.RacerRace.place === null) 
+            || 
+          + (a.RacerRace.place > b.RacerRace.place)
+            ||
+          - (a.RacerRace.place < b.RacerRace.place);
+      });
+      setSortedResults(results);
+    }
+
+    // eslint-disable-next-line
+  }, []);
 
   if(results === null){
     return null;
@@ -9,14 +28,7 @@ const ResultsBoard = (props) => {
 
   return (
   	<Fragment>
-  		<div 
-        className="fas fa-horse fa-flip-horizontal racer-default-img"
-        style={{
-          backgroundColor: results === null ? 'white' : results[0].primaryColor,
-          color: results === null ? 'white' : results[0].secondaryColor
-        }}
-        ></div>
-      <h3 className="white-text text-center">{results[0].name} Wins!</h3>
+  		<RaceWinner racers={results.racers}/>
       <table className="white-text">
   			<thead>
   				<tr>
@@ -27,7 +39,7 @@ const ResultsBoard = (props) => {
   				</tr>
   			</thead>
   			<tbody>
-  				{results && results.map((result, i) => (
+  				{sortedResults && sortedResults.map((result, i) => (
   					<tr key={result.id}>
   						<td>{result.RacerRace.place}</td>
               <td>

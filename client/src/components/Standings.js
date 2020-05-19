@@ -12,7 +12,6 @@ const Standings = () => {
   const getStandings = async () => {
     const res = await fetch('api/racers');
     let data = await res.json();
-    console.log(data);
     const now = moment();
 
     // collection data
@@ -43,7 +42,7 @@ const Standings = () => {
       racer.first = first;
       racer.second = second;
       racer.third = third;
-      racer.winPrct = winPrct;
+      racer.winPrct = winPrct === 'NaN' ? 0 : winPrct;
       racer.injuries = injuries;
     })
 
@@ -60,52 +59,54 @@ const Standings = () => {
     <Fragment>
       <div className="container">
         <h1 className="header white-text track-name">Standings</h1>
-        <table className="standings-board white-text">
-          <thead>
-            <tr>
-              <th className="uppercase normal">Name</th>
-              <th className="uppercase normal tooltipped hide-on-small-only"
-                data-position="bottom" 
-                data-tooltip="Starts"
-                aria-label="Starts">Sts</th>
-              <th className="uppercase normal">1st</th>
-              <th className="uppercase normal">2nd</th>
-              <th className="uppercase normal">3rd</th>
-              <th className="uppercase normal tooltipped"
-                data-position="bottom" 
-                data-tooltip="Win Percentage"
-                aria-label="Win Percentage">Win %</th>
-              <th className="uppercase normal tooltipped hide-on-small-only"
-                data-position="bottom" 
-                data-tooltip="Did Not Finish"
-                aria-label="Did Not Finish">Dnf</th>
-            </tr>
-          </thead>
-          <tbody>
-            {standings && standings.map((racer, i) => (
-              <tr key={racer.id}>
-                <td>
-                  <span>{racer.name}</span>
-                  <div 
-                    className="racer-color"
-                    style={{
-                      backgroundColor: racer.primaryColor,
-                      display: 'inline-block',
-                      marginRight: '10%',
-                      float: 'right'
-                    }}>
-                  </div>
-                </td>
-                <td className="hide-on-small-only">{racer.starts}</td>
-                <td>{racer.first}</td>
-                <td>{racer.second}</td>
-                <td>{racer.third}</td>
-                <td>{racer.winPrct + '%'}</td>
-                <td className="hide-on-small-only">{racer.injuries}</td>
+        <div class="scroll">
+          <table className="standings-board white-text">
+            <thead>
+              <tr>
+                <th className="uppercase normal">Name</th>
+                <th className="uppercase normal tooltipped hide-on-small-only"
+                  data-position="bottom" 
+                  data-tooltip="Starts"
+                  aria-label="Starts">Sts</th>
+                <th className="uppercase normal">1st</th>
+                <th className="uppercase normal">2nd</th>
+                <th className="uppercase normal">3rd</th>
+                <th className="uppercase normal tooltipped"
+                  data-position="bottom" 
+                  data-tooltip="Win Percentage"
+                  aria-label="Win Percentage">Win %</th>
+                <th className="uppercase normal tooltipped hide-on-small-only"
+                  data-position="bottom" 
+                  data-tooltip="Did Not Finish"
+                  aria-label="Did Not Finish">Dnf</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {standings && standings.map((racer, i) => (
+                <tr key={racer.id}>
+                  <td>
+                    <span>{racer.name}</span>
+                    <div 
+                      className="racer-color"
+                      style={{
+                        backgroundColor: racer.primaryColor,
+                        display: 'inline-block',
+                        marginRight: '10%',
+                        float: 'right'
+                      }}>
+                    </div>
+                  </td>
+                  <td className="hide-on-small-only">{racer.starts}</td>
+                  <td>{racer.first}</td>
+                  <td>{racer.second}</td>
+                  <td>{racer.third}</td>
+                  <td>{racer.winPrct + '%'}</td>
+                  <td className="hide-on-small-only">{racer.injuries}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </Fragment>
   )

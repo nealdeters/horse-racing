@@ -16,6 +16,7 @@ const Navigation = () => {
               <i className="material-icons">menu</i>
             </Link>
             <ul className="right hide-on-med-and-down">
+             <li><Link to="/schedule">Schedule</Link></li>
              <li><Link to="/standings">Standings</Link></li>
             </ul>
           </div>
@@ -23,6 +24,7 @@ const Navigation = () => {
       </div>
 
       <ul className="sidenav" id="mobile-demo">
+        <li className="sidenav-close"><Link to="/schedule">Schedule</Link></li>
         <li className="sidenav-close"><Link to="/standings">Standings</Link></li>
       </ul>
     </Fragment>

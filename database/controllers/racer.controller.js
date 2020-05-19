@@ -13,10 +13,7 @@ const getAllRacers = async (req, res) => {
   try {
     const racers = await Racer.findAll({
       include: [
-        {
-          model: Race,
-          as: 'races'
-        }
+        'races'
       ]
     });
     return res.status(200).json(racers);
