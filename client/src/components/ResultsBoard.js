@@ -28,7 +28,7 @@ const ResultsBoard = (props) => {
 
   return (
   	<Fragment>
-      <table className="white-text">
+      <table className="results-board white-text">
   			<thead>
   				<tr>
   					<th className="uppercase normal">Place</th>
