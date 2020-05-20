@@ -170,8 +170,8 @@ const getAllRaces = async (req, res) => {
 
 const getSchedule = async (req, res) => {
   try {
-    const now = moment().format();
-    const endOfDay = moment().endOf('day').format();
+    const now = moment();
+    const endOfDay = moment().endOf('day');
     let payload = {
       where: {
         startTime: {
@@ -199,7 +199,7 @@ const deleteEmptyRaces = async () => {
     const deleted = await Race.destroy({
       where: {
         startTime: {
-          [Op.lt]: moment().format()
+          [Op.lt]: moment()
         },
         endTime: null
       }
@@ -223,7 +223,7 @@ const deleteOldRaces = async () => {
           [Op.ne]: null
         },
         endTime: {
-          [Op.lt]: moment().subtract(10, 'days').format()
+          [Op.lt]: moment().subtract(10, 'days')
         }
       }
     });
