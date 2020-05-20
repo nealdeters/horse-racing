@@ -54,7 +54,7 @@ const Racer = ({ match }) => {
       } else if(race.RacerRace.place === 2){
         second++;
         track.second++;
-      } else if(race.RacerRace.second === 3){
+      } else if(race.RacerRace.place === 3){
         third++;
         track.third++;
       }
@@ -67,7 +67,7 @@ const Racer = ({ match }) => {
 	    	track.starts++;
 	    	track.time += duration;
 
-	    	return moment(race.startTime).isBefore(now) && race.endTime;
+	    	return moment(race.startTime).isBefore(now);
     	} else {
     		return false;
     	}
@@ -121,6 +121,10 @@ const Racer = ({ match }) => {
 		          data-position="bottom" 
 		          data-tooltip="Starts"
 		          aria-label="Starts">Sts</th>
+		        <th className="uppercase normal tooltipped"
+		          data-position="bottom" 
+		          data-tooltip="Win Percentage"
+		          aria-label="Win Percentage">Win</th>
 		        <th className="uppercase normal">1st</th>
 		        <th className="uppercase normal">2nd</th>
 		        <th className="uppercase normal hide-on-small-only">3rd</th>
@@ -128,10 +132,6 @@ const Racer = ({ match }) => {
                 data-position="bottom" 
                 data-tooltip="Did Not Finish"
                 aria-label="Did Not Finish">Dnf</th>
-		        <th className="uppercase normal tooltipped"
-		          data-position="bottom" 
-		          data-tooltip="Win Percentage"
-		          aria-label="Win Percentage">Win</th>
 		      </tr>
 		    </thead>
 		    <tbody>
@@ -139,11 +139,11 @@ const Racer = ({ match }) => {
 	          <td>{racer.type}</td>
 	          <td>{ racer.avgTime ? moment(racer.avgTime).format('mm:ss.SSSS') : '-'}</td>
 	          <td className="hide-on-small-only">{racer.starts}</td>
+	          <td>{racer.winPrct + '%'}</td>
 	          <td>{racer.first}</td>
 	          <td>{racer.second}</td>
 	          <td className="hide-on-small-only">{racer.third}</td>
 	          <td className="hide-on-small-only">{racer.injuries}</td>
-	          <td>{racer.winPrct + '%'}</td>
 	        </tr>
 		    </tbody>
 		  </table>
@@ -160,6 +160,10 @@ const Racer = ({ match }) => {
 		          data-position="bottom" 
 		          data-tooltip="Starts"
 		          aria-label="Starts">Sts</th>
+		        <th className="uppercase normal tooltipped"
+		          data-position="bottom" 
+		          data-tooltip="Win Percentage"
+		          aria-label="Win Percentage">Win</th>
 		        <th className="uppercase normal">1st</th>
 		        <th className="uppercase normal">2nd</th>
 		        <th className="uppercase normal hide-on-small-only">3rd</th>
@@ -167,10 +171,6 @@ const Racer = ({ match }) => {
                 data-position="bottom" 
                 data-tooltip="Did Not Finish"
                 aria-label="Did Not Finish">Dnf</th>
-		        <th className="uppercase normal tooltipped"
-		          data-position="bottom" 
-		          data-tooltip="Win Percentage"
-		          aria-label="Win Percentage">Win</th>
 		      </tr>
 		    </thead>
 		    <tbody>
@@ -184,11 +184,11 @@ const Racer = ({ match }) => {
               </td>
               <td>{ track.avgTime ? moment(track.avgTime).format('mm:ss.SSSS') : '-'}</td>
           		<td className="hide-on-small-only">{track.starts}</td>
+          		<td>{track.winPrct + '%'}</td>
           		<td>{track.first}</td>
           		<td>{track.second}</td>
           		<td className="hide-on-small-only">{track.third}</td>
           		<td className="hide-on-small-only">{track.injuries}</td>
-          		<td>{track.winPrct + '%'}</td>
           	</tr>
           )): null}
 		    </tbody>

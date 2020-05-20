@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from 'react';
 import Track from '../components/Track';
 import moment from 'moment';
 import Utility from '../Utility';
-import RaceCountdown from '../components/RaceCountdown';
 
 const TrackData = ({ match }) => {
 	const [ track, setTrack ] = useState(null);
@@ -53,7 +52,6 @@ const TrackData = ({ match }) => {
 	return (
 		<Fragment>
 			<h1 className="header white-text">{track.name}</h1>
-			<RaceCountdown alwaysShow={true} />
 
 			<Track track={track} />
 
