@@ -305,36 +305,35 @@ const deleteRace = async (req, res) => {
 
 const scheduleRaces = async (startDay, everyNMins, numDays) => {
   const hoursInDay = 24;
-  const hoursToAdd = numDays * (everyNMins * hoursInDay);
+  const racesToSchedule = (numDays * hoursInDay * 60) / everyNMins;
 
-  for(let i = 0; i < hoursToAdd; i++){
+  for(let i = 0; i < racesToSchedule; i++){
     const req = {
       body: {
-        startTime: startDay.format()
+        startTime: startDay
       }
     }
 
-    switch( startDay.hour() ){
-      case 17: case 18: case 19: case 20: case 21:
-        if(startDay.minute() === 0){
-          // all racers on Boardwalk track
-          req.body.racers = true;
-          req.body.track = 4;
-        }
-        break;
-      default:
-        break;
+    const hour = startDay.hour();
+    if(hour === 17 || hour === 18 || hour === 19 || hour === 20 || hour === 21){
+      const minute = startDay.minute();
+      if(minute === 0){
+        req.body.racers = true;
+        req.body.track = 4;
+      }
     }
-    
+
     try {
       // call to create race
-      const res = createRace(req);
-      startDay.add(10, 'minutes');
+      const res = await createRace(req);
+      startDay.add(everyNMins, 'minutes');
       console.log(req.body.startTime);
     } catch (err) {
       console.error(err.message);
     }
   }
+
+  console.log(racesToSchedule)
 }
 
 const createTomorrowRaces = () => {

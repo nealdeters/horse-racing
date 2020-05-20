@@ -1,12 +1,21 @@
 'use strict';
+const moment = require('moment');
 
 module.exports = (sequelize, DataTypes) => {
   const Race = sequelize.define('Race', {
     startTime: {
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      get() {
+        const dateText = this.getDataValue('startTime');
+        return moment(dateText).format('YYYY-MM-DD HH:mm:ss');
+      }
     },
     endTime: {
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      get() {
+        const dateText = this.getDataValue('endTime');
+        return moment(dateText).format('YYYY-MM-DD HH:mm:ss');
+      }
     },
     trackId: {
       type: DataTypes.INTEGER
