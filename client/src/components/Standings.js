@@ -60,8 +60,8 @@ const Standings = () => {
 
   return (
     <Fragment>
-      <div className="container">
-        <h1 className="header white-text track-name">Standings</h1>
+      <div className="container standings">
+        <h1 className="header white-text">Standings</h1>
         <RaceCountdown alwaysShow={true} />
 
         <table className="standings-board white-text">

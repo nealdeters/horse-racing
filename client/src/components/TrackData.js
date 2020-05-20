@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Track from '../components/Track';
 import moment from 'moment';
+import Utility from '../Utility';
 
 const TrackData = ({ match }) => {
 	const [ track, setTrack ] = useState(null);
@@ -20,7 +21,7 @@ const TrackData = ({ match }) => {
     let data = await res.json();
     setTrack(data);
     if(data){
-	  	document.body.style = `background-color: ${data.trackColor};`;
+	  	Utility.setBackgroundColor(data.trackColor);
 	  }
 
 	  if(data.race){
@@ -54,23 +55,23 @@ const TrackData = ({ match }) => {
 		    backgroundColor: track.trackColor,
 		    minHeight: `100%`
 		  }}>
-		  <h1 className="header white-text track-name">{track.name}</h1>
+		  <h1 className="header white-text">{track.name}</h1>
 
 		  <Track track={track} />
 
-		  <table className="schedule-board white-text">
+		  <table className="track-board white-text">
 		    <thead>
 		      <tr>
-		        <th className="uppercase normal">Avg. Time</th>
-		        <th className="uppercase normal">Distance</th>
 		        <th className="uppercase normal">Races</th>
+		        <th className="uppercase normal">Distance</th>
+		        <th className="uppercase normal">Avg. Time</th>
 		      </tr>
 		    </thead>
 		    <tbody>
 	        <tr>
-	          <td>{avgTime ? moment(avgTime).format('mm:ss.SSSS') : '-'}</td>
-	          <td>{track.distance}</td>
 	          <td>{races.length}</td>
+	          <td>{track.distance}</td>
+	          <td>{avgTime ? moment(avgTime).format('mm:ss.SSSS') : '-'}</td>
 	        </tr>
 		    </tbody>
 		  </table>
