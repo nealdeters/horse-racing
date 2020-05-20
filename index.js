@@ -9,6 +9,10 @@ const moment = require('moment');
 const path = require('path');
 const { racerCronJob } = require('./moveRacer');;
 const { Race, RacerRace } = require('./database/controllers');
+const moment = require('moment-timezone');
+
+// set server timezone to chicago
+moment().tz("America/Chicago").format();
 
 require('dotenv').config();
 
