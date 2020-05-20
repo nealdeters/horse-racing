@@ -23,13 +23,16 @@ const _shuffle = (array) => {
   return array;
 }
 
-const _setRacerLanes = (racers) => {
-  racers.forEach( ( racer, index ) => {
-    racer.lane = index + 1;
-  });
+// const _setRacerLanes = (racers, race) => {
+//   racers.forEach( async ( racer, index ) => {
+//     const rr = { lane: index + 1 };
+//     const res = await RacerRace.update(rr, {
+//       where: {raceId: race.id, racerId: racer.id}
+//     });
+//   });
 
-  return racers;
-}
+//   return racers;
+// }
 
 const createRace = async (req, res) => {
   try {
@@ -101,7 +104,7 @@ const createRace = async (req, res) => {
           order: sequelize.random(),
           limit: 8
         });
-        randRacers = _setRacerLanes(randRacers);
+        // randRacers = _setRacerLanes(randRacers, newRace);
       } else if (racers && racers.length){
         // if provided racers array is larger than 8, cut it down
         if(racers.length > 8){
@@ -116,14 +119,14 @@ const createRace = async (req, res) => {
           }
         }))
 
-        randRacers = _setRacerLanes(randRacers);
+        // randRacers = _setRacerLanes(randRacers, newRace);
       } else {
         // if no racers added, apply 4 random ones
         randRacers = await Racer.findAll({
           order: sequelize.random(),
           limit: 4
         });
-        randRacers = _setRacerLanes(randRacers);
+        // randRacers = _setRacerLanes(randRacers, newRace);
       }
 
       await newRace.setRacers(randRacers);
@@ -331,8 +334,6 @@ const scheduleRaces = async (startDay, everyNMins, numDays) => {
       console.error(err.message);
     }
   }
-
-  console.log(racesToSchedule)
 }
 
 const createTomorrowRaces = () => {

@@ -103,7 +103,7 @@ const _updateRacerRaces = (racers) => {
 
   const _updateRacerRace = async (racer, index) => {
     const rr = racer.RacerRace;
-    rr.endTime = moment(rr.endTime).toISOString();
+    rr.endTime = moment(rr.endTime);
     rr.duration = rr.duration ? moment(rr.duration).format('mm:ss.SSSS') : null;
     rr.place = rr.duration === null ? null : index + 1;
     

@@ -40,7 +40,7 @@ const Racer = ({ match }) => {
     	track.time = 0;
     })
 
-    const races = data.races.filter(async race => {
+    const races = data.races.filter(race => {
       const track = tracks.find(track => track.id === race.trackId);
 
       if(race.RacerRace.injured){
@@ -59,16 +59,20 @@ const Racer = ({ match }) => {
         track.third++;
       }
 
-      if(race.startTime && race.endTime){
-      	const start = moment(race.startTime);
-      	const end = moment(race.endTime);
-      	const duration = end.diff( start );
-      	durations.push(duration);
-      	track.starts++;
-      	track.time += duration;
-      	return start.isBefore(now)
-      }
+    	if(race.startTime && race.endTime){
+    		const start = moment(race.RacerRace.startTime);
+	    	const end = moment(race.RacerRace.endTime);
+	    	const duration = end.diff( start );
+	    	durations.push(duration);
+	    	track.starts++;
+	    	track.time += duration;
+
+	    	return moment(race.startTime).isBefore(now) && race.endTime;
+    	} else {
+    		return false;
+    	}
     });
+
     let starts = races.length;
     let winPrct = ((first/starts) * 100).toFixed(2);
 
@@ -84,13 +88,13 @@ const Racer = ({ match }) => {
     	.reduce((prev, cur) => 
     		moment.duration(cur).add(prev), moment.duration(durations[0])
     	)
-    data.avgTime = (totalDurations/ races.length);
+    data.avgTime = (totalDurations/ starts);
 
     data.tracks.forEach(track => {
     	let winPrct = ((track.first/track.starts) * 100).toFixed(2);
     	track.winPrct = winPrct === 'NaN' ? 0 : winPrct;
     	track.avgTime = (track.time/ track.starts);
-    })
+    });
 
     setRacer(data);
 	}
@@ -103,7 +107,7 @@ const Racer = ({ match }) => {
 		<div className="container racer">
 		  <h1 className="header white-text">{racer.name}</h1>
 		  <RaceCountdown alwaysShow={true} />
-		  <RacerIcon racer={racer} />
+		  <RacerIcon racer={racer ? racer : null} />
 
 		  <table className="racer-board white-text">
 		    <thead>
