@@ -175,7 +175,7 @@ const getSchedule = async (req, res) => {
     let payload = {
       where: {
         startTime: {
-          [Op.between]: [now, endOfDay]
+          [Op.gte]: now
         },
         endTime: null
       },

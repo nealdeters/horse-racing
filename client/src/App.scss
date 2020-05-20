@@ -123,6 +123,16 @@ h6 {
       text-align: center;
     }
   }
+
+  /* Extra small devices (phones, 600px and down) */
+  @media only screen and (max-width: 600px) {
+    .racer-board {
+      th, td {
+        width: 20%;
+        text-align: center;
+      }
+    }
+  } 
 }
 
 .track {
