@@ -89,7 +89,6 @@ const Racer = ({ match }) => {
     data.tracks.forEach(track => {
     	let winPrct = ((track.first/track.starts) * 100).toFixed(2);
     	track.winPrct = winPrct === 'NaN' ? 0 : winPrct;
-    	console.log(track)
     	track.avgTime = (track.time/ track.starts);
     })
 
@@ -134,7 +133,7 @@ const Racer = ({ match }) => {
 		    <tbody>
 	        <tr>
 	          <td>{racer.type}</td>
-	          <td>{ moment(racer.avgTime).format('mm:ss.SSSS') }</td>
+	          <td>{ racer.avgTime ? moment(racer.avgTime).format('mm:ss.SSSS') : '-'}</td>
 	          <td className="hide-on-small-only">{racer.starts}</td>
 	          <td>{racer.first}</td>
 	          <td>{racer.second}</td>
@@ -179,7 +178,7 @@ const Racer = ({ match }) => {
                   {track.name}
                 </Link>
               </td>
-              <td>{ moment(track.avgTime).format('mm:ss.SSSS') }</td>
+              <td>{ track.avgTime ? moment(track.avgTime).format('mm:ss.SSSS') : '-'}</td>
           		<td className="hide-on-small-only">{track.starts}</td>
           		<td>{track.first}</td>
           		<td>{track.second}</td>
