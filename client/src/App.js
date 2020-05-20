@@ -8,8 +8,6 @@ import TrackData from './components/TrackData';
 import Results from './components/Results';
 import Racer from './components/Racer';
 import Race from './components/Race';
-import Racers from './components/Racers';
-import Tracks from './components/Tracks';
 import NotFound from './components/NotFound'
 import RaceState from './context/race/RaceState';
 import "materialize-css/dist/css/materialize.min.css";

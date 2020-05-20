@@ -30,7 +30,7 @@ const Schedule = () => {
             <tr>
               <th className="uppercase normal">Start</th>
               <th className="uppercase normal">Track</th>
-              <th className="uppercase normal">Distance</th>
+              <th className="uppercase normal">Dist</th>
               <th className="uppercase normal">Racers</th>
             </tr>
           </thead>

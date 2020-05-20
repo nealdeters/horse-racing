@@ -1,7 +1,9 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import RacerIcon from './RacerIcon';
 import Utility from '../Utility';
+import { Link } from "react-router-dom";
+import RaceCountdown from '../components/RaceCountdown';
 
 const Racer = ({ match }) => {
 	const [ racer, setRacer ] = useState(null);
@@ -35,6 +37,7 @@ const Racer = ({ match }) => {
     	track.third = 0;
     	track.injuries = 0;
     	track.winPrct = 0;
+    	track.time = 0;
     })
 
     const races = data.races.filter(async race => {
@@ -59,8 +62,10 @@ const Racer = ({ match }) => {
       if(race.startTime && race.endTime){
       	const start = moment(race.startTime);
       	const end = moment(race.endTime);
-      	durations.push( end.diff( start ) );
+      	const duration = end.diff( start );
+      	durations.push(duration);
       	track.starts++;
+      	track.time += duration;
       	return start.isBefore(now)
       }
     });
@@ -84,6 +89,8 @@ const Racer = ({ match }) => {
     data.tracks.forEach(track => {
     	let winPrct = ((track.first/track.starts) * 100).toFixed(2);
     	track.winPrct = winPrct === 'NaN' ? 0 : winPrct;
+    	console.log(track)
+    	track.avgTime = (track.time/ track.starts);
     })
 
     setRacer(data);
@@ -96,19 +103,24 @@ const Racer = ({ match }) => {
 	return (
 		<div className="container racer">
 		  <h1 className="header white-text">{racer.name}</h1>
+		  <RaceCountdown alwaysShow={true} />
 		  <RacerIcon racer={racer} />
 
 		  <table className="racer-board white-text">
 		    <thead>
 		      <tr>
-		        <th className="uppercase normal">Avg. Time</th>
+		        <th className="uppercase normal">Type</th>
+		        <th className="uppercase normal tooltipped"
+		        	data-position="bottom" 
+		        	data-tooltip="Average Race Time"
+		        	aria-label="Average Race Time">Avg</th>
 		        <th className="uppercase normal tooltipped hide-on-small-only"
 		          data-position="bottom" 
 		          data-tooltip="Starts"
 		          aria-label="Starts">Sts</th>
 		        <th className="uppercase normal">1st</th>
 		        <th className="uppercase normal">2nd</th>
-		        <th className="uppercase normal">3rd</th>
+		        <th className="uppercase normal hide-on-small-only">3rd</th>
 		        <th className="uppercase normal tooltipped hide-on-small-only"
                 data-position="bottom" 
                 data-tooltip="Did Not Finish"
@@ -116,16 +128,17 @@ const Racer = ({ match }) => {
 		        <th className="uppercase normal tooltipped"
 		          data-position="bottom" 
 		          data-tooltip="Win Percentage"
-		          aria-label="Win Percentage">Win %</th>
+		          aria-label="Win Percentage">Win</th>
 		      </tr>
 		    </thead>
 		    <tbody>
 	        <tr>
+	          <td>{racer.type}</td>
 	          <td>{ moment(racer.avgTime).format('mm:ss.SSSS') }</td>
 	          <td className="hide-on-small-only">{racer.starts}</td>
 	          <td>{racer.first}</td>
 	          <td>{racer.second}</td>
-	          <td>{racer.third}</td>
+	          <td className="hide-on-small-only">{racer.third}</td>
 	          <td className="hide-on-small-only">{racer.injuries}</td>
 	          <td>{racer.winPrct + '%'}</td>
 	        </tr>
@@ -136,13 +149,17 @@ const Racer = ({ match }) => {
 		    <thead>
 		      <tr>
 		        <th className="uppercase normal">Track</th>
+		        <th className="uppercase normal tooltipped"
+		        	data-position="bottom" 
+		        	data-tooltip="Average Race Time"
+		        	aria-label="Average Race Time">Avg</th>
 		        <th className="uppercase normal tooltipped hide-on-small-only"
 		          data-position="bottom" 
 		          data-tooltip="Starts"
 		          aria-label="Starts">Sts</th>
 		        <th className="uppercase normal">1st</th>
 		        <th className="uppercase normal">2nd</th>
-		        <th className="uppercase normal">3rd</th>
+		        <th className="uppercase normal hide-on-small-only">3rd</th>
 		        <th className="uppercase normal tooltipped hide-on-small-only"
                 data-position="bottom" 
                 data-tooltip="Did Not Finish"
@@ -150,17 +167,23 @@ const Racer = ({ match }) => {
 		        <th className="uppercase normal tooltipped"
 		          data-position="bottom" 
 		          data-tooltip="Win Percentage"
-		          aria-label="Win Percentage">Win %</th>
+		          aria-label="Win Percentage">Win</th>
 		      </tr>
 		    </thead>
 		    <tbody>
           {racer.tracks ? racer.tracks.map(track => (
           	<tr key={track.id}>
-          		<td>{track.name}</td>
+          		<td>
+          			<Link className="schedule-link" 
+          				to={`/tracks/${track.id}`}>
+                  {track.name}
+                </Link>
+              </td>
+              <td>{ moment(track.avgTime).format('mm:ss.SSSS') }</td>
           		<td className="hide-on-small-only">{track.starts}</td>
           		<td>{track.first}</td>
           		<td>{track.second}</td>
-          		<td>{track.third}</td>
+          		<td className="hide-on-small-only">{track.third}</td>
           		<td className="hide-on-small-only">{track.injuries}</td>
           		<td>{track.winPrct + '%'}</td>
           	</tr>

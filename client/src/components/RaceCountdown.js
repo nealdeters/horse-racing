@@ -23,12 +23,14 @@ const RaceCountdown = ({ alwaysShow }) => {
 		    }
 	    }
 	  });
+
+	  // eslint-disable-next-line
 	}, []);
 
 	return (
 		<Fragment>
 		  { alwaysShow ? (
-		  	<div class="chip timer">
+		  	<div className="chip timer">
 		  	  { countdown ? (
 		  	  	<Link to="/">{countdown}</Link>
 		  	  ) : (
@@ -37,7 +39,7 @@ const RaceCountdown = ({ alwaysShow }) => {
 		  	</div>
 		  ) : (
 		  	countdown ? (
-			  	<div class="chip timer">
+			  	<div className="chip timer">
 			  	  <Link to="/">{countdown}</Link>
 			  	</div>
 		  	) : (

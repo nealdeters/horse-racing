@@ -23,6 +23,14 @@ const _shuffle = (array) => {
   return array;
 }
 
+const _setRacerLanes = (racers) => {
+  racers.forEach( ( racer, index ) => {
+    racer.lane = index + 1;
+  });
+
+  return racers;
+}
+
 const createRace = async (req, res) => {
   try {
     const {startTime, endTime, racers, track} = req.body;
@@ -85,37 +93,40 @@ const createRace = async (req, res) => {
       }
 
       const newRace = await Race.create(race);
+      const randRacers = [];
 
       if(racers === true){
         // if racers is true, apply 8 random ones
-        const randRacers = await Racer.findAll({
+        randRacers = await Racer.findAll({
           order: sequelize.random(),
           limit: 8
         });
-
-        await newRace.setRacers(randRacers);
+        randRacers = _setRacerLanes(randRacers);
       } else if (racers && racers.length){
         // if provided racers array is larger than 8, cut it down
         if(racers.length > 8){
           racers = racers.splice(0, 8);
         }
 
-        await newRace.setRacers(_shuffle(racers.map(racer => {
+        randRacers = _shuffle(racers.map(racer => {
           if(typeof racer === 'number'){
             return racer;
           } else if(racer.id && typeof racer === 'number'){
             return racer.id;
           }
-        })))
+        }))
+
+        randRacers = _setRacerLanes(randRacers);
       } else {
         // if no racers added, apply 4 random ones
-        const randRacers = await Racer.findAll({
+        randRacers = await Racer.findAll({
           order: sequelize.random(),
           limit: 4
         });
-
-        await newRace.setRacers(randRacers);
+        randRacers = _setRacerLanes(randRacers);
       }
+
+      await newRace.setRacers(randRacers);
 
       const result = await Race.findOne({
         where: {
@@ -124,7 +135,7 @@ const createRace = async (req, res) => {
         include: [
           'racers', 'Track'
         ]
-      })
+      });
       
       if(res){
         return res.status(201).json(result);

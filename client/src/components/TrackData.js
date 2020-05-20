@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Track from '../components/Track';
 import moment from 'moment';
 import Utility from '../Utility';
+import RaceCountdown from '../components/RaceCountdown';
 
 const TrackData = ({ match }) => {
 	const [ track, setTrack ] = useState(null);
@@ -50,32 +51,36 @@ const TrackData = ({ match }) => {
 	}
 
 	return (
-		<div className="container track"
-		  style={{
-		    backgroundColor: track.trackColor,
-		    minHeight: `100%`
-		  }}>
-		  <h1 className="header white-text">{track.name}</h1>
+		<Fragment>
+			<h1 className="header white-text">{track.name}</h1>
+			<RaceCountdown alwaysShow={true} />
 
-		  <Track track={track} />
+			<Track track={track} />
 
-		  <table className="track-board white-text">
-		    <thead>
-		      <tr>
-		        <th className="uppercase normal">Races</th>
-		        <th className="uppercase normal">Distance</th>
-		        <th className="uppercase normal">Avg. Time</th>
-		      </tr>
-		    </thead>
-		    <tbody>
-	        <tr>
-	          <td>{races.length}</td>
-	          <td>{track.distance}</td>
-	          <td>{avgTime ? moment(avgTime).format('mm:ss.SSSS') : '-'}</td>
-	        </tr>
-		    </tbody>
-		  </table>
-		</div>
+			<div className="container track"
+			  style={{
+			    backgroundColor: track.trackColor,
+			    minHeight: `100%`
+			  }}>
+			  
+			  <table className="track-board white-text">
+			    <thead>
+			      <tr>
+			        <th className="uppercase normal">Sts</th>
+			        <th className="uppercase normal">Dist</th>
+			        <th className="uppercase normal">Avg</th>
+			      </tr>
+			    </thead>
+			    <tbody>
+		        <tr>
+		          <td>{races.length}</td>
+		          <td>{track.distance}</td>
+		          <td>{avgTime ? moment(avgTime).format('mm:ss.SSSS') : '-'}</td>
+		        </tr>
+			    </tbody>
+			  </table>
+			</div>
+		</Fragment>
 	);
 }
 
