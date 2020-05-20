@@ -12,7 +12,7 @@ const RaceCountdown = ({ alwaysShow }) => {
 	    if(alwaysShow){
 	    	if(data){
 	    		if(data === 'No Races Scheduled for Today.'){
-	    			setCountdown(`${data}`);
+	    			setCountdown(data);
 	    		} else {
 	    			setCountdown(`Watch Live ${data}`);
 	    		}
@@ -20,11 +20,15 @@ const RaceCountdown = ({ alwaysShow }) => {
 	    		setCountdown(null);
 	    	}
 	    } else {
-	    	if(data === 'No Races Scheduled for Today.'){
-	    		setCountdown(`${data}`);
-	    	} else if(data && data.includes('in')){
-	    		setCountdown(`Next Race ${data}`);
-		    } else {
+	    	if(data){
+		    	if(data === 'No Races Scheduled for Today.'){
+		    		setCountdown(data);
+		    	} else if(data && data.includes('in')){
+		    		setCountdown(`Next Race ${data}`);
+			    } else {
+			    	setCountdown(data);
+			    }
+	    	} else {
 		    	setCountdown(null);
 		    }
 	    }
