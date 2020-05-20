@@ -47,7 +47,7 @@ const ResultsBoard = (props) => {
                 <RacerName racer={result} strikeName={true} />  
               </td>
               <td>
-                <Fragment>{result.RacerRace.lane ? result.RacerRace.lane : '-'}</Fragment>
+                <Fragment>{result.RacerRace.lane ? result.RacerRace.lane : i + 1}</Fragment>
               </td>
   						<td>
                 <Fragment>{result.RacerRace.duration ? result.RacerRace.duration : '-'}</Fragment>
