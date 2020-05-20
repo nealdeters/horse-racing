@@ -36,7 +36,9 @@ const Standings = () => {
           third++;
         }
 
-        return moment(race.startTime).isBefore(now) && race.endTime;
+        if(race.startTime && race.endTime){
+          return moment(race.startTime).isBefore(now);
+        }
       });
       let starts = races.length;
       let winPrct = ((first/starts) * 100).toFixed(2);

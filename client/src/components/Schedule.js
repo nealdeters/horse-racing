@@ -40,7 +40,7 @@ const Schedule = () => {
                 <td>
                   <Link 
                     className="schedule-link"
-                    to={`/races/${race.id}`}>{moment(race.startTime).format('LT')}
+                    to={`/races/${race.id}`}>{moment(race.startTime).format('ddd @ LT')}
                   </Link>
                 </td>
                 <td>

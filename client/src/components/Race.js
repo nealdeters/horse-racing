@@ -44,8 +44,8 @@ const Race = ({ match }) => {
 		    </thead>
 		    <tbody>
 	        <tr>
-	          <td>{moment(race.startTime).format('LTS')}</td>
-	          <td>{ race.endTime ? moment(race.endTime).format('LTS') : '-'}</td>
+	          <td>{moment(race.startTime).format('ll LTS')}</td>
+	          <td>{ race.endTime ? moment(race.endTime).format('ll LTS') : '-'}</td>
 	          <td>
 	          	<Link 
 	          	  className="track-name"
