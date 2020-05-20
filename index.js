@@ -5,10 +5,14 @@ const passport = require('passport');
 const { sequelize, Sequelize } = require('./database/models');
 const routes = require('./database/routes');
 const cron = require('node-cron');
-const moment = require('moment');
+// const moment = require('moment');
 const path = require('path');
 const { racerCronJob } = require('./moveRacer');;
 const { Race, RacerRace } = require('./database/controllers');
+const moment = require('moment-timezone');
+
+// set server timezone to chicago
+moment().tz("America/Chicago").format();
 
 require('dotenv').config();
 
@@ -46,9 +50,6 @@ io.on('connection', (socket) => {
 		console.log(`User ${socket.id} disconnected.`);
 	});
 });
-
-Race.deleteAllRaces();
-Race.createTomorrowRaces();
 
 // every day at 3am schedule races
 cron.schedule('0 3 * * *', () => {

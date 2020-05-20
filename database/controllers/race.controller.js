@@ -126,7 +126,6 @@ const createRace = async (req, res) => {
         randRacers = _setRacerLanes(randRacers);
       }
 
-      console.log(randRacers)
       await newRace.setRacers(randRacers);
 
       const result = await Race.findOne({

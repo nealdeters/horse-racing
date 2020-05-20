@@ -21,17 +21,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     startTime: {
       type: DataTypes.DATE,
-      get() {
-        const dateText = this.getDataValue('startTime');
-        return moment(dateText).format('YYYY-MM-DD HH:mm:ss');
-      }
+      // get() {
+      //   const dateText = this.getDataValue('startTime');
+      //   return moment(dateText).format('YYYY-MM-DD HH:mm:ss');
+      // }
     },
     endTime: {
       type: DataTypes.DATE,
-      get() {
-        const dateText = this.getDataValue('endTime');
-        return moment(dateText).format('YYYY-MM-DD HH:mm:ss');
-      }
+      // get() {
+      //   const dateText = this.getDataValue('endTime');
+      //   return moment(dateText).format('YYYY-MM-DD HH:mm:ss');
+      // }
     },
     place: {
       type: DataTypes.INTEGER,
