@@ -160,8 +160,10 @@ const _startRace = (race, socket) => {
 
 const _setRacerLanes = (race) => {
   race.racers.forEach( (racer, index) => {
-    racer.RacerRace.percentage = 0;
-    racer.RacerRace.lane = index + 1;
+    if(typeof racer.RacerRace.percentage === 'undefined'){
+      racer.RacerRace.percentage = 0;
+      racer.RacerRace.lane = index + 1;
+    }
   });
 
   return race;

@@ -4,6 +4,7 @@ import ResultsBoard from '../components/ResultsBoard';
 import RaceWinner from '../components/RaceWinner';
 import Utility from '../Utility';
 import moment from 'moment';
+import RaceCountdown from '../components/RaceCountdown';
 
 const Race = ({ match }) => {
 	const [ race, setRace ] = useState(null);
@@ -30,6 +31,7 @@ const Race = ({ match }) => {
 	return (
 		<div className="container race">
 		  <h1 className="header white-text">Race #{race.id}</h1>
+		  <RaceCountdown alwaysShow={true} />
 		  
 		  <RaceWinner racers={race.racers}/>
 
@@ -39,7 +41,7 @@ const Race = ({ match }) => {
 		        <th className="uppercase normal">Start</th>
 		        <th className="uppercase normal">End</th>
 		        <th className="uppercase normal">Track</th>
-		        <th className="uppercase normal">Distance</th>
+		        <th className="uppercase normal">Dist</th>
 		      </tr>
 		    </thead>
 		    <tbody>
