@@ -170,7 +170,7 @@ const _setRacerLanes = (race) => {
 }
 
 const countdown = (nextRace, nextStartTime, socket) => {
-  let time = nextStartTime.diff(moment().subtract(1, 'minutes'), 'seconds');
+  let time = nextStartTime.diff(moment(), 'seconds');
 
   if(time >= 60){
     let fromNow = nextStartTime.fromNow();
