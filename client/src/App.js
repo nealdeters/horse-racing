@@ -8,6 +8,9 @@ import TrackData from './components/TrackData';
 import Results from './components/Results';
 import Racer from './components/Racer';
 import Race from './components/Race';
+import Racers from './components/Racers';
+import Tracks from './components/Tracks';
+import NotFound from './components/NotFound'
 import RaceState from './context/race/RaceState';
 import "materialize-css/dist/css/materialize.min.css";
 import M from "materialize-css/dist/js/materialize.min.js";
@@ -32,9 +35,12 @@ const App = () => {
           </Route>
           <Route exact path="/schedule" component={Schedule} />
           <Route exact path="/standings" component={Standings} />
+          <Route exact path="/racers" component={Racers} />
+          <Route exact path="/tracks" component={Tracks} />
           <Route exact path="/races/:id" component={Race} />
           <Route exact path="/tracks/:id" component={TrackData} />
           <Route exact path="/racers/:id" component={Racer} />
+          <Route component={NotFound} />
         </Switch>
       </Router>
     </Fragment>

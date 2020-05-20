@@ -172,7 +172,7 @@ const countdown = (nextRace, nextStartTime, socket) => {
 
   if(time >= 60){
     let fromNow = nextStartTime.fromNow();
-    message = `Next Race ${fromNow}`;
+    message = `${fromNow}`;
     socket.emit('nextRaceCountdown', message);
   } else {
     if(time === 1){

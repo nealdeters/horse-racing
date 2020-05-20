@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import Track from '../components/Track';
 import ResultsBoard from '../components/ResultsBoard';
 import RaceWinner from '../components/RaceWinner';
+import Utility from '../Utility';
 
 import moment from 'moment';
 
@@ -11,6 +12,7 @@ const Race = ({ match }) => {
 	// on mount
 	useEffect(() => {
 		getRace(match.params.id);
+		Utility.setBackgroundColor();
 
     // eslint-disable-next-line
 	}, []);
@@ -20,9 +22,6 @@ const Race = ({ match }) => {
 		const res = await fetch(`${base}/api/races/${id}`);
     let data = await res.json();
     setRace(data);
-    if(data.Track){
-	  	document.body.style = `background-color: SeaGreen;`;
-	  }
 	}
 
 	if(race === null){
@@ -30,11 +29,7 @@ const Race = ({ match }) => {
 	}
 
 	return (
-		<div className="container race"
-		  style={{
-		    backgroundColor: 'SeaGreen',
-		    minHeight: `100%`
-		  }}>
+		<div className="container race">
 		  <h1 className="header white-text track-name">Race #{race.id}</h1>
 		  
 		  <RaceWinner racers={race.racers}/>

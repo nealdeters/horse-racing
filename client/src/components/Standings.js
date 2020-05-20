@@ -1,12 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import RacerName from '../components/RacerName';
+import RaceCountdown from '../components/RaceCountdown';
+import Utility from '../Utility';
 
 const Standings = () => {
   const [standings, setStandings] = useState([]);
 
   useEffect(() => {
-    document.body.style = `background-color: SeaGreen;`;
+    Utility.setBackgroundColor();
     getStandings();
   }, []);
 
@@ -60,45 +62,45 @@ const Standings = () => {
     <Fragment>
       <div className="container">
         <h1 className="header white-text track-name">Standings</h1>
-        <div class="scroll">
-          <table className="standings-board white-text">
-            <thead>
-              <tr>
-                <th className="uppercase normal">Name</th>
-                <th className="uppercase normal tooltipped hide-on-small-only"
-                  data-position="bottom" 
-                  data-tooltip="Starts"
-                  aria-label="Starts">Sts</th>
-                <th className="uppercase normal">1st</th>
-                <th className="uppercase normal">2nd</th>
-                <th className="uppercase normal">3rd</th>
-                <th className="uppercase normal tooltipped"
-                  data-position="bottom" 
-                  data-tooltip="Win Percentage"
-                  aria-label="Win Percentage">Win %</th>
-                <th className="uppercase normal tooltipped hide-on-small-only"
-                  data-position="bottom" 
-                  data-tooltip="Did Not Finish"
-                  aria-label="Did Not Finish">Dnf</th>
+        <RaceCountdown alwaysShow={true} />
+
+        <table className="standings-board white-text">
+          <thead>
+            <tr>
+              <th className="uppercase normal">Name</th>
+              <th className="uppercase normal tooltipped hide-on-small-only"
+                data-position="bottom" 
+                data-tooltip="Starts"
+                aria-label="Starts">Sts</th>
+              <th className="uppercase normal">1st</th>
+              <th className="uppercase normal">2nd</th>
+              <th className="uppercase normal">3rd</th>
+              <th className="uppercase normal tooltipped"
+                data-position="bottom" 
+                data-tooltip="Win Percentage"
+                aria-label="Win Percentage">Win %</th>
+              <th className="uppercase normal tooltipped hide-on-small-only"
+                data-position="bottom" 
+                data-tooltip="Did Not Finish"
+                aria-label="Did Not Finish">Dnf</th>
+            </tr>
+          </thead>
+          <tbody>
+            {standings && standings.map((racer, i) => (
+              <tr key={racer.id}>
+                <td>
+                  <RacerName racer={racer} strikeName={false} />
+                </td>
+                <td className="hide-on-small-only">{racer.starts}</td>
+                <td>{racer.first}</td>
+                <td>{racer.second}</td>
+                <td>{racer.third}</td>
+                <td>{racer.winPrct + '%'}</td>
+                <td className="hide-on-small-only">{racer.injuries}</td>
               </tr>
-            </thead>
-            <tbody>
-              {standings && standings.map((racer, i) => (
-                <tr key={racer.id}>
-                  <td>
-                    <RacerName racer={racer} strikeName={false} />
-                  </td>
-                  <td className="hide-on-small-only">{racer.starts}</td>
-                  <td>{racer.first}</td>
-                  <td>{racer.second}</td>
-                  <td>{racer.third}</td>
-                  <td>{racer.winPrct + '%'}</td>
-                  <td className="hide-on-small-only">{racer.injuries}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
     </Fragment>
   )

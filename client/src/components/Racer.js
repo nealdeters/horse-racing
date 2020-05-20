@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import RacerIcon from './RacerIcon';
+import Utility from '../Utility';
 
 const Racer = ({ match }) => {
 	const [ racer, setRacer ] = useState(null);
@@ -8,7 +9,7 @@ const Racer = ({ match }) => {
 	// on mount
 	useEffect(() => {
 		getTrack(match.params.id);
-		document.body.style = `background-color: SeaGreen;`;
+		Utility.setBackgroundColor();
 
     // eslint-disable-next-line
 	}, []);

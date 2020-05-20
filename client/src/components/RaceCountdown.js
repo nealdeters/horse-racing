@@ -1,24 +1,45 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
 import Utility from '../Utility';
 const io = Utility.io();
 
-const RaceCountdown = () => {
+const RaceCountdown = ({ alwaysShow }) => {
 	const [countdown, setCountdown] = useState('');
 
 	// on mount
 	useEffect(() => {
 	  io.on("nextRaceCountdown", data => {
-	    setCountdown(data);
+	    if(alwaysShow){
+	    	setCountdown(`Watch Live ${data}`);
+	    } else {
+	    	if(data && data.includes('in')){
+	    		setCountdown(`Next Race ${data}`);
+		    } else {
+		    	setCountdown(data);
+		    }
+	    }
 	  });
 	}, []);
 
-	if(!countdown){
-		return null;
-	}
-
 	return (
 		<Fragment>
-		  <h3 id="timer" className="timer">{countdown}</h3>
+		  { alwaysShow ? (
+		  	<div class="chip timer">
+		  	  { countdown ? (
+		  	  	<Link to="/">{countdown}</Link>
+		  	  ) : (
+		  	  	<Link to="/">Watch Live Race</Link>
+		  	  )}
+		  	</div>
+		  ) : (
+		  	countdown ? (
+			  	<div class="chip timer">
+			  	  <Link to="/">{countdown}</Link>
+			  	</div>
+		  	) : (
+	  	  	null
+	  	  )
+		  )}
 		</Fragment>
 	);
 }

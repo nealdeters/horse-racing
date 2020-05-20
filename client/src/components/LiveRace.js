@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import RaceTrack from '../components/RaceTrack';
+import RaceCountdown from '../components/RaceCountdown';
 import RaceContext from '../context/race/raceContext';
 import Utility from '../Utility';
 const io = Utility.io();
@@ -20,7 +21,7 @@ const LiveRace = () => {
 	// on update
 	useEffect(() => {
 	  if(track){
-	  	document.body.style = `background-color: ${track.trackColor};`;
+	  	Utility.setBackgroundColor(track.trackColor);
 	  }
 
 	  // eslint-disable-next-line
@@ -33,6 +34,7 @@ const LiveRace = () => {
 		    minHeight: `100%`
 		  }}>
 		  <h1 className="header white-text track-name">{track.name}</h1>
+		  <RaceCountdown alwaysShow={false}/>
 		  <RaceTrack />
 		</div>
 	);
