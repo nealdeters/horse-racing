@@ -66,9 +66,18 @@ const TrackData = ({ match }) => {
 			  <table className="track-board white-text">
 			    <thead>
 			      <tr>
-			        <th className="uppercase normal">Sts</th>
-			        <th className="uppercase normal">Dist</th>
-			        <th className="uppercase normal">Avg</th>
+			        <th className="uppercase normal tooltipped" 
+			        	data-position="bottom" 
+                data-tooltip="Starts"
+                aria-label="Starts">Sts</th>
+			        <th className="uppercase normal"
+			        	data-position="bottom" 
+                data-tooltip="Starts"
+                aria-label="Starts">Dist</th>
+			        <th className="uppercase normal"
+			        	data-position="bottom" 
+                data-tooltip="Average Time."
+                aria-label="Average Time.">Avg</th>
 			      </tr>
 			    </thead>
 			    <tbody>
