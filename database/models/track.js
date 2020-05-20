@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
   Track.associate = function(models) {
     Track.hasMany(models.Race, {
       foreignKey: 'trackId', 
-      sourceKey: 'id'
+      sourceKey: 'id',
+      as: 'race'
     });
   };
   return Track;

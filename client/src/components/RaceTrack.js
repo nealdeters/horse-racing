@@ -1,6 +1,5 @@
-import React, { Fragment, useRef, useEffect, useState, useContext } from 'react';
+import React, { Fragment, useContext } from 'react';
 import Track from './Track';
-import RaceCountdown from './RaceCountdown';
 import RaceKey from './RaceKey';
 import RaceContext from '../context/race/raceContext';
 
@@ -15,7 +14,6 @@ const RaceTrack = (props) => {
         race={race} 
         racers={racers} 
         track={track} />
-      <RaceCountdown />
       <RaceKey />
     </Fragment>
   );

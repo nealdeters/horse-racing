@@ -1,12 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import { Link } from "react-router-dom";
+import RaceCountdown from '../components/RaceCountdown';
+import Utility from '../Utility';
 
 const Schedule = () => {
   const [races, setRaces] = useState([]);
 
   useEffect(() => {
-    document.body.style = `background-color: SeaGreen;`;
+    Utility.setBackgroundColor();
     getRaces();
   }, []);
 
@@ -22,13 +24,14 @@ const Schedule = () => {
     <Fragment>
       <div className="container">
         <h1 className="header white-text track-name">Schedule</h1>
+        <RaceCountdown alwaysShow={true} />
         <table className="schedule-board white-text">
           <thead>
             <tr>
               <th className="uppercase normal">Start Time</th>
               <th className="uppercase normal">Track</th>
               <th className="uppercase normal">Distance</th>
-              <th className="uppercase normal"># Racers</th>
+              <th className="uppercase normal">Racers</th>
             </tr>
           </thead>
           <tbody>

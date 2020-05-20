@@ -22,7 +22,10 @@ const getTrackById = async (req, res) => {
   try {
     const { id } = req.params;
     const track = await Track.findOne({
-      where: { id: id }
+      where: { id: id },
+      include: [
+        'race'
+      ]
     });
     if (track) {
       return res.status(200).json(track);

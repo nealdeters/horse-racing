@@ -25,6 +25,17 @@ const Utility = {
 	},
 	io: () => {
 		return io;
+	},
+	setBackgroundColor: (color) => {
+		document.body.style = color ? 
+			`background-color: ${color}` : 
+			`background-color: SeaGreen`;
+	},
+	defaultBackgroundColor: () => {
+		return {
+	    backgroundColor: 'SeaGreen',
+	    minHeight: `100%`
+	  }
 	}
 }
 
