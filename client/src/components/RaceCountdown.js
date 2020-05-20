@@ -10,12 +10,16 @@ const RaceCountdown = ({ alwaysShow }) => {
 	useEffect(() => {
 	  io.on("nextRaceCountdown", data => {
 	    if(alwaysShow){
-	    	setCountdown(`Watch Live ${data}`);
+	    	if(data){
+	    		setCountdown(`Watch Live ${data}`);
+	    	} else {
+	    		setCountdown(null);
+	    	}
 	    } else {
 	    	if(data && data.includes('in')){
 	    		setCountdown(`Next Race ${data}`);
 		    } else {
-		    	setCountdown(data);
+		    	setCountdown(null);
 		    }
 	    }
 	  });
