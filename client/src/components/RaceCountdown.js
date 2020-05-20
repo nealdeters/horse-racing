@@ -11,12 +11,18 @@ const RaceCountdown = ({ alwaysShow }) => {
 	  io.on("nextRaceCountdown", data => {
 	    if(alwaysShow){
 	    	if(data){
-	    		setCountdown(`Watch Live ${data}`);
+	    		if(data === 'No Races Scheduled for Today.'){
+	    			setCountdown(`${data}`);
+	    		} else {
+	    			setCountdown(`Watch Live ${data}`);
+	    		}
 	    	} else {
 	    		setCountdown(null);
 	    	}
 	    } else {
-	    	if(data && data.includes('in')){
+	    	if(data === 'No Races Scheduled for Today.'){
+	    		setCountdown(`${data}`);
+	    	} else if(data && data.includes('in')){
 	    		setCountdown(`Next Race ${data}`);
 		    } else {
 		    	setCountdown(null);

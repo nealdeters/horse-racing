@@ -93,7 +93,7 @@ const createRace = async (req, res) => {
       }
 
       const newRace = await Race.create(race);
-      const randRacers = [];
+      let randRacers = [];
 
       if(racers === true){
         // if racers is true, apply 8 random ones
@@ -126,6 +126,7 @@ const createRace = async (req, res) => {
         randRacers = _setRacerLanes(randRacers);
       }
 
+      console.log(randRacers)
       await newRace.setRacers(randRacers);
 
       const result = await Race.findOne({

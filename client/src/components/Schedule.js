@@ -15,7 +15,6 @@ const Schedule = () => {
   const getRaces = async () => {
     const res = await fetch(`api/races/schedule`);
     let data = await res.json();
-    console.log(data)
 
     setRaces(data);
   }
