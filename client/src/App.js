@@ -35,8 +35,6 @@ const App = () => {
           </Route>
           <Route exact path="/schedule" component={Schedule} />
           <Route exact path="/standings" component={Standings} />
-          <Route exact path="/racers" component={Racers} />
-          <Route exact path="/tracks" component={Tracks} />
           <Route exact path="/races/:id" component={Race} />
           <Route exact path="/tracks/:id" component={TrackData} />
           <Route exact path="/racers/:id" component={Racer} />

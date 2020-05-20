@@ -18,8 +18,6 @@ const Navigation = () => {
             <ul className="right hide-on-med-and-down">
              <li><Link to="/schedule">Schedule</Link></li>
              <li><Link to="/standings">Standings</Link></li>
-             <li><Link to="/tracks">Tracks</Link></li>
-             <li><Link to="/racers">Racers</Link></li>
             </ul>
           </div>
         </nav>
@@ -28,8 +26,6 @@ const Navigation = () => {
       <ul className="sidenav" id="mobile-demo">
         <li className="sidenav-close"><Link to="/schedule">Schedule</Link></li>
         <li className="sidenav-close"><Link to="/standings">Standings</Link></li>
-        <li className="sidenav-close"><Link to="/tracks">Tracks</Link></li>
-        <li className="sidenav-close"><Link to="/racers">Racers</Link></li>
       </ul>
     </Fragment>
   )

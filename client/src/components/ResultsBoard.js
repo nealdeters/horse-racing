@@ -40,11 +40,15 @@ const ResultsBoard = (props) => {
   			<tbody>
   				{sortedResults && sortedResults.map((result, i) => (
   					<tr key={result.id}>
-  						<td>{result.RacerRace.place}</td>
+  						<td>
+                <Fragment>{result.RacerRace.place ? result.RacerRace.place : '-'}</Fragment>      
+              </td>
               <td>
                 <RacerName racer={result} strikeName={true} />  
               </td>
-              <td>{result.RacerRace.lane}</td>
+              <td>
+                <Fragment>{result.RacerRace.lane ? result.RacerRace.lane : '-'}</Fragment>
+              </td>
   						<td>
                 <Fragment>{result.RacerRace.duration ? result.RacerRace.duration : '-'}</Fragment>
   						</td>

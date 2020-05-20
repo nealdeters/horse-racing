@@ -13,7 +13,7 @@ const Tracks = props => {
 	return (
 		<div className="container">
 			<h1 className="header white-text">Tracks</h1>
-			<p className="lead">
+			<p className="lead white-text">
 				Tracks list coming soon.
 			</p>
 		</div>

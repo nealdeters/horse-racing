@@ -10,7 +10,7 @@ const RaceKey = (props) => {
   return (
     <div className="race-key">
       { racers.length ? (
-        <table className="white-text">
+        <table className="race-key-board white-text">
           <thead>
             <tr>
               <th className="uppercase normal">Name</th>
@@ -24,7 +24,7 @@ const RaceKey = (props) => {
                 <td>
                   <RacerName racer={racer} strikeName={true} />
                 </td>
-                <td className="text-center">{racer.RacerRace.lane}</td>
+                <td>{racer.RacerRace.lane}</td>
                 <td>
                   <div className="racer-progress" style={{backgroundColor: racer.primaryColor}}>
                     <ProgressBar progress={racer.RacerRace.percentage} />

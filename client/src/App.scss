@@ -49,10 +49,13 @@ h6 {
 
 .track-name {
   margin: 1rem;
+  color: inherit;
+  text-decoration: underline
 }
 
 .header {
   text-align: center;
+  margin: 1rem;
 }
 
 .race-track {
@@ -82,9 +85,56 @@ h6 {
   color: white;
 }
 
-.race, .racer {
-  .schedule-board, .results-board, .racer-board {
+.race, .schedule {
+  .schedule-board, .results-board {
     margin-top: 30px;
+
+    th, td {
+      width: 25%;
+      text-align: center;
+    }
+  }
+}
+
+.standings {
+  .standings-board {
+    margin-top: 30px;
+
+    th, td {
+      width: 14%;
+      text-align: center;
+    }
+  }
+}
+
+.racer {
+  racer-board {
+    margin-top: 30px;
+
+    th, td {
+      width: 14%;
+      text-align: center;
+    }
+  }
+}
+
+.track {
+  .track-board {
+    margin-top: 30px;
+    th, td {
+      width: 33%;
+      text-align: center;
+    }
+  }
+}
+
+.race-key {
+  .race-key-board {
+    margin-top: 30px;
+    th, td {
+      width: 33%;
+      text-align: center;
+    }
   }
 }
 
@@ -95,14 +145,29 @@ h6 {
 }
 
 .racer-name {
-  width: 70%;
-  display: inline-block;
-}
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-.racer-color {
-  width: 15px;
-  height: 15px;
-  margin-top: .3rem;
+  .left, .right {
+    flex: 1;
+    padding: 0 5px;
+  }
+
+  .color {
+    width: 15px;
+    height: 15px;
+  }
+
+  .name {
+    //width: 70%;
+    display: inline-block;
+    color: inherit;
+    text-decoration: underline;
+    text-align: center;
+    flex: 1 1 0px;
+    padding: 0 5px;
+  }
 }
 
 .racer-default-img {

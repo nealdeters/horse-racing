@@ -22,13 +22,13 @@ const Schedule = () => {
 
   return (
     <Fragment>
-      <div className="container">
-        <h1 className="header white-text track-name">Schedule</h1>
+      <div className="container schedule">
+        <h1 className="header white-text">Schedule</h1>
         <RaceCountdown alwaysShow={true} />
         <table className="schedule-board white-text">
           <thead>
             <tr>
-              <th className="uppercase normal">Start Time</th>
+              <th className="uppercase normal">Start</th>
               <th className="uppercase normal">Track</th>
               <th className="uppercase normal">Distance</th>
               <th className="uppercase normal">Racers</th>
@@ -40,7 +40,8 @@ const Schedule = () => {
                 <td>
                   <Link 
                     className="schedule-link"
-                    to={`/races/${race.id}`}>{moment(race.startTime).format('lll')}</Link>
+                    to={`/races/${race.id}`}>{moment(race.startTime).format('LT')}
+                  </Link>
                 </td>
                 <td>
                   <Link

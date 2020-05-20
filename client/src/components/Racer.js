@@ -46,7 +46,7 @@ const Racer = ({ match }) => {
 
 	return (
 		<div className="container racer">
-		  <h1 className="header white-text track-name">{racer.name}</h1>
+		  <h1 className="header white-text">{racer.name}</h1>
 		  <RacerIcon racer={racer} />
 
 		  <table className="racer-board white-text">

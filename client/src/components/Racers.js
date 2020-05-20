@@ -13,7 +13,7 @@ const Racers = props => {
 	return (
 		<div className="container">
 			<h1 className="header white-text">Racers</h1>
-			<p className="lead">
+			<p className="lead white-text">
 				Racers list coming soon.
 			</p>
 		</div>
