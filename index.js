@@ -51,9 +51,6 @@ io.on('connection', (socket) => {
 	});
 });
 
-Race.deleteAllRaces();
-Race.createTomorrowRaces();
-
 // every day at 3am schedule races
 cron.schedule('0 3 * * *', () => {
 	Race.createTomorrowRaces();
