@@ -58,7 +58,7 @@ const _moveRacer = (racer, track, racers) => {
     }
 
     racer.RacerRace.finished = true;
-    clearTimeout(_mTimeout);
+    // clearTimeout(_mTimeout);
   } else {
     _mTimeout = setTimeout(() => {
       _moveRacer(racer, track, racers);
@@ -77,7 +77,7 @@ const isRaceFinished = async (race, socket) => {
     await _updateRacerRaces(race.racers);
     race.finished = true;
     socket.emit('raceResults', race);
-    clearTimeout(_fTimeout);
+    // clearTimeout(_fTimeout);
   } else {
     _fTimeout = setTimeout(() => {
       isRaceFinished(race, socket);
