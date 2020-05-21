@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 import LiveRace from './components/LiveRace';
 import Standings from './components/Standings';
 import Schedule from './components/Schedule';
@@ -24,20 +25,23 @@ const App = () => {
     <Fragment>
       <Router>
         <Navigation />
-        <Switch>
-          <Route exact path="/">
-            <RaceState>
-              <Results />
-              <LiveRace />
-            </RaceState>
-          </Route>
-          <Route exact path="/schedule" component={Schedule} />
-          <Route exact path="/standings" component={Standings} />
-          <Route exact path="/races/:id" component={Race} />
-          <Route exact path="/tracks/:id" component={TrackData} />
-          <Route exact path="/racers/:id" component={Racer} />
-          <Route component={NotFound} />
-        </Switch>
+        <main>
+          <Switch>
+            <Route exact path="/">
+              <RaceState>
+                <Results />
+                <LiveRace />
+              </RaceState>
+            </Route>
+            <Route exact path="/schedule" component={Schedule} />
+            <Route exact path="/standings" component={Standings} />
+            <Route exact path="/races/:id" component={Race} />
+            <Route exact path="/tracks/:id" component={TrackData} />
+            <Route exact path="/racers/:id" component={Racer} />
+            <Route component={NotFound} />
+          </Switch>
+        </main>
+        <Footer />
       </Router>
     </Fragment>
   );

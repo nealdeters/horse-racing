@@ -287,3 +287,27 @@ table {
   color: inherit;
   text-decoration: underline;
 }
+
+.live-race {
+  min-height: 100vh;
+  min-height: 100%;
+}
+
+.page-footer {
+  padding: 0;
+  background-color: #191919;
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  font-size: 12px;
+
+  .footer-copyright {
+    min-height: 0;
+    height: 15px;
+
+    .created-by {
+      padding: 0 15px;
+    }
+  }
+}

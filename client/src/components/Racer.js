@@ -69,14 +69,17 @@ const Racer = ({ match }) => {
           }
 
           if(race.startTime && race.endTime){
-            const start = moment(race.RacerRace.startTime);
-            const end = moment(race.RacerRace.endTime);
-            const duration = end.diff( start );
-            durations.push(duration);
-            track.starts++;
-            track.time += duration;
-
-            return moment(race.startTime).isBefore(now);
+            if( moment(race.startTime).isBefore(now) ){
+              const start = moment(race.RacerRace.startTime);
+              const end = moment(race.RacerRace.endTime);
+              const duration = end.diff( start );
+              durations.push(duration);
+              track.starts++;
+              track.time += duration ? duration : 0;
+              return true;
+            } else {
+              return false;
+            }
           } else {
             return false;
           }
