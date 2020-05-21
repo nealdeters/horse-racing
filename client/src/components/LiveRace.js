@@ -40,9 +40,9 @@ const LiveRace = () => {
 	return (
 		<div
 		  style={{
-		    backgroundColor: track.trackColor,
-		    minHeight: `100%`
-		  }}>
+		    backgroundColor: track.trackColor
+		  }}
+		  className="live-race">
 		  <h1 className="header white-text">{track.name}</h1>
 		  <RaceCountdown alwaysShow={false}/>
 		  <RaceTrack />
