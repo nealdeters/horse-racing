@@ -316,13 +316,10 @@ const scheduleRaces = async (startDay, everyNMins, numDays) => {
       }
     }
 
-    const hour = startDay.hour();
-    if(hour === 17 || hour === 18 || hour === 19 || hour === 20 || hour === 21){
-      const minute = startDay.minute();
-      if(minute === 0){
-        req.body.racers = true;
-        req.body.track = 4;
-      }
+    const minute = startDay.minute();
+    if(minute === 0){
+      req.body.racers = true;
+      req.body.track = 4;
     }
 
     try {
