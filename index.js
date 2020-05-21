@@ -40,8 +40,8 @@ app.use('/api', routes);
 io.on('connection', (socket) => {
 	console.log(`User ${socket.id} connected.`);
 
-	// cron job every 200ms
-	cron.schedule('*/.2 * * * * *', () => {
+	// cron job every second
+	cron.schedule('*/1 * * * * *', () => {
 		// console.log('cron job')
 		racerCronJob(io);
 	});
