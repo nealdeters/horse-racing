@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import RaceTrack from '../components/RaceTrack';
 import RaceCountdown from '../components/RaceCountdown';
 import RaceContext from '../context/race/raceContext';
@@ -8,12 +8,22 @@ const io = Utility.io();
 const LiveRace = () => {
 	const raceContext = useContext(RaceContext);
 	const { track, setRace } = raceContext;
+	const isMountedRef = useRef(null);
 
 	// on mount
 	useEffect(() => {
+    isMountedRef.current = true;
     io.on("raceResults", data => {
-      setRace(data);
+      if(isMountedRef.current){
+      	setRace(data);
+      }
     });
+
+    // on dismount
+    return () => {
+      io.off('raceResults', setRace);
+      isMountedRef.current = false;
+    };
 
     // eslint-disable-next-line
 	}, []);

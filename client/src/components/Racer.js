@@ -3,7 +3,6 @@ import moment from 'moment';
 import RacerIcon from './RacerIcon';
 import Utility from '../Utility';
 import { Link } from "react-router-dom";
-import RaceCountdown from '../components/RaceCountdown';
 
 const Racer = ({ match }) => {
 	const [ racer, setRacer ] = useState(null);
@@ -106,7 +105,6 @@ const Racer = ({ match }) => {
 	return (
 		<div className="container racer">
 		  <h1 className="header white-text">{racer.name}</h1>
-		  <RaceCountdown alwaysShow={true} />
 		  <RacerIcon racer={racer ? racer : null} />
 
 		  <table className="racer-board white-text">

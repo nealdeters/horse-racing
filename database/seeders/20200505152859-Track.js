@@ -33,7 +33,7 @@ module.exports = {
       },
       {
         name: 'Boardwalk',
-        trackColor: 'ForestGreen',
+        trackColor: '#4EA24E',
         groundColor: 'BurlyWood',
         railColor: 'LightGrey',
         distance: 40,
