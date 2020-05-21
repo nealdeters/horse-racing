@@ -14,6 +14,7 @@ const _randomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+let _mTimeout = null
 const _moveRacer = (racer, track, racers) => {
   const increment = _randomInt(1, 10);
   let divisable = null;
@@ -57,13 +58,15 @@ const _moveRacer = (racer, track, racers) => {
     }
 
     racer.RacerRace.finished = true;
+    clearTimeout(_mTimeout);
   } else {
-    setTimeout(() => {
+    _mTimeout = setTimeout(() => {
       _moveRacer(racer, track, racers);
     }, timeout);
   }
 }
 
+let _fTimeout = null;
 const isRaceFinished = async (race, socket) => {
   raceFinished = race.racers.every(racer => {
     return racer.RacerRace.finished;
@@ -74,8 +77,9 @@ const isRaceFinished = async (race, socket) => {
     await _updateRacerRaces(race.racers);
     race.finished = true;
     socket.emit('raceResults', race);
+    clearTimeout(_fTimeout);
   } else {
-    setTimeout(() => {
+    _fTimeout = setTimeout(() => {
       isRaceFinished(race, socket);
       socket.emit('raceResults', race);
     }, timeout);

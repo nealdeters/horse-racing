@@ -12,14 +12,23 @@ const Results = (props) => {
 	// on mount
 	useEffect(() => {
     io.on("raceResults", data => {
-      if(data && data.finished){
-      	setShow(false);
-      	setResults(data.racers);
-      }
+      raceResults(data);
     });
+
+    // on dismount
+    return () => {
+      io.off('raceResults', raceResults);
+    };
 
     // eslint-disable-next-line
 	}, []);
+
+	const raceResults = (data) => {
+		if(data && data.finished){
+			setShow(false);
+			setResults(data.racers);
+		}
+	}
 
 	useEffect(() => {
 		if(results && results.length){
