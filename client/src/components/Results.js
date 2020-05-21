@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useRef, useState, useEffect } from 'react';
 import RaceWinner from './RaceWinner';
 import ResultsBoard from './ResultsBoard';
 import { Modal } from 'react-materialize';
@@ -8,22 +8,27 @@ const io = Utility.io();
 const Results = (props) => {
 	const [show, setShow] = useState(false);
 	const [results, setResults] = useState(null);
+	const isMountedRef = useRef(null);
 
 	// on mount
 	useEffect(() => {
-    io.on("raceResults", data => {
-      raceResults(data);
+    isMountedRef.current = true;
+    io.on("liveRace", data => {
+      if(isMountedRef.current){
+      	liveRace(data.race);
+      }
     });
 
     // on dismount
     return () => {
-      io.off('raceResults', raceResults);
+      io.off('liveRace');
+      isMountedRef.current = false;
     };
 
     // eslint-disable-next-line
 	}, []);
 
-	const raceResults = (data) => {
+	const liveRace = (data) => {
 		if(data && data.finished){
 			setShow(false);
 			setResults(data.racers);

@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useRef, useState, useEffect } from 'react';
 import Track from '../components/Track';
 import moment from 'moment';
 import Utility from '../Utility';
@@ -7,42 +7,56 @@ const TrackData = ({ match }) => {
 	const [ track, setTrack ] = useState(null);
 	const [ avgTime, setAvgTime ] = useState(null);
 	const [ races, setRaces ] = useState([]);
+	const isMountedRef = useRef(null);
 
 	// on mount
 	useEffect(() => {
+		isMountedRef.current = true;
 		getTrack(match.params.id);
+
+		// on dismount
+		return () => {
+		  isMountedRef.current = false;
+		};
 
     // eslint-disable-next-line
 	}, []);
 
 	const getTrack = async (id) => {
-		const base = window.location.origin;
-		const res = await fetch(`${base}/api/tracks/${id}`);
-    let data = await res.json();
-    setTrack(data);
-    if(data){
-	  	Utility.setBackgroundColor(data.trackColor);
-	  }
+		try {
+			const base = window.location.origin;
+			const res = await fetch(`${base}/api/tracks/${id}`);
+	    let data = await res.json();
+	    
+	    if(isMountedRef.current){
+  	    setTrack(data);
+  	    if(data){
+  		  	Utility.setBackgroundColor(data.trackColor);
+  		  }
 
-	  if(data.race){
-	  	const durations = [];
-	  	const fullRaces = [];
-	  	data.race.forEach(r => {
-	  		if(r.startTime && r.endTime){
-	  			durations.push( moment(r.endTime).diff( moment(r.startTime) ) );
-	  			fullRaces.push(r);
-	  		}
-	  	})
+  		  if(data.race){
+  		  	const durations = [];
+  		  	const fullRaces = [];
+  		  	data.race.forEach(r => {
+  		  		if(r.startTime && r.endTime){
+  		  			durations.push( moment(r.endTime).diff( moment(r.startTime) ) );
+  		  			fullRaces.push(r);
+  		  		}
+  		  	})
 
-	  	const totalDurations = durations
-	  		.slice(1)
-	  		.reduce((prev, cur) => 
-	  			moment.duration(cur).add(prev), moment.duration(durations[0])
-	  		)
-	  	const avg = (totalDurations/ fullRaces.length);
-	  	setAvgTime(avg);
-	  	setRaces(fullRaces);
-	  }
+  		  	const totalDurations = durations
+  		  		.slice(1)
+  		  		.reduce((prev, cur) => 
+  		  			moment.duration(cur).add(prev), moment.duration(durations[0])
+  		  		)
+  		  	const avg = (totalDurations/ fullRaces.length);
+  		  	setAvgTime(avg);
+  		  	setRaces(fullRaces);
+  		  }
+	    }
+		} catch (err){
+			console.error(err);
+		}
 	}
 
 	if(track === null){

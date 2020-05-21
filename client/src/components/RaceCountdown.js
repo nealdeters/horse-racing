@@ -10,22 +10,22 @@ const RaceCountdown = ({ alwaysShow }) => {
 	// on mount
 	useEffect(() => {
 	  isMountedRef.current = true;
-	  io.on("nextRaceCountdown", data => {
+	  io.on("liveRace", data => {
 	    if(isMountedRef.current){
-	    	nextRaceCountdown(data);
+	    	getCountdown(data.message);
 	    }
 	  });
 
 	  // on dismount
 	  return () => {
-	    io.off('nextRaceCountdown', nextRaceCountdown);
+	    io.off('liveRace');
 	    isMountedRef.current = false;
 	  };
 
 	  // eslint-disable-next-line
 	}, []);
 
-	const nextRaceCountdown = (data) => {
+	const getCountdown = (data) => {
     if(alwaysShow){
     	if(data){
     		if(data === 'No Races Scheduled for Today.'){

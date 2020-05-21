@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import ResultsBoard from '../components/ResultsBoard';
 import RaceWinner from '../components/RaceWinner';
@@ -7,20 +7,34 @@ import moment from 'moment';
 
 const Race = ({ match }) => {
 	const [ race, setRace ] = useState(null);
+	const isMountedRef = useRef(null);
 
 	// on mount
 	useEffect(() => {
+		isMountedRef.current = true;
 		getRace(match.params.id);
 		Utility.setBackgroundColor();
+
+		// on dismount
+		return () => {
+		  isMountedRef.current = false;
+		};
 
     // eslint-disable-next-line
 	}, []);
 
 	const getRace = async (id) => {
-		const base = window.location.origin;
-		const res = await fetch(`${base}/api/races/${id}`);
-    let data = await res.json();
-    setRace(data);
+		try {
+			const base = window.location.origin;
+			const res = await fetch(`${base}/api/races/${id}`);
+	    let data = await res.json();
+	    
+	    if(isMountedRef.current){
+	    	setRace(data);
+	    }
+		} catch (err){
+			console.error(err);
+		}
 	}
 
 	if(race === null){
