@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import RacerName from '../components/RacerName';
 import RaceCountdown from '../components/RaceCountdown';
@@ -6,60 +6,74 @@ import Utility from '../Utility';
 
 const Standings = () => {
   const [standings, setStandings] = useState([]);
+  const isMountedRef = useRef(null);
 
   useEffect(() => {
+    isMountedRef.current = true;
     Utility.setBackgroundColor();
     getStandings();
+
+    // on dismount
+    return () => {
+      isMountedRef.current = false;
+    };
   }, []);
 
   const getStandings = async () => {
-    const res = await fetch('api/racers');
-    let data = await res.json();
-    const now = moment();
+    try {
+      const res = await fetch('api/racers');
+      let data = await res.json();
+      
+      if(isMountedRef.current){
+        const now = moment();
 
-    // collection data
-    data.forEach(racer => {
-      let first = 0;
-      let second = 0;
-      let third = 0
-      let injuries = 0;
-      const races = racer.races.filter(race => {
-        if(race.RacerRace.injured){
-          injuries++;
-        }
+        // collection data
+        data.forEach(racer => {
+          let first = 0;
+          let second = 0;
+          let third = 0
+          let injuries = 0;
+          const races = racer.races.filter(race => {
+            if(race.RacerRace.injured){
+              injuries++;
+            }
 
-        if(race.RacerRace.place === 1){
-          first++;
-        } else if(race.RacerRace.place === 2){
-          second++;
-        } else if(race.RacerRace.place === 3){
-          third++;
-        }
+            if(race.RacerRace.place === 1){
+              first++;
+            } else if(race.RacerRace.place === 2){
+              second++;
+            } else if(race.RacerRace.place === 3){
+              third++;
+            }
 
-        if(race.startTime && race.endTime){
-          return moment(race.startTime).isBefore(now);
-        } else {
-          return false;
-        }
-      });
-      let starts = races.length;
-      let winPrct = ((first/starts) * 100).toFixed(2);
+            if(race.startTime && race.endTime){
+              return moment(race.startTime).isBefore(now);
+            } else {
+              return false;
+            }
+          });
+          let starts = races.length;
+          let winPrct = ((first/starts) * 100).toFixed(2);
 
-      racer.starts = starts;
-      racer.first = first;
-      racer.second = second;
-      racer.third = third;
-      racer.winPrct = winPrct === 'NaN' ? 0 : winPrct;
-      racer.injuries = injuries;
-    })
+          racer.starts = starts;
+          racer.first = first;
+          racer.second = second;
+          racer.third = third;
+          racer.winPrct = winPrct === 'NaN' ? 0 : winPrct;
+          racer.injuries = injuries;
+        })
 
-    // sort array by wins
-    data.sort((a, b) => {
-      return b.winPrct - a.winPrct || b.first - a.first || b.second - a.second || 
-        b.third - a.third;
-    })
+        // sort array by wins
+        data.sort((a, b) => {
+          return b.winPrct - a.winPrct || b.first - a.first || b.second - a.second || 
+            b.third - a.third;
+        })
 
-    setStandings(data);
+        setStandings(data);
+      }
+    } catch (err){
+      console.error(err);
+    }
   }
 
   return (

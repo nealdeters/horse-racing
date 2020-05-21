@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import { Link } from "react-router-dom";
 import RaceCountdown from '../components/RaceCountdown';
@@ -6,17 +6,30 @@ import Utility from '../Utility';
 
 const Schedule = () => {
   const [races, setRaces] = useState([]);
+  const isMountedRef = useRef(null);
 
   useEffect(() => {
+    isMountedRef.current = true;
     Utility.setBackgroundColor();
     getRaces();
+
+    // on dismount
+    return () => {
+      isMountedRef.current = false;
+    };
   }, []);
 
   const getRaces = async () => {
-    const res = await fetch(`api/races/schedule`);
-    let data = await res.json();
+    try {
+      const res = await fetch(`api/races/schedule`);
+      let data = await res.json();
 
-    setRaces(data);
+      if(isMountedRef.current){
+        setRaces(data);
+      }
+    } catch (err){
+      console.error(err);
+    }
   }
 
   return (

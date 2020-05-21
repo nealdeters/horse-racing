@@ -195,6 +195,10 @@ h6 {
     flex: 1 1 0px;
     padding: 0 2.5px;
   }
+
+  .strike-name {
+    text-decoration: line-through;
+  }
 }
 
 .racer-default-img {
@@ -229,10 +233,6 @@ h6 {
       color: white;
     }
   }
-}
-
-.strike-name {
-  text-decoration: line-through;
 }
 
 .timer {

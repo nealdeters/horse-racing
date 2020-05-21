@@ -13,15 +13,15 @@ const LiveRace = () => {
 	// on mount
 	useEffect(() => {
     isMountedRef.current = true;
-    io.on("raceResults", data => {
+    io.on("liveRace", data => {
       if(isMountedRef.current){
-      	setRace(data);
+      	setRace(data.race);
       }
     });
 
     // on dismount
     return () => {
-      io.off('raceResults', setRace);
+      io.off('liveRace');
       isMountedRef.current = false;
     };
 
