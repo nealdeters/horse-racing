@@ -1,9 +1,9 @@
-const { sequelize, Sequelize } = require('./database/models');
+const { sequelize, Sequelize } = require('../models');
 const { Race, Racer, Track, RacerRace } = sequelize.models;
 const Op = Sequelize.Op;
 const moment = require('moment');
 
-const debugging = false;
+
 const timeout = 100;
 let ioSocket = null;
 let raceFinished = false;
@@ -16,25 +16,21 @@ const _randomInt = (min, max) => {
 }
 
 let _mTimeout = null
-const _moveRacer = (racer, track, racers) => {
+const _moveRacer = (race, racer, track, racers) => {
   const increment = _randomInt(1, 10);
   let divisable = null;
 
-  if(debugging){
-    divisable = 1;
-  } else {
-    divisable = track.distance;
+  divisable = track.distance;
 
-    const upperBound = Math.floor(track.distance * 0.90);
-    const lowerBound = Math.floor(track.distance * 0.70);
+  const upperBound = Math.floor(track.distance * 0.90);
+  const lowerBound = Math.floor(track.distance * 0.70);
 
-    if(racer.type === 'starter' && racer.RacerRace.percentage < 33){
-      divisable = _randomInt(lowerBound, upperBound);
-    } else if(racer.type === 'middle' && (racer.RacerRace.percentage >= 33 && racer.RacerRace.percentage <= 66)){
-      divisable = _randomInt(lowerBound, upperBound);
-    } else if(racer.type === 'finisher' && racer.RacerRace.percentage > 66){
-      divisable = _randomInt(lowerBound, upperBound);
-    }
+  if(racer.type === 'starter' && racer.RacerRace.percentage < 33){
+    divisable = _randomInt(lowerBound, upperBound);
+  } else if(racer.type === 'middle' && (racer.RacerRace.percentage >= 33 && racer.RacerRace.percentage <= 66)){
+    divisable = _randomInt(lowerBound, upperBound);
+  } else if(racer.type === 'finisher' && racer.RacerRace.percentage > 66){
+    divisable = _randomInt(lowerBound, upperBound);
   }
 
   const injuryChance = 7000;
@@ -47,6 +43,7 @@ const _moveRacer = (racer, track, racers) => {
   }
 
   racer.RacerRace.percentage += (increment / divisable);
+  // console.log(`${racer.name} ${racer.RacerRace.percentage}`);
 
   if(racer.RacerRace.percentage >= 100 || racer.RacerRace.injured){
     if(racer.RacerRace.injured){
@@ -62,31 +59,45 @@ const _moveRacer = (racer, track, racers) => {
     racer.RacerRace.finished = true;
   } else {
     _mTimeout = setTimeout(() => {
-      _moveRacer(racer, track, racers);
+      _moveRacer(race, racer, track, racers);
     }, timeout);
   }
+
+  isRaceFinished(race);
 }
 
-let _fTimeout = null;
-const isRaceFinished = async (race, socket) => {
+const isRaceFinished = async (race) => {
   raceFinished = race.racers.every(racer => {
     return racer.RacerRace.finished;
   });
   if(raceFinished){
     raceInProgress = false;
+    race.finished = true;
+    
     // clearTimeout(_fTimeout);
     await _updateRace(race);
     await _updateRacerRaces(race.racers);
-    race.finished = true;
-    emitLiveRace(message, race);
-  } else {
-    _fTimeout = setTimeout(() => {
-      isRaceFinished(race, socket);
-      emitLiveRace(message, race);
-    }, timeout);
   }
 
+  emitLiveRace(message, race);
+
   return raceFinished;
+}
+
+const _updateRacerRace = async (racer, index) => {
+  const rr = racer.RacerRace;
+  rr.endTime = rr.endTime ? moment(rr.endTime) : null;
+  rr.duration = rr.duration ? moment(rr.duration).format('mm:ss.SSSS') : null;
+  rr.place = rr.duration === null ? null : index + 1;
+  
+  try {
+    // update join table with results
+    const res = await RacerRace.update(rr, {
+      where: {raceId: rr.raceId, racerId: rr.racerId}
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
 }
 
 const _updateRacerRaces = (racers) => {
@@ -105,22 +116,6 @@ const _updateRacerRaces = (racers) => {
       return 0;
     }
   });
-
-  const _updateRacerRace = async (racer, index) => {
-    const rr = racer.RacerRace;
-    rr.endTime = moment(rr.endTime);
-    rr.duration = rr.duration ? moment(rr.duration).format('mm:ss.SSSS') : null;
-    rr.place = rr.duration === null ? null : index + 1;
-    
-    try {
-      // update join table with results
-      const res = await RacerRace.update(rr, {
-        where: {raceId: rr.raceId, racerId: rr.racerId}
-      });
-    } catch (err) {
-      console.error(err.message);
-    }
-  }
 
   // call to update racerRaces
   racers.forEach(_updateRacerRace);
@@ -143,7 +138,7 @@ const _updateRace = async (race) => {
   }
 }
 
-const _startRace = (race, socket) => {
+const _startRace = (race) => {
   raceInProgress = true;
   raceFinished = false;
   nextRace = null;
@@ -153,35 +148,32 @@ const _startRace = (race, socket) => {
   if(race.racers && race.racers.length && race.Track){
     race.racers.forEach(racer => {
       racer.RacerRace.startTime = moment();
-      _moveRacer(racer, race.Track, race.racers);
+      _moveRacer(race, racer, race.Track, race.racers);
     });
-
-    isRaceFinished(race, socket);
   } else {
     raceFinished = true;
     raceInProgress = false;
   }
 }
 
-const _setRacerLanes = (race) => {
+const _setRacerPercentages = (race) => {
   race.racers.forEach( (racer, index) => {
     if(typeof racer.RacerRace.percentage === 'undefined'){
       racer.RacerRace.percentage = 0;
-      racer.RacerRace.lane = index + 1;
     }
   });
 
   return race;
 }
 
-const countdown = (nextRace, nextStartTime, socket) => {
+const countdown = (nextRace, nextStartTime) => {
   let time = nextStartTime.diff(moment(), 'seconds');
   if(time >= 60){
     let fromNow = nextStartTime.fromNow();
     message = `${fromNow}`;
   } else {
     if(time === 1){
-      _startRace(nextRace, socket);
+      _startRace(nextRace);
       message = null;
     } else if (time >= 10){
       message = `00:${time}`;
@@ -193,11 +185,11 @@ const countdown = (nextRace, nextStartTime, socket) => {
   emitLiveRace(message, nextRace);
 }
 
-const initNextRace = (nextRace, socket) => {
+const initNextRace = (nextRace) => {
   if( nextRace ){
     const nextStartTime = moment(nextRace.startTime);
-    _setRacerLanes(nextRace);
-    countdown(nextRace, nextStartTime, socket);
+    _setRacerPercentages(nextRace);
+    countdown(nextRace, nextStartTime);
   } else {
     emitLiveRace('No Races Scheduled for Today.', null);
   }
@@ -235,14 +227,12 @@ const racerCronJob = async (socket) => {
 
       const res = result && result[0] ? result[0] : null;
       nextRace = JSON.parse(JSON.stringify(res));
-      initNextRace(nextRace, socket);   
+
+      initNextRace(nextRace);   
     } else if(moment(nextRace.startTime).isAfter(moment())){
-      initNextRace(nextRace, socket);
+      initNextRace(nextRace);
     }
-  } 
-  // else {
-  //   console.log('race still in progress')
-  // }
+  }
 }
 
 const emitLiveRace = (message, race) => {

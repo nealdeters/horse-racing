@@ -62,7 +62,7 @@ const Standings = () => {
           racer.winPrct = winPrct === 'NaN' ? 0 : winPrct;
           racer.injuries = injuries;
         })
-
+        console.log(data)
         // sort array by wins
         data.sort((a, b) => {
           return b.winPrct - a.winPrct || b.first - a.first || b.second - a.second || 

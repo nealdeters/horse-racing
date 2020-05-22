@@ -7,7 +7,7 @@ const routes = require('./database/routes');
 const cron = require('node-cron');
 // const moment = require('moment');
 const path = require('path');
-const { racerCronJob } = require('./moveRacer');;
+const { racerCronJob } = require('./database/services/racer');;
 const { Race, RacerRace } = require('./database/controllers');
 const moment = require('moment-timezone');
 
@@ -51,6 +51,9 @@ io.on('connection', (socket) => {
 	});
 });
 
+// Race.deleteAllRaces();
+// Race.createTomorrowRaces();
+
 // every day at 3am schedule races
 cron.schedule('0 3 * * *', () => {
 	Race.createTomorrowRaces();
@@ -61,8 +64,8 @@ cron.schedule('0 3 * * *', () => {
 	Race.deleteEmptyRaces();
 });
 
-// every monday at 3am delete old races
-cron.schedule('0 3 * * 1', () => {
+// every day at 3am delete races that are 6 days old
+cron.schedule('0 3 * * *', () => {
 	Race.deleteOldRaces();
 });
 
