@@ -160,6 +160,9 @@ const _setRacerPercentages = (race) => {
   race.racers.forEach( (racer, index) => {
     if(typeof racer.RacerRace.percentage === 'undefined'){
       racer.RacerRace.percentage = 0;
+      if(!racer.RacerRace.lane){
+        racer.RacerRace.lane = index + 1;
+      }
     }
   });
 
