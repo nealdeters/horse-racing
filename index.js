@@ -64,8 +64,8 @@ cron.schedule('0 3 * * *', () => {
 	Race.deleteEmptyRaces();
 });
 
-// every monday at 3am delete old races
-cron.schedule('0 3 * * 1', () => {
+// every day at 3am delete races that are 6 days old
+cron.schedule('0 3 * * *', () => {
 	Race.deleteOldRaces();
 });
 

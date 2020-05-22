@@ -218,11 +218,8 @@ const deleteOldRaces = async () => {
   try {
     const deleted = await Race.destroy({
       where: {
-        startTime: {
-          [Op.ne]: null
-        },
         endTime: {
-          [Op.lt]: moment().subtract(10, 'days')
+          [Op.lt]: moment().subtract(6, 'days')
         }
       }
     });
@@ -334,7 +331,7 @@ const scheduleRaces = async (startDay, everyNMins, numDays) => {
 
 const createTomorrowRaces = () => {
   let scheduleDay = moment();
-  const everyNMins = 10;
+  const everyNMins = 5;
   const remainder = everyNMins - (scheduleDay.minute() % everyNMins);
   scheduleDay = scheduleDay.add(remainder, "minutes").seconds(0);
   scheduleRaces(scheduleDay, everyNMins, 1);
