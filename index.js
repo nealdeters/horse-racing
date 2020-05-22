@@ -7,7 +7,7 @@ const routes = require('./database/routes');
 const cron = require('node-cron');
 // const moment = require('moment');
 const path = require('path');
-const { racerCronJob } = require('./moveRacer');;
+const { racerCronJob } = require('./database/services/racer');;
 const { Race, RacerRace } = require('./database/controllers');
 const moment = require('moment-timezone');
 
@@ -50,6 +50,9 @@ io.on('connection', (socket) => {
 		console.log(`User ${socket.id} disconnected.`);
 	});
 });
+
+// Race.deleteAllRaces();
+// Race.createTomorrowRaces();
 
 // every day at 3am schedule races
 cron.schedule('0 3 * * *', () => {

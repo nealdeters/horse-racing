@@ -3,6 +3,7 @@ const { sequelize, Sequelize } = require('../models');
 // const sqs = require('sequelize-querystring');
 const { Race, RacerRace, Racer, Track } = require('../models');
 const Op = Sequelize.Op;
+const debugging = false;
 
 const _shuffle = (array) => {
   var currentIndex = array.length, temporaryValue, randomIndex;
@@ -23,16 +24,15 @@ const _shuffle = (array) => {
   return array;
 }
 
-// const _setRacerLanes = (racers, race) => {
-//   racers.forEach( async ( racer, index ) => {
-//     const rr = { lane: index + 1 };
-//     const res = await RacerRace.update(rr, {
-//       where: {raceId: race.id, racerId: racer.id}
-//     });
-//   });
+const _setRacerLanes = (racers) => {
+  racers.forEach( ( racer, index ) => {
+    racer.RacerRace = {
+      lane: index + 1
+    }
+  });
 
-//   return racers;
-// }
+  return racers;
+}
 
 const createRace = async (req, res) => {
   try {
@@ -52,7 +52,7 @@ const createRace = async (req, res) => {
     });
 
     raceInRange = JSON.parse(JSON.stringify(raceInRange));
-    if(raceInRange && raceInRange.length){
+    if(raceInRange && raceInRange.length && !debugging){
       const err = 'Cannot create a race with same start time, or a start time within the range of 5 minutes of another.';
       if(res){
         return res.status(400).json({error: err})
@@ -104,7 +104,7 @@ const createRace = async (req, res) => {
           order: sequelize.random(),
           limit: 8
         });
-        // randRacers = _setRacerLanes(randRacers, newRace);
+        randRacers = _setRacerLanes(randRacers);
       } else if (racers && racers.length){
         // if provided racers array is larger than 8, cut it down
         if(racers.length > 8){
@@ -119,18 +119,17 @@ const createRace = async (req, res) => {
           }
         }))
 
-        // randRacers = _setRacerLanes(randRacers, newRace);
+        randRacers = _setRacerLanes(randRacers);
       } else {
         // if no racers added, apply 4 random ones
         randRacers = await Racer.findAll({
           order: sequelize.random(),
           limit: 4
         });
-        // randRacers = _setRacerLanes(randRacers, newRace);
+        randRacers = _setRacerLanes(randRacers);
       }
 
-      await newRace.setRacers(randRacers);
-
+      const racersRes = await newRace.setRacers(randRacers);
       const result = await Race.findOne({
         where: {
           id: newRace.id
