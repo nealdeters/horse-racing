@@ -124,7 +124,7 @@ const createRace = async (req, res) => {
           order: sequelize.random(),
           limit: 4,
           // where: {
-            
+
           // }
         });
         randRacers = _setRacerLanes(randRacers);
@@ -327,6 +327,7 @@ const scheduleRaces = async (startDay, everyNMins, numDays) => {
     } else if(minute === 15){
       // central park
       req.body.track = 6
+      req.body.racers = true;
     } else if(minute === 20){
       // park hills
       req.body.track = 1
@@ -346,6 +347,7 @@ const scheduleRaces = async (startDay, everyNMins, numDays) => {
     } else if(minute === 45){
       // summer meadows
       req.body.track = 7
+      req.body.racers = true;
     } else if(minute === 50){
       // moss course
       req.body.track = 3

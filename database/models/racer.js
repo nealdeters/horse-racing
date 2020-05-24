@@ -92,15 +92,15 @@ module.exports = (sequelize, DataTypes) => {
   let _mTimeout = null
   const _moveRacer = (race, racer, track, racers) => {
     // lower stamina decreases performance
-    const minimizeDiff = (100 - racer.stamina) / 2;
-    const stamina = racer.stamina ? Math.floor( (racer.stamina + minimizeDiff) / 10) : 10;
+    const minimizeStaminaDiff = (100 - racer.stamina) / 4;
+    const stamina = racer.stamina ? Math.floor( (racer.stamina + minimizeStaminaDiff) / 9) : 10;
     const max = _randomInt(stamina, 10);
     const increment = _randomInt(1, max);
     const chance = racer.stamina ? (racer.stamina * 100) : 7000;
     let divisable = track.distance;
 
     const upperBound = Math.floor(track.distance * 0.90);
-    const lowerBound = Math.floor(track.distance * 0.70);
+    const lowerBound = Math.floor(track.distance * 0.50);
 
     if(racer.type === 'starter' && racer.RacerRace.percentage < 33){
       divisable = _randomInt(lowerBound, upperBound);
@@ -109,7 +109,7 @@ module.exports = (sequelize, DataTypes) => {
     } else if(racer.type === 'finisher' && racer.RacerRace.percentage > 66){
       divisable = _randomInt(lowerBound, upperBound);
     } else {
-      if(_randomInt(1, chance) === _randomInt(1, chance)){
+      if( _randomInt(1, chance) === _randomInt(1, chance) ){
         // extra boost
         divisable = _randomInt(lowerBound, upperBound);
       } 
