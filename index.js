@@ -2,12 +2,10 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const logger = require('morgan');
 const passport = require('passport');
-const { sequelize, Sequelize } = require('./database/models');
+const { sequelize, Sequelize, Racer } = require('./database/models');
 const routes = require('./database/routes');
 const cron = require('node-cron');
-// const moment = require('moment');
 const path = require('path');
-const { racerCronJob } = require('./database/services/racer');;
 const { Race, RacerRace } = require('./database/controllers');
 const moment = require('moment-timezone');
 
@@ -40,16 +38,25 @@ app.use('/api', routes);
 io.on('connection', (socket) => {
 	console.log(`User ${socket.id} connected.`);
 
-	// cron job every second
-	cron.schedule('*/1 * * * * *', () => {
-		// console.log('cron job')
-		racerCronJob(io);
-	});
-
 	socket.on('disconnect', (reason) => {
 		console.log(`User disconnected.`);
 	});
 });
+
+// cron job every second
+// cron.schedule('*/1 * * * * *', () => {
+// 	Racer.move(io);
+// });
+
+const moveRacers = () => {
+	Racer.move(io);
+
+	setTimeout(() => {
+		moveRacers();
+	}, 500)
+}
+
+moveRacers();
 
 // Race.deleteAllRaces();
 // Race.createTomorrowRaces();

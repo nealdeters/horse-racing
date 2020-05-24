@@ -15,7 +15,9 @@ const Results = (props) => {
     isMountedRef.current = true;
     io.on("liveRace", data => {
       if(isMountedRef.current){
-      	liveRace(data.race);
+      	if(data.race){
+      		liveRace(data.race);
+      	}
       }
     });
 

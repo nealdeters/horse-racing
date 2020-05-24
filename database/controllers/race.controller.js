@@ -122,7 +122,10 @@ const createRace = async (req, res) => {
         // if no racers added, apply 4 random ones
         randRacers = await Racer.findAll({
           order: sequelize.random(),
-          limit: 4
+          limit: 4,
+          // where: {
+
+          // }
         });
         randRacers = _setRacerLanes(randRacers);
       }
@@ -312,8 +315,45 @@ const scheduleRaces = async (startDay, everyNMins, numDays) => {
 
     const minute = startDay.minute();
     if(minute === 0){
-      req.body.racers = true;
+      // boardwalk
       req.body.track = 4;
+      req.body.racers = true;
+    } else if(minute === 5){
+      // moss course
+      req.body.track = 3
+    } else if(minute === 10){
+      //sea grove
+      req.body.track = 2
+    } else if(minute === 15){
+      // central park
+      req.body.track = 6
+      req.body.racers = true;
+    } else if(minute === 20){
+      // park hills
+      req.body.track = 1
+    } else if(minute === 25){
+      // moss course
+      req.body.track = 3
+    } else if(minute === 30){
+      // evergreen fields
+      req.body.track = 5
+      req.body.racers = true;
+    } else if(minute === 35){
+      // sea grove
+      req.body.track = 2
+    } else if(minute === 40){
+      // park hills
+      req.body.track = 1
+    } else if(minute === 45){
+      // summer meadows
+      req.body.track = 7
+      req.body.racers = true;
+    } else if(minute === 50){
+      // moss course
+      req.body.track = 3
+    } else if(minute === 55){
+      // sea grove
+      req.body.track = 2
     }
 
     try {
