@@ -15,8 +15,10 @@ const LiveRace = () => {
     isMountedRef.current = true;
     io.on("liveRace", data => {
       if(isMountedRef.current){
-      	setRace(data.race);
-      	Utility.setBackgroundColor(data.race.Track.trackColor);
+      	if(data.race){
+      		setRace(data.race);
+      		Utility.setBackgroundColor(data.race.Track.trackColor);
+      	}
       }
     });
 
