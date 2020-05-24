@@ -96,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
     const stamina = racer.stamina ? Math.floor( (racer.stamina + minimizeStaminaDiff) / 9) : 10;
     const max = _randomInt(stamina, 10);
     const increment = _randomInt(1, max);
-    const chance = racer.stamina ? (racer.stamina * 100) : 7000;
+    const chance = _randomInt(racer.stamina * 100, 10000);
     let divisable = track.distance;
 
     const upperBound = Math.floor(track.distance * 0.90);
