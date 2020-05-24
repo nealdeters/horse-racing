@@ -89,19 +89,24 @@ module.exports = (sequelize, DataTypes) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  let _mTimeout = null
   const _moveRacer = (race, racer, track, racers) => {
-    // lower stamina decreases performance
-    const minimizeStaminaDiff = (100 - racer.stamina) / 4;
-    const stamina = racer.stamina ? Math.floor( (racer.stamina + minimizeStaminaDiff) / 9) : 10;
-    const max = _randomInt(stamina, 10);
-    const increment = _randomInt(1, max);
-    const chance = racer.stamina ? _randomInt( (racer.stamina + minimizeStaminaDiff) * 100, 10000) : 7000;
+    const useStamina = _randomInt(1, 100);
+    let stamina = 10;
+    let chance = 10000;
+    
+    // if racer has stamina and odds hit, use stamina
+    if(racer.stamina && (useStamina === 3 || useStamina === 6 || useStamina === 9) ){
+      stamina = Math.floor( (racer.stamina) / 10);
+      chance = _randomInt( (racer.stamina) * 100, chance);
+    }
+    
+    const increment = _randomInt(1, stamina);
     let divisable = track.distance;
 
-    const upperBound = Math.floor(track.distance * 0.90);
-    const lowerBound = Math.floor(track.distance * 0.50);
+    const upperBound = Math.floor(track.distance * 0.95);
+    const lowerBound = Math.floor(track.distance * 0.70);
 
+    // use racer strategy
     if(racer.type === 'starter' && racer.RacerRace.percentage < 33){
       divisable = _randomInt(lowerBound, upperBound);
     } else if(racer.type === 'middle' && (racer.RacerRace.percentage >= 33 && racer.RacerRace.percentage <= 66)){
@@ -109,13 +114,14 @@ module.exports = (sequelize, DataTypes) => {
     } else if(racer.type === 'finisher' && racer.RacerRace.percentage > 66){
       divisable = _randomInt(lowerBound, upperBound);
     } else {
-      if( _randomInt(1, chance) === _randomInt(1, chance) ){
-        // extra boost
+      // extra boost
+      const extraBoost = track.distance * 10;
+      if(_randomInt(1, extraBoost) === _randomInt(1, extraBoost)){
         divisable = _randomInt(lowerBound, upperBound);
-      } 
+        // console.log(`${racer.name} extra boost`)
+      }
     }
 
-    // lower stamina increases injury odds
     const injuryChance1 = _randomInt(1, chance);
     const injuryChance2 = _randomInt(1, chance);
     if(injuryChance1 === injuryChance2){
@@ -124,7 +130,6 @@ module.exports = (sequelize, DataTypes) => {
       racer.RacerRace.injured = false;
     }
 
-    // ex. 10 / (7..9)
     racer.RacerRace.percentage += (increment / divisable);
     // console.log(`${racer.name} ${racer.RacerRace.percentage}`);
 
@@ -138,10 +143,9 @@ module.exports = (sequelize, DataTypes) => {
         racer.RacerRace.duration = moment(racer.RacerRace.endTime).diff(racer.RacerRace.startTime);
       }
 
-      // clearTimeout(_mTimeout);
       racer.RacerRace.finished = true;
     } else {
-      _mTimeout = setTimeout(() => {
+      setTimeout(() => {
         _moveRacer(race, racer, track, racers);
       }, timeout);
     }
@@ -248,8 +252,8 @@ module.exports = (sequelize, DataTypes) => {
       }
 
       if(!racer.stamina){
-        // const stamina = await Racer.getStamina(racer);
-        // racer.stamina = stamina;
+        const stamina = await Racer.getStamina(racer);
+        racer.stamina = stamina;
       }
     });
 

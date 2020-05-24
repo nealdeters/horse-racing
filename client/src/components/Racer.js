@@ -37,6 +37,7 @@ const Racer = ({ match }) => {
         let second = 0;
         let third = 0
         let injuries = 0;
+        let stsToday = 0;
         const durations = [];
         
         tracks.forEach(track => {
@@ -76,6 +77,11 @@ const Racer = ({ match }) => {
               durations.push(duration);
               track.starts++;
               track.time += duration ? duration : 0;
+
+              if(start.isSame(moment(), 'day')){
+                stsToday++;
+              }
+
               return true;
             } else {
               return false;
@@ -95,6 +101,8 @@ const Racer = ({ match }) => {
         data.winPrct = winPrct === 'NaN' ? 0 : winPrct;
         data.injuries = injuries;
         data.tracks = tracks;
+        data.stsToday = stsToday;
+
         const totalDurations = durations
           .slice(1)
           .reduce((prev, cur) => 
@@ -129,6 +137,22 @@ const Racer = ({ match }) => {
 		<div className="container racer">
 		  <h1 className="header white-text">{racer.name}</h1>
 		  <RacerIcon racer={racer ? racer : null} />
+
+      <table className="racer-board white-text">
+        <thead>
+          <tr>
+            <th className="uppercase normal tooltipped"
+              data-position="bottom" 
+              data-tooltip="Starts Today"
+              aria-label="Starts Today">Sts Today</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{racer.stsToday}</td>
+          </tr>
+        </tbody>
+      </table>
 
 		  <table className="racer-board white-text">
 		    <thead>
