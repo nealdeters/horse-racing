@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import RaceTrack from '../components/RaceTrack';
 import RaceCountdown from '../components/RaceCountdown';
 import RaceContext from '../context/race/raceContext';
-import Utility from '../Utility';
+import Utility from '../services/Utility';
 const io = Utility.io();
 
 const LiveRace = () => {
@@ -16,6 +16,7 @@ const LiveRace = () => {
     io.on("liveRace", data => {
       if(isMountedRef.current){
       	setRace(data.race);
+      	Utility.setBackgroundColor(data.race.Track.trackColor);
       }
     });
 
@@ -29,20 +30,14 @@ const LiveRace = () => {
 	}, []);
 
 	// on update
-	useEffect(() => {
-	  if(track){
-	  	Utility.setBackgroundColor(track.trackColor);
-	  }
-
-	  // eslint-disable-next-line
-	}, [track])
+	// useEffect(() => {
+	// 	if(track){
+	// 		Utility.setBackgroundColor(track.trackColor);
+	// 	}
+	// }, [track])
 
 	return (
-		<div
-		  style={{
-		    backgroundColor: track.trackColor
-		  }}
-		  className="live-race">
+		<div className="live-race">
 		  <h1 className="header white-text">{track.name}</h1>
 		  <RaceCountdown alwaysShow={false}/>
 		  <RaceTrack />

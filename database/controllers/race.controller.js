@@ -1,7 +1,5 @@
 const moment = require('moment');
-const { sequelize, Sequelize } = require('../models');
-// const sqs = require('sequelize-querystring');
-const { Race, RacerRace, Racer, Track } = require('../models');
+const { sequelize, Sequelize, Race, RacerRace, Racer, Track } = require('../models');
 const Op = Sequelize.Op;
 const debugging = false;
 

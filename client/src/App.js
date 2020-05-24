@@ -13,13 +13,15 @@ import NotFound from './components/NotFound'
 import RaceState from './context/race/RaceState';
 import "materialize-css/dist/css/materialize.min.css";
 import M from "materialize-css/dist/js/materialize.min.js";
+import Utility from './services/Utility';
 import './App.scss';
 
 const App = () => {
   useEffect(() => {
     // initialize materialize js
     M.AutoInit();
-  })
+    Utility.setBackgroundColor();
+  }, []);
   
   return (
     <Fragment>

@@ -2,7 +2,7 @@ import React, { Fragment, useRef, useState, useEffect } from 'react';
 import RaceWinner from './RaceWinner';
 import ResultsBoard from './ResultsBoard';
 import { Modal } from 'react-materialize';
-import Utility from '../Utility';
+import Utility from '../services/Utility';
 const io = Utility.io();
 
 const Results = (props) => {

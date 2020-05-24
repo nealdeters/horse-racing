@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState, useRef } from 'react';
 import { Link } from "react-router-dom";
-import Utility from '../Utility';
+import Utility from '../services/Utility';
 const io = Utility.io();
 
 const RaceCountdown = ({ alwaysShow }) => {

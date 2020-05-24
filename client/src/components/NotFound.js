@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import Utility from '../Utility';
+import Utility from '../services/Utility';
 
 const NotFound = props => {
 	

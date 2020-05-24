@@ -4,7 +4,7 @@ import RacerIcon from '../components/RacerIcon';
 const RaceWinner = ({ racers }) => {
   const [winner, setWinner] = useState(null);
 
-  // on update
+  // on mount
   useEffect(() => {
     if(racers){
       const champ = racers.find(racer => {
@@ -16,7 +16,7 @@ const RaceWinner = ({ racers }) => {
       }
     }
     // eslint-disable-next-line
-  }, [racers]);
+  }, []);
 
   if(!winner){
     return null;
