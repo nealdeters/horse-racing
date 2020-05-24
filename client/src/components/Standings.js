@@ -2,7 +2,7 @@ import React, { Fragment, useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import RacerName from '../components/RacerName';
 import RaceCountdown from '../components/RaceCountdown';
-import Utility from '../Utility';
+import Utility from '../services/Utility';
 
 const Standings = () => {
   const [standings, setStandings] = useState([]);
@@ -61,13 +61,13 @@ const Standings = () => {
           racer.third = third;
           racer.winPrct = winPrct === 'NaN' ? 0 : winPrct;
           racer.injuries = injuries;
-        })
-        console.log(data)
+        });
+
         // sort array by wins
         data.sort((a, b) => {
           return b.winPrct - a.winPrct || b.first - a.first || b.second - a.second || 
             b.third - a.third;
-        })
+        });
 
         setStandings(data);
       }

@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import RacerIcon from './RacerIcon';
-import Utility from '../Utility';
+import Utility from '../services/Utility';
 import { Link } from "react-router-dom";
 
 const Racer = ({ match }) => {

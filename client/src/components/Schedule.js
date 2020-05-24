@@ -2,7 +2,7 @@ import React, { Fragment, useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import { Link } from "react-router-dom";
 import RaceCountdown from '../components/RaceCountdown';
-import Utility from '../Utility';
+import Utility from '../services/Utility';
 
 const Schedule = () => {
   const [races, setRaces] = useState([]);

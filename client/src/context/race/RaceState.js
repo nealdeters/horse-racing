@@ -30,22 +30,26 @@ const RaceState = props => {
   const [state, dispatch] = useReducer(raceReducer, initialState);
 
   const setRace = async (race) => {
-    if(race && race.Track){
-      setTrack(race.Track);
-    } else {
-      setTrack(defaultTrack);
-    }
+    if(race){
+      if(race.Track){
+        if(race.Track !== state.track){
+          setTrack(race.Track);
+        }
+      } else {
+        setTrack(defaultTrack);
+      }
 
-    if(race && race.racers.length){
-      setRacers(race.racers);
-    } else {
-      setRacers([]);
-    }
+      if(race.racers.length){
+        setRacers(race.racers);
+      } else {
+        setRacers([]);
+      }
 
-    dispatch({
-      type: SET_RACE,
-      payload: race
-    })
+      dispatch({
+        type: SET_RACE,
+        payload: race
+      });
+    }
   }
 
   const setTrack = async (track) => {

@@ -34,7 +34,7 @@ module.exports = {
       {
         name: 'Central Park',
         trackColor: '#4f9151',
-        groundColor: '#ffebbb',
+        groundColor: '#ccbc95',
         railColor: '#046307',
         distance: 25,
         createdAt: new Date(),
@@ -52,7 +52,7 @@ module.exports = {
       {
         name: 'Summer Meadows',
         trackColor: '#6b8f23',
-        groundColor: '#ede4b7',
+        groundColor: '#c3bd9c',
         railColor: '#49582c',
         distance: 35,
         createdAt: new Date(),
@@ -62,7 +62,7 @@ module.exports = {
         name: 'Boardwalk',
         trackColor: '#4EA24E',
         groundColor: 'BurlyWood',
-        railColor: 'LightGrey',
+        railColor: '#e5e5e5',
         distance: 40,
         createdAt: new Date(),
         updatedAt: new Date(),

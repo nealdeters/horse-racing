@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import ResultsBoard from '../components/ResultsBoard';
 import RaceWinner from '../components/RaceWinner';
-import Utility from '../Utility';
+import Utility from '../services/Utility';
 import moment from 'moment';
 
 const Race = ({ match }) => {

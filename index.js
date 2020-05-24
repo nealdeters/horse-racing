@@ -46,8 +46,8 @@ io.on('connection', (socket) => {
 		racerCronJob(io);
 	});
 
-	io.on('disconnect', (socket) => {
-		console.log(`User ${socket.id} disconnected.`);
+	socket.on('disconnect', (reason) => {
+		console.log(`User disconnected.`);
 	});
 });
 

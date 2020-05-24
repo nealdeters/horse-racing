@@ -1,7 +1,7 @@
 import React, { Fragment, useRef, useState, useEffect } from 'react';
 import Track from '../components/Track';
 import moment from 'moment';
-import Utility from '../Utility';
+import Utility from '../services/Utility';
 
 const TrackData = ({ match }) => {
 	const [ track, setTrack ] = useState(null);
