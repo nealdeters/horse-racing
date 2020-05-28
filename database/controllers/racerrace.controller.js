@@ -1,4 +1,6 @@
-const { RacerRace } = require('../models');
+const moment = require('moment');
+const { sequelize, Sequelize, RacerRace } = require('../models');
+const Op = Sequelize.Op;
 
 const createRacerRace = async (req, res) => {
   try {
@@ -64,6 +66,26 @@ const deleteRacerRace = async (req, res) => {
   }
 }
 
+const deleteOldRacerRaces = async () => {
+  try {
+    const deleted = await RacerRace.destroy({
+      where: {
+        createdAt: {
+          [Op.lt]: moment().subtract(3, 'days')
+        }
+      }
+    });
+    
+    if(deleted){
+      console.log('Old racer races deleted.')
+    } else {
+      throw new Error("Old racer races not found.");
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
 const deleteAllRacerRaces = async () => {
   // BE CAREFUL WHEN USING THIS. THIS IS REALLY ONLY MEANT FOR DEVELOPMENT
   try {
@@ -88,5 +110,6 @@ module.exports = {
   getRacerRaceById,
   updateRacerRace,
   deleteRacerRace,
-  deleteAllRacerRaces
+  deleteAllRacerRaces,
+  deleteOldRacerRaces
 }

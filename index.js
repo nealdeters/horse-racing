@@ -58,7 +58,8 @@ const moveRacers = () => {
 
 moveRacers();
 
-Race.deleteOldRaces();
+// Race.deleteOldRaces();
+// RacerRace.deleteOldRacerRaces();
 // Race.deleteAllRaces();
 // Race.createTomorrowRaces();
 
@@ -72,9 +73,10 @@ cron.schedule('0 3 * * *', () => {
 	Race.deleteEmptyRaces();
 });
 
-// every day at 3am delete races that are 6 days old
+// every day at 3am delete races that are 3 days old
 cron.schedule('0 3 * * *', () => {
 	Race.deleteOldRaces();
+	RacerRace.deleteOldRacerRaces();
 });
 
 // app static assets in production
