@@ -58,6 +58,7 @@ const moveRacers = () => {
 
 moveRacers();
 
+Race.deleteOldRaces();
 // Race.deleteAllRaces();
 // Race.createTomorrowRaces();
 
