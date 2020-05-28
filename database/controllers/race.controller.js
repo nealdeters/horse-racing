@@ -220,7 +220,7 @@ const deleteOldRaces = async () => {
     const deleted = await Race.destroy({
       where: {
         endTime: {
-          [Op.lt]: moment().subtract(6, 'days')
+          [Op.lt]: moment().subtract(3, 'days')
         }
       }
     });
