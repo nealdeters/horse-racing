@@ -89,6 +89,7 @@ module.exports = (sequelize, DataTypes) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
+  let _mTimeouts = {};
   const _moveRacer = (race, racer, track, racers) => {
     const useStamina = _randomInt(1, 100);
     let stamina = 10;
@@ -100,7 +101,7 @@ module.exports = (sequelize, DataTypes) => {
       chance = _randomInt( (racer.stamina) * 100, chance);
     }
     
-    const increment = _randomInt(1, stamina);
+    let increment = _randomInt(1, stamina);
     let divisable = track.distance;
 
     const upperBound = Math.floor(track.distance * 0.95);
@@ -130,6 +131,10 @@ module.exports = (sequelize, DataTypes) => {
       racer.RacerRace.injured = false;
     }
 
+    // keep racers from moving backwards
+    increment = Math.abs(increment);
+    divisable = Math.abs(divisable);
+
     racer.RacerRace.percentage += (increment / divisable);
     // console.log(`${racer.name} ${racer.RacerRace.percentage}`);
 
@@ -145,7 +150,7 @@ module.exports = (sequelize, DataTypes) => {
 
       racer.RacerRace.finished = true;
     } else {
-      setTimeout(() => {
+      _mTimeouts[racer.id] = setTimeout(() => {
         _moveRacer(race, racer, track, racers);
       }, timeout);
     }
@@ -158,7 +163,10 @@ module.exports = (sequelize, DataTypes) => {
       return racer.RacerRace.finished;
     });
     if(race.finished){    
-      // clearTimeout(_fTimeout);
+      // for(key in _mTimeouts){
+      //   clearTimeouts(_mTimeouts[key]);
+      // }
+
       raceInProgress = false;
       await _updateRace(race);
       await _updateRacerRaces(race.racers);
