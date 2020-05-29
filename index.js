@@ -53,7 +53,7 @@ const moveRacers = () => {
 
 	setTimeout(() => {
 		moveRacers();
-	}, 500)
+	}, 1000)
 }
 
 moveRacers();
