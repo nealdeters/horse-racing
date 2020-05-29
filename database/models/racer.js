@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     Racer.belongsToMany(models.Race, {
       otherKey: 'raceId',
       foreignKey: 'racerId',
+      foreignKeyConstraint: true,
       as: 'races',
       through: models.RacerRace,
       onDelete: 'cascade',

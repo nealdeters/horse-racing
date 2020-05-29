@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     Race.belongsToMany(models.Racer, {
       otherKey: 'racerId',
       foreignKey: 'raceId',
+      foreignKeyConstraint: true,
       as: 'racers',
       through: models.RacerRace,
       onDelete: 'cascade',
@@ -26,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     Race.belongsTo(models.Track, {
       foreignKey: 'trackId',
+      foreignKeyConstraint: true,
       targetKey: 'id',
     });
   };
