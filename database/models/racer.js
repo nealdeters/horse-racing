@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: 'cascade',
       hooks: true
     });
+    // Racer.hasMany(models.RacerRace);
   };
 
   Racer.getStamina = async function(racer){

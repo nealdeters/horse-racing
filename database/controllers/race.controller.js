@@ -180,7 +180,14 @@ const getSchedule = async (req, res) => {
         endTime: null
       },
       include: [ 
-        'racers', 'Track'
+        {
+          model: Racer,
+          as: 'racers',
+          through: {
+            attributes: []
+          }
+        },
+        'Track'
       ],
       order: [
         ['startTime', 'ASC'],

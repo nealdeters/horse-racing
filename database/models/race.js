@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKeyConstraint: true,
       targetKey: 'id',
     });
+    // Race.hasMany(models.RacerRace);
   };
   
   return Race; 

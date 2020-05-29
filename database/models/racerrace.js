@@ -40,5 +40,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
+  // RacerRace.associate = function(models) {
+  //   RacerRace.belongsTo(models.Race, {
+  //     foreignKey: 'raceId',
+  //     otherKey: 'racerId'
+  //   });
+  //   RacerRace.belongsTo(models.Racer, {
+  //     foreignKey: 'racerId',
+  //     otherKey: 'raceId'
+  //   });
+  // };
+
   return RacerRace; 
 };
